@@ -1,0 +1,11 @@
+# Vercel handles caching this
+node_modules
+
+# Ignore local environment files
+.env
+.env.local
+.env.development.local
+
+# Git files
+.git
+.gitignore
