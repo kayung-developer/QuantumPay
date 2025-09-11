@@ -1,0 +1,48 @@
+/*
+ * This file injects Tailwind's base, components, and utilities styles
+ * into our application. It's also the place for any global CSS overrides
+ * or custom base styles.
+ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* Apply a default dark background and smooth font rendering */
+  body {
+    @apply bg-neutral-950 text-neutral-200 antialiased;
+  }
+
+  /* Style headings with the 'Lexend' display font */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display text-neutral-50;
+  }
+}
+
+@layer utilities {
+  /* A custom utility class for a subtle, glowing background effect often used in hero sections */
+  .bg-glow-radial {
+    background-image: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(79, 70, 229, 0.3), transparent);
+  }
+
+  /* Custom scrollbar styling for a modern look that fits the dark theme */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #0F172A; /* neutral-900 */
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: #334155; /* neutral-700 */
+    border-radius: 10px;
+    border: 2px solid #0F172A; /* neutral-900 */
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: #475569; /* neutral-600 */
+  }
+}
