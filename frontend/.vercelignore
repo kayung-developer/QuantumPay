@@ -1,11 +1,21 @@
-# Vercel handles caching this
-node_modules
+# Ignore the entire mobile app folder for the web and backend deployments
+/mobile/
 
-# Ignore local environment files
-.env
-.env.local
-.env.development.local
+# Ignore the entire frontend folder if you were deploying the backend from root
+# /frontend/
 
-# Git files
+# Ignore local development artifacts
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# Ignore node_modules in all subdirectories
+**/node_modules
+
+# Ignore Git and local env files
 .git
 .gitignore
+.env
+.env.*
+**/ .env
