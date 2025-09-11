@@ -1,0 +1,35 @@
+# Core FastAPI Framework & Server
+fastapi
+uvicorn[standard]
+
+# Database & ORM
+sqlalchemy
+
+# Data Validation & Settings Management
+pydantic-settings
+python-dotenv
+
+# Security & Authentication
+firebase-admin
+bcrypt
+python-jose[cryptography]
+cachetools
+
+# AI & Machine Learning
+scikit-learn
+pandas
+numpy
+
+google-cloud-vision
+statsmodels
+rasa
+email-validator
+pyotp
+qrcode[pil]
+plaid-python
+
+# HTTP Client (for Webhooks and third-party integrations)
+httpx
+google-api-python-client
+google-auth-httplib2
+google-auth-oauthlib
