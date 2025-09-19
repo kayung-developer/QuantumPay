@@ -10,7 +10,6 @@ import {
 import { auth } from '../firebase'; // Assuming your firebase config is in 'src/firebase.js'
 import apiClient, { setupAxiosInterceptors } from '../api/axiosConfig'; // Import your configured axios instance
 import toast from 'react-hot-toast';
-import { TourProvider } from './TourContext';
 
 const AuthContext = createContext(null);
 
@@ -170,9 +169,8 @@ export const AuthProvider = ({ children }) => {
 
   return (
         <AuthContext.Provider value={value}>
-            <TourProvider>
                 {children}
-            </TourProvider>
         </AuthContext.Provider>
     );
+
 };
