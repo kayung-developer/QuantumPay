@@ -126,7 +126,6 @@ const Sidebar = ({ onLinkClick }) => {
             // --- [THE UPDATE] We pass the tourId as the id prop ---
             <SidebarNavLink
                 key={item.name}
-                id={item.tourId} // Pass the id here
                 to={item.href}
                 icon={item.icon}
                 onClick={onLinkClick}
@@ -190,13 +189,6 @@ const Sidebar = ({ onLinkClick }) => {
             <SidebarNavLink to="/dashboard/kyc" icon={DocumentCheckIcon} onClick={onLinkClick}>
             Verification
             </SidebarNavLink>
-            <button
-                    onClick={startDashboardTour}
-                    className="flex items-center w-full px-4 py-2.5 text-sm font-medium rounded-lg text-neutral-700 dark:text-neutral-300 hover:bg-neutral-800"
-                >
-                    <QuestionMarkCircleIcon className="h-5 w-5 mr-3"/>
-                    Help & Tour
-                </button>
 
             <button
                 onClick={logout}
@@ -213,3 +205,4 @@ const Sidebar = ({ onLinkClick }) => {
 
 
 export default Sidebar;
+
