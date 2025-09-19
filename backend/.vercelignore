@@ -4,13 +4,23 @@ venv/
 __pycache__/
 *.pyc
 *.db
-*.db-journal*
+*.db-*
+.pytest_cache/
+.coverage
 
 # Ignore local environment files
 .env
 .env.*
 
-# Ignore ML models if they are not committed to Git
-# For deployment, it's better to download these from cloud storage in a build step.
-# If your models are small and in Git, you can comment out the line below.
+# Critically, ignore test files and documentation that are not needed in production
+tests/
+*.md
+docs/
+
+# Ignore ML models - these MUST be hosted elsewhere for a large deployment
 # ml_models/
+
+# Ignore IDE and OS-specific files
+.idea/
+.vscode/
+.DS_Store
