@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { useTour } from '../../context/TourContext';
 import {
   HomeIcon,
   WalletIcon,
@@ -23,7 +22,6 @@ import {
   ArrowLeftOnRectangleIcon,
   DocumentTextIcon,
   BuildingOffice2Icon,
-  QuestionMarkCircleIcon,
   BriefcaseIcon,
   BookOpenIcon,
   //BanknotesIcon, // Added BanknotesIcon for Deposit
@@ -43,9 +41,8 @@ const Logo = () => (
 );
 
 // --- [THE UPDATE] The SidebarNavLink component is updated to accept and pass an `id` prop ---
-const SidebarNavLink = ({ id, to, icon: Icon, children, onClick }) => (
+const SidebarNavLink = ({ to, icon: Icon, children, onClick }) => (
   <NavLink
-    id={id} // The passed id is applied here
     to={to}
     end={to === '/dashboard'} // A more robust way to handle the 'end' prop
     onClick={onClick}
@@ -65,15 +62,14 @@ const SidebarNavLink = ({ id, to, icon: Icon, children, onClick }) => (
 
 const Sidebar = ({ onLinkClick }) => {
   const { dbUser, isAdmin, logout, activeProfile, switchToBusiness, switchToPersonal } = useAuth();
-  const { startDashboardTour } = useTour();
 
   // --- [THE UPDATE] We will map over these arrays and add the IDs directly in the JSX ---
   const mainNavLinks = [
-    { name: 'Dashboard', href: '/dashboard', icon: HomeIcon, tourId: 'tour-dashboard-link' }, // Added tourId
-    { name: 'Wallets', href: '/dashboard/wallets', icon: WalletIcon, tourId: 'tour-wallets-link' },
-    //{ name: 'Deposit Funds', href: '/dashboard/deposit', icon: BanknotesIcon, tourId: 'tour-deposit-link' },
+    { name: 'Dashboard', href: '/dashboard', icon: HomeIcon}, // Added tourId
+    { name: 'Wallets', href: '/dashboard/wallets', icon: WalletIcon},
+    //{ name: 'Deposit Funds', href: '/dashboard/deposit', icon: BanknotesIcon},
     { name: 'Withdraw Funds', href: '/dashboard/withdraw', icon: ArrowUpTrayIcon },
-    { name: 'Send Global', href: '/dashboard/global-transfer', icon: GlobeAmericasIcon, tourId: 'tour-global-transfer-link' },
+    { name: 'Send Global', href: '/dashboard/global-transfer', icon: GlobeAmericasIcon},
     { name: 'Exchange', href: '/dashboard/exchange', icon: ScaleIcon },
     { name: 'Transactions', href: '/dashboard/transactions', icon: ArrowsRightLeftIcon },
     { name: 'Pay Bills', href: '/dashboard/pay-bills', icon: ReceiptPercentIcon },
@@ -214,5 +210,6 @@ const Sidebar = ({ onLinkClick }) => {
     </div>
   );
 };
+
 
 export default Sidebar;
