@@ -16,12 +16,12 @@ python-jose[cryptography]
 cachetools
 
 # AI & Machine Learning
-scikit-learn
-pandas
+# scikit-learn
+# pandas
 numpy
 
 google-cloud-vision
-statsmodels
+# statsmodels
 #rasa
 email-validator
 emails
@@ -35,4 +35,6 @@ httpx
 google-api-python-client
 google-auth-httplib2
 google-auth-oauthlib
+
 cloudinary
+google-cloud-recaptcha-enterprise==1.11.1
