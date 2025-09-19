@@ -1,0 +1,16 @@
+# Ignore local development artifacts
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.db
+*.db-journal*
+
+# Ignore local environment files
+.env
+.env.*
+
+# Ignore ML models if they are not committed to Git
+# For deployment, it's better to download these from cloud storage in a build step.
+# If your models are small and in Git, you can comment out the line below.
+# ml_models/
