@@ -1,0 +1,22 @@
+# FILE: netlify.toml (at the VERY ROOT of your repository)
+
+# [build] context: all build settings apply here
+[build]
+  # Base directory: Tell Netlify to change to this directory before running the build command.
+  base = "frontend"
+
+  # Build command: This is run from within the 'base' directory.
+  command = "npm run build"
+
+  # Publish directory: Netlify will deploy this folder (relative to the 'base' directory).
+  # If you are using Vite, this is correct. If you are using Create React App, change "dist" to "build".
+  publish = "frontend/build"
+
+# [[redirects]] context: all redirect rules apply here
+# This rule is essential for Single Page Applications (SPAs) like React.
+# It ensures that any direct navigation to a route (e.g., your-site.com/dashboard)
+# is correctly handled by your app's main index.html file.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
