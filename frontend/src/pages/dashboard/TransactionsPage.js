@@ -4,10 +4,12 @@ import useApi from '../../hooks/useApi';
 import TransactionTable from '../../components/dashboard/TransactionTable';
 import Button from '../../components/common/Button';
 import { ChevronLeftIcon, ChevronRightIcon, FunnelIcon } from '@heroicons/react/24/solid';
+import { useTranslation } from 'react-i18next';
 
 const TRANSACTIONS_PER_PAGE = 10;
 
 const TransactionsPage = () => {
+  const { t } = useTranslation();
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1); // Will be set by API response in a real system
   const [filters, setFilters] = useState({}); // For future implementation
