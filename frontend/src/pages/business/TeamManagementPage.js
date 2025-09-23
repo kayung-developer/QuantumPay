@@ -11,6 +11,9 @@ import * as Yup from 'yup';
 import FormInput from '../../components/common/FormInput';
 import { useAuth } from '../../context/AuthContext';
 import { Alert } from '@headlessui/react'; // For confirmation dialog
+import EmployeeFormModal from '../../components/payroll/EmployeeFormModal'; // Reusable modal
+import EmployeeTable from '../../components/payroll/EmployeeTable'; // Reusable table
+
 
 // --- Reusable Add/Edit Employee Modal ---
 const EmployeeFormModal = ({ isOpen, onClose, onSuccess, employee }) => {
@@ -88,27 +91,24 @@ const EmployeeFormModal = ({ isOpen, onClose, onSuccess, employee }) => {
 const TeamManagementPage = () => {
     const { data: employees, loading, error, request: refetchEmployees } = useApi('/business/employees');
     const [modalState, setModalState] = useState({ isOpen: false, employee: null });
+    const { post: deleteEmployee } = useApiPost('', { method: 'DELETE' });
 
-    // Hook for the delete action
-    const { post: deleteEmployee, loading: deleting } = useApiPost('', { method: 'DELETE' });
-
-    const handleSave = (employee, isEditing) => {
+    const handleSave = (isEditing) => {
         setModalState({ isOpen: false, employee: null });
         refetchEmployees();
         toast.success(`Team member ${isEditing ? 'updated' : 'added'} successfully.`);
     };
 
     const handleDelete = (employee) => {
-        // Use a simple browser confirm dialog for this critical action
-        if (window.confirm(`Are you sure you want to remove ${employee.user.full_name} from your team?`)) {
-            const result = deleteEmployee({}, { url: `/business/employees/${employee.id}` });
-            if (result) {
-                toast.success("Team member removed.");
-                refetchEmployees();
-            }
+        if (window.confirm(`Are you sure you want to remove ${employee.user.full_name}?`)) {
+            deleteEmployee({}, { url: `/business/employees/${employee.id}` }).then(result => {
+                if (result.success) {
+                    toast.success("Team member removed.");
+                    refetchEmployees();
+                }
+            });
         }
-    }
-
+    };
     const openAddModal = () => setModalState({ isOpen: true, employee: null });
     const openEditModal = (employee) => setModalState({ isOpen: true, employee: employee });
 
@@ -148,8 +148,11 @@ const TeamManagementPage = () => {
                         <h1 className="text-3xl font-bold font-display text-neutral-900 dark:text-white">Team Management</h1>
                         <p className="mt-1 text-neutral-600 dark:text-neutral-400">Add, view, and manage your business team members.</p>
                     </div>
-                    <Button onClick={openAddModal}><PlusIcon className="h-5 w-5 mr-2" />Invite Member</Button>
+                    <Button onClick={() => setModalState({ isOpen: true, employee: null })}>
+                        <PlusIcon className="h-5 w-5 mr-2" /> Invite Member
+                    </Button>
                 </div>
+
 
                 <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-lg overflow-hidden">
                     <table className="min-w-full divide-y divide-neutral-200 dark:divide-neutral-800">
@@ -169,6 +172,14 @@ const TeamManagementPage = () => {
                 </div>
             </div>
 
+            <EmployeeTable
+                    employees={employees}
+                    isLoading={loading}
+                    error={error}
+                    onEdit={(emp) => setModalState({ isOpen: true, employee: emp })}
+                    onDelete={handleDelete}
+                />
+            </div>
             <EmployeeFormModal
                 isOpen={modalState.isOpen}
                 onClose={() => setModalState({ isOpen: false, employee: null })}
