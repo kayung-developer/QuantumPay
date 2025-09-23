@@ -73,7 +73,7 @@ const DashboardHomePage = () => {
 
   return (
     //<DashboardLayout pageTitle="Overview">
-    <DashboardLayout pageTitle={t('Overview')}>
+    <DashboardLayout pageTitleKey="dashboard_overview">
       <div className="space-y-8">
         {/* Welcome Header */}
         <motion.div
@@ -85,7 +85,7 @@ const DashboardHomePage = () => {
             {t('welcome_back', { name: dbUser?.full_name || 'User' })}!
           </h1>
           <p className="mt-1 text-neutral-600 dark:text-neutral-400">
-            Here's a snapshot of your financial activity.
+            {t('dashboard_header_subtitle')}
           </p>
         </motion.div>
 
