@@ -11,6 +11,8 @@ import FormInput from '../../components/common/FormInput';
 import toast from 'react-hot-toast';
 import Spinner from '../../components/common/Spinner';
 import { format } from 'date-fns';
+import { useTranslation } from 'react-i18next';
+
 
 // --- Create Key Modal ---
 const CreateKeyModal = ({ isOpen, onClose, onSuccess }) => {
@@ -90,6 +92,7 @@ const CreateWebhookModal = ({ isOpen, onClose, onSuccess }) => {
 
 
 const DeveloperPage = () => {
+    const { t } = useTranslation();
     const { data: apiKeys, loading: keysLoading, request: refetchKeys } = useApi('/developer/api-keys');
     const { data: webhooks, loading: webhooksLoading, request: refetchWebhooks } = useApi('/developer/webhooks');
     const { post: revokeKeyPost, loading: revoking } = useApiPost('/developer/api-keys/', { method: 'DELETE' });
