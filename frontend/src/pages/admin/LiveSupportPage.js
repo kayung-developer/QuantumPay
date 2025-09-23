@@ -53,17 +53,12 @@ const LiveSupportPage = () => {
             if (data.type === 'new_message' && data.payload.conversation_id === selectedConvoIdRef.current) {
                 setMessages(prev => [...prev, data.payload]);
             } else if (data.type === 'admin_notification' || data.type === 'new_message') {
-                // If a message arrives for any conversation, refetch the list to show an indicator
                 refetch();
             }
         };
 
         // Cleanup function
-        return () => {
-            if (ws.current) {
-                ws.current.close();
-            }
-        };
+         return () => { if (ws.current) ws.current.close(); };
     }, [authToken, refetch]); // This effect only re-runs if the auth token changes.
 
     // Scroll to bottom when new messages arrive
