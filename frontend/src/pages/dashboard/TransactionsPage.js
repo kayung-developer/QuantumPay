@@ -54,7 +54,7 @@ const TransactionsPage = () => {
 
 
   return (
-    <DashboardLayout pageTitle="Transaction History">
+    <DashboardLayout pageTitleKey="transactions_title">
       <div className="space-y-6">
         <div>
           <h1 className="text-3xl font-bold font-display text-neutral-600 dark:text-white">Transaction History</h1>
