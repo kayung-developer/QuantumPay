@@ -49,12 +49,12 @@ const DangerZone = () => {
             <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Confirm Account Deletion">
                 <div className="space-y-4">
                     <p className="text-neutral-700 dark:text-neutral-300">This action is permanent. All your data, including wallets and transaction history, will be permanently removed.</p>
-                    <p className="text-white">To confirm, please type <strong className="font-mono text-red-400">delete my account</strong> below.</p>
+                    <p className="text-neutral-900 dark:text-white">To confirm, please type <strong className="font-mono text-red-400">delete my account</strong> below.</p>
                     <input
                         type="text"
                         value={confirmText}
                         onChange={(e) => setConfirmText(e.target.value)}
-                        className="w-full bg-neutral-800 border-neutral-300 dark:border-neutral-700 p-2 rounded-md text-white font-mono"
+                         className="w-full bg-neutral-100 dark:bg-neutral-800 border-neutral-300 dark:border-neutral-700 p-2 rounded-md text-neutral-900 dark:text-white font-mono"
                         placeholder="delete my account"
                     />
                     <div className="flex justify-end pt-4">
