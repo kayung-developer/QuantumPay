@@ -1,7 +1,5 @@
 import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { useShepherd } from 'react-shepherd'; // The modern hook for react-shepherd
-import { homepageTourSteps } from '../../services/tourService'; // Correctly import the steps
 import Button from '../../components/common/Button';
 import {
   ShieldCheckIcon,
@@ -10,49 +8,8 @@ import {
   BoltIcon,
 } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
-import Shepherd from 'shepherd.js'; // Import Shepherd directly for a robust fallback
 
 // --- Tour Management Component ---
-const HomepageTour = () => {
-    // This hook gets the tour controller instance from the global provider.
-    // However, since we want a separate tour for the homepage, we'll create a new instance.
-    // This ensures it doesn't conflict with the dashboard tour.
-
-    useEffect(() => {
-        // This effect runs once when the HomePage mounts.
-        const hasSeenHomepageTour = localStorage.getItem('hasSeenHomepageTour_v1');
-        if (hasSeenHomepageTour) {
-            return; // If they've seen it, do nothing.
-        }
-
-        // Use a timeout to ensure all page elements have rendered and animations have settled.
-        const tourTimeout = setTimeout(() => {
-            const tourInstance = new Shepherd.Tour({
-                useModalOverlay: true,
-                defaultStepOptions: {
-                    classes: 'shepherd-element shepherd-theme-arrows',
-                    scrollTo: { behavior: 'smooth', block: 'center' },
-                    cancelIcon: { enabled: true },
-                },
-            });
-
-            tourInstance.addSteps(homepageTourSteps);
-            tourInstance.start();
-
-            // Once the tour starts, immediately set the flag in localStorage
-            // so it doesn't appear again on the next page visit or refresh.
-            localStorage.setItem('hasSeenHomepageTour_v1', 'true');
-
-        }, 2000); // 2-second delay before the tour starts
-
-        // Cleanup function to prevent memory leaks if the user navigates away quickly.
-        return () => clearTimeout(tourTimeout);
-
-    }, []); // Empty dependency array ensures this runs only once.
-
-    // This component renders nothing. It's purely for logic.
-    return null;
-};
 
 
 // --- Sub-components for HomePage Sections ---
@@ -93,7 +50,7 @@ const features = [
 
 const FeaturesSection = () => (
   // ID for the guided tour to attach to
-  <section id="tour-features-section" className="py-20 lg:py-32 bg-neutral-50 dark:bg-neutral-950">
+  <section id="features" className="py-20 lg:py-32 bg-neutral-50 dark:bg-neutral-950">
     <div className="container mx-auto px-4">
       <div className="text-center">
         <h2 className="font-display text-3xl lg:text-4xl font-bold text-neutral-900 dark:text-white">Why Choose QuantumPay?</h2>
@@ -210,7 +167,6 @@ const CTASection = () => (
 const HomePage = () => {
   return (
     <>
-    <HomepageTour />
       <HeroSection />
       <FeaturesSection />
       <TestimonialsSection />
