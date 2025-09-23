@@ -180,7 +180,6 @@ const TeamManagementPage = () => {
                     onEdit={(emp) => setModalState({ isOpen: true, employee: emp })}
                     onDelete={handleDelete}
                 />
-            </div>
             <EmployeeFormModal
                 isOpen={modalState.isOpen}
                 onClose={() => setModalState({ isOpen: false, employee: null })}
