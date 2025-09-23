@@ -186,7 +186,7 @@ const WalletsPage = () => {
   };
 
   return (
-    <DashboardLayout pageTitle="My Wallets">
+    <DashboardLayout pageTitleKey="wallets_title">
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
