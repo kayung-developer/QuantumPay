@@ -62,6 +62,26 @@ const resources = {
       "monthly_volume": "Monthly Volume (30d)",
       "monthly_transactions": "Transactions (30d)",
       "credit_score": "Credit Score",
+
+      //Business
+    "business_header_subtitle": "A real-time overview of your business operations.",
+    "business_cta_title": "Ready to do more?",
+    "business_cta_subtitle": "Create a free business profile to start accepting payments, sending invoices, and running payroll.",
+    "business_cta_button": "Become a Merchant",
+    "team_header_subtitle": "Add, view, and manage your business team members.",
+    "team_invite_button": "Invite Member",
+    "invoicing_header_subtitle": "Create, send, and track invoices to your customers.",
+    "invoicing_create_button": "Create Invoice",
+    "payroll_header_subtitle": "Manage your international team and run payroll in multiple currencies with one click.",
+    "payroll_add_team_button": "Add/Edit Team",
+    "payroll_create_run_button": "Create Payroll Run",
+    "payroll_team_title": "Your Team",
+    "payroll_history_title": "Payroll History",
+    "cards_header_subtitle": "Issue, manage, and control company spending in real-time.",
+    "cards_issue_button": "Issue Card",
+    "expenses_header_subtitle": "Review and approve expense reports from your team.",
+    "settings_header_subtitle": "Manage your business profile, legal information, and operational settings.",
+    "cashflow_header_subtitle": "AI-powered 30-day forecast based on your historical transaction data."
     }
   },
   fr: {
