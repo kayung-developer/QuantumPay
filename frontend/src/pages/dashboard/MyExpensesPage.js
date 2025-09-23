@@ -16,59 +16,38 @@ const SubmitExpenseModal = ({ isOpen, onClose, onSuccess }) => {
     const [isUploading, setIsUploading] = useState(false);
     const { post: submitExpenseForReview } = useApiPost('/business/expenses');
 
-    const onDrop = useCallback(acceptedFiles => {
-        if (acceptedFiles.length > 0) {
-            setFile(acceptedFiles[0]);
-        }
-    }, []);
-
-    const { getRootProps, getInputProps, isDragActive } = useDropzone({
-        onDrop,
-        accept: { 'image/jpeg': [], 'image/png': [], 'application/pdf': [] },
-        maxFiles: 1,
-    });
+    const onDrop = useCallback(acceptedFiles => { if (acceptedFiles.length > 0) setFile(acceptedFiles[0]); }, []);
+    const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop, accept: { 'image/*': ['.jpeg', '.png'], 'application/pdf': ['.pdf'] }, maxFiles: 1 });
 
     const handleSubmit = async () => {
-        if (!file) {
-            toast.error("Please select a file to upload.");
-            return;
-        }
+        if (!file) { toast.error("Please select a file."); return; }
         setIsUploading(true);
         try {
-            // Step 1: Get a secure upload signature from our backend.
-            const sigResponse = await apiClient.get(`/compliance/upload-signature?file_name=${file.name}`);
-            const { signature, api_key, cloud_name, folder, tags } = sigResponse.data;
+            // Step 1: Get secure upload signature from our backend
+            const sigResponse = await apiClient.get(`/compliance/upload-signature?upload_preset=expense_receipts`);
+            const { signature, timestamp, api_key, upload_preset } = sigResponse.data;
 
-            // Step 2: Upload the file DIRECTLY to Cloudinary.
+            // Step 2: Upload the file DIRECTLY to Cloudinary
             const formData = new FormData();
             formData.append('file', file);
             formData.append('api_key', api_key);
             formData.append('signature', signature);
-            formData.append('folder', folder);
-            formData.append('tags', tags);
-            formData.append('timestamp', (Math.floor(Date.now() / 1000)).toString());
+            formData.append('timestamp', timestamp);
+            formData.append('upload_preset', upload_preset);
 
-            const uploadResponse = await fetch(`https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`, {
+            const uploadResponse = await fetch(`https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}/auto/upload`, {
                 method: 'POST',
                 body: formData,
             });
             const uploadData = await uploadResponse.json();
+            if (!uploadResponse.ok) throw new Error(uploadData.error.message);
 
-            if (!uploadResponse.ok) {
-                throw new Error(uploadData.error.message || 'Cloudinary upload failed.');
-            }
-
-            const secure_url = uploadData.secure_url;
-            toast.success("Receipt uploaded securely!");
-
-            // Step 3: Send the secure URL to our backend to create the expense record.
-            const result = await submitExpenseForReview({ receipt_url: secure_url });
-            if (result.success) {
-                onSuccess(result.data);
-            }
+            // Step 3: Send the secure URL to our backend
+            const result = await submitExpenseForReview({ receipt_url: uploadData.secure_url });
+            if (result.success) onSuccess(result.data);
 
         } catch (err) {
-            toast.error(err.message || "An error occurred during upload.");
+            toast.error(err.message || "An error occurred.");
         } finally {
             setIsUploading(false);
             setFile(null);
@@ -89,7 +68,7 @@ const SubmitExpenseModal = ({ isOpen, onClose, onSuccess }) => {
                 </div>
                 <div className="pt-4 flex justify-end">
                     <Button onClick={handleSubmit} isLoading={isUploading} disabled={!file}>
-                        Submit for Review
+                        Upload & Submit
                     </Button>
                 </div>
             </div>
