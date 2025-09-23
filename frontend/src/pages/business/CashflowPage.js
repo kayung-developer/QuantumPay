@@ -61,7 +61,7 @@ const CashflowPage = () => {
     }
 
     return (
-        <DashboardLayout pageTitle="Cash Flow Forecast">
+        <DashboardLayout pageTitleKey="cashflow_title">
             <div>
                 <h1 className="text-3xl font-bold font-display text-neutral-900 dark:text-white">Cash Flow</h1>
                 <p className="mt-1 text-neutral-400">AI-powered 30-day forecast based on your historical transaction data.</p>
