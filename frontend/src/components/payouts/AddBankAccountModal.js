@@ -27,36 +27,30 @@ const AccountVerificationEffect = () => {
     const { values, setFieldValue } = useFormikContext();
     const { post: verifyAccount, loading: verifying, error: verificationError } = useApiPost('/payouts/verify-account');
 
-    // useCallback and debounce ensure this function is stable and doesn't spam the API.
     const debouncedVerify = useCallback(
         debounce(async (formValues) => {
             if (!formValues.bank_code || formValues.account_number.length !== 10) {
-                setFieldValue('verified_account_name', ''); // Clear any previously verified name
+                setFieldValue('verified_account_name', '');
                 return;
             }
             const result = await verifyAccount({
                 account_number: formValues.account_number,
                 bank_code: formValues.bank_code,
             });
-
             if (result.success && result.data.account_name) {
-                // If successful, update the Formik state with the verified name.
                 setFieldValue('verified_account_name', result.data.account_name);
             } else {
                 setFieldValue('verified_account_name', '');
             }
-        }, 800), // 800ms delay after user stops typing
-        [] // Dependencies are stable, so this is created once
+        }, 800), // 800ms delay
+        []
     );
 
-    // This useEffect is at the top level of this component, so it's a valid use of hooks.
-    // It watches for changes to the account number or bank code.
     useEffect(() => {
-        // When the user changes the bank or account number, clear the previously verified name
-        // to force re-validation.
         setFieldValue('verified_account_name', '');
         debouncedVerify(values);
     }, [values.account_number, values.bank_code, debouncedVerify, setFieldValue]);
+
 
     // This component renders the UI for the verification status.
     return (
