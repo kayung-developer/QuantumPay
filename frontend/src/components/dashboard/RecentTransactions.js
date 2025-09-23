@@ -88,9 +88,8 @@ const RecentTransactions = ({ transactions = [], isLoading, currentUserId }) => 
 
   return (
     // [THEME FIX] Updated main container background and border colors
-    <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-lg shadow-lg h-full flex flex-col">
-      <div className="flex items-center justify-between p-5 border-b border-neutral-200 dark:border-neutral-800">
-        {/* [THEME FIX] Updated header text color */}
+  <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 ...">
+    <div className="flex items-center justify-between p-5 border-b border-neutral-200 dark:border-neutral-800">
         <h3 className="text-lg font-semibold text-neutral-900 dark:text-white font-display">Recent Transactions</h3>
         <Button to="/dashboard/transactions" variant="ghost" size="sm">View All</Button>
       </div>
