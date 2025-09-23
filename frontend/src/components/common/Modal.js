@@ -45,10 +45,9 @@ const Modal = ({ isOpen, onClose, title, children, size = 'md' }) => {
             <Dialog.Panel
               as={motion.div}
               className={`w-full ${sizeClasses[size]} transform rounded-lg
-                         bg-white dark:bg-neutral-900
-                         border border-neutral-200 dark:border-neutral-800
-                         text-left align-middle shadow-xl transition-all p-6`}
-            >
+             bg-white dark:bg-neutral-900
+             border border-neutral-200 dark:border-neutral-800
+             text-left align-middle shadow-xl transition-all p-6`}>
               <div className="flex items-start justify-between">
                 <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-neutral-900 dark:text-neutral-50">
                   {title}
@@ -56,11 +55,10 @@ const Modal = ({ isOpen, onClose, title, children, size = 'md' }) => {
                 <button
                   type="button"
                   className="p-1 rounded-full
-                             text-neutral-500 dark:text-neutral-400
-                             hover:bg-neutral-100 dark:hover:bg-neutral-800
-                             focus:outline-none focus:ring-2 focus:ring-primary"
-                  onClick={onClose}
-                >
+                 text-neutral-500 dark:text-neutral-400
+                 hover:bg-neutral-100 dark:hover:bg-neutral-800
+                 focus:outline-none focus:ring-2 focus:ring-primary"
+                onClick={onClose}>
                   <span className="sr-only">Close</span>
                   <XMarkIcon className="h-6 w-6" />
                 </button>
