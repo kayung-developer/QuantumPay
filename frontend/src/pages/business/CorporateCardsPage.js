@@ -7,6 +7,7 @@ import toast from 'react-hot-toast';
 import IssueCardModal from '../../components/dashboard/business/IssueCardModal';
 import CardDetailsModal from '../../components/dashboard/business/CardDetailsModal';
 import Spinner from '../../components/common/Spinner';
+import { useTranslation } from 'react-i18next';
 
 const CardRow = ({ card, onSelectCard }) => (
     <tr className="hover:bg-neutral-800/50 cursor-pointer" onClick={() => onSelectCard(card)}>
@@ -43,6 +44,7 @@ const SkeletonRow = () => (
 const CorporateCardsPage = () => {
     // In a real system, card data would be fetched from a dedicated endpoint.
     // For now, we manage it in state after creation.
+    const { t } = useTranslation();
     const [cards, setCards] = useState([]);
     const [loading, setLoading] = useState(false); // Simulate loading
     const [isIssueModalOpen, setIsIssueModalOpen] = useState(false);
