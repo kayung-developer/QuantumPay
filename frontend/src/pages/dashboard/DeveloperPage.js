@@ -133,7 +133,7 @@ const DeveloperPage = () => {
     }
 
     return (
-        <DashboardLayout pageTitle="Developer Tools">
+       <DashboardLayout pageTitleKey="developer_title">
             {/* Modal to show the newly created API key ONCE */}
             <Modal isOpen={!!newlyCreatedKey} onClose={() => setNewlyCreatedKey(null)} title="API Key Generated Successfully">
                 <div className="space-y-4">
