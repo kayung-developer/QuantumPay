@@ -4,10 +4,12 @@ import useApi from '../../hooks/useApi';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import Spinner from '../../components/common/Spinner';
+import { useTranslation } from 'react-i18next';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler);
 
 const CashflowPage = () => {
+    const { t } = useTranslation();
     const { data, loading, error } = useApi('/business/cashflow-forecast');
 
     const chartData = {
