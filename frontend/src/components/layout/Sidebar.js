@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useTour } from '../../context/TourContext';
+import { useTranslation } from 'react-i18next';
 import {
   HomeIcon,
   WalletIcon,
@@ -66,6 +67,7 @@ const SidebarNavLink = ({ id, to, icon: Icon, children, onClick }) => (
 const Sidebar = ({ onLinkClick }) => {
   const { dbUser, isAdmin, logout, activeProfile, switchToBusiness, switchToPersonal } = useAuth();
   const { startDashboardTour } = useTour();
+  const { t } = useTranslation();
 
   // --- [THE UPDATE] We will map over these arrays and add the IDs directly in the JSX ---
   const mainNavLinks = [
