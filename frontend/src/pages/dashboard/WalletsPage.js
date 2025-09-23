@@ -9,6 +9,7 @@ import { PlusIcon, ArrowDownTrayIcon, ArrowUpTrayIcon, WalletIcon } from '@heroi
 import DepositModal from '../../components/dashboard/funding/DepositModal';
 import AddWalletModal from '../../components/wallets/AddWalletModal';
 import toast from 'react-hot-toast'; // Added for better user feedback
+import { useTranslation } from 'react-i18next';
 
 
 // A simple component to render a wallet card (No changes needed here)
@@ -76,6 +77,7 @@ const WalletCard = ({ wallet, onDeposit }) => {
 
 // The main page component with robust enhancements
 const WalletsPage = () => {
+  const { t } = useTranslation();
   const { data: wallets, loading, error, request: refetchWallets } = useApi('/wallets/me');
   const [isDepositModalOpen, setDepositModalOpen] = useState(false);
   const [selectedWallet, setSelectedWallet] = useState(null);
