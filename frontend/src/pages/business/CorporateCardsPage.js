@@ -61,7 +61,7 @@ const CorporateCardsPage = () => {
     }
 
     return (
-        <DashboardLayout pageTitle="Corporate Cards">
+        <DashboardLayout pageTitleKey="corporate_cards_title">
             <div className="space-y-6">
                 <div className="flex flex-col md:flex-row items-start md:items-center justify-between">
                     <div>
