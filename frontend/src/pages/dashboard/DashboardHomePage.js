@@ -19,8 +19,8 @@ import { motion } from 'framer-motion';
 import BusinessSetupModal from '../../components/business/BusinessSetupModal';
 
 const DashboardHomePage = () => {
-  const { dbUser, fetchDbUser, loading: authLoading } = useAuth();
   const { t } = useTranslation();
+  const { dbUser, fetchDbUser, loading: authLoading } = useAuth();
   const [isSetupModalOpen, setIsSetupModalOpen] = useState(false);
 
 // --- PARALLEL DATA FETCHING ---
@@ -142,13 +142,13 @@ const DashboardHomePage = () => {
                         <div className="flex items-center">
                             <BriefcaseIcon className="h-10 w-10 text-primary" />
                             <div className="ml-4">
-                                <h3 className="font-semibold text-neutral-900 dark:text-white">Ready to do more?</h3>
+                              <h3 className="font-semibold text-neutral-900 dark:text-white">{t('business_cta_title')}</h3>
                                 <p className="text-sm text-neutral-600 dark:text-neutral-400">
-                                    Create a free business profile to start accepting payments, sending invoices, and running payroll.
-                                </p>
+                                {t('business_cta_subtitle')}
+                            </p>
                             </div>
                         </div>
-                        <Button onClick={() => setIsSetupModalOpen(true)}>Become a Merchant</Button>
+                        <Button onClick={() => setIsSetupModalOpen(true)}>{t('business_cta_button')}</Button>
                     </motion.div>
         )}
 
