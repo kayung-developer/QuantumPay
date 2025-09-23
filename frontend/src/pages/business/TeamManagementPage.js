@@ -11,7 +11,6 @@ import * as Yup from 'yup';
 import FormInput from '../../components/common/FormInput';
 import { useAuth } from '../../context/AuthContext';
 import { Alert } from '@headlessui/react'; // For confirmation dialog
-import EmployeeFormModal from '../../components/payroll/EmployeeFormModal'; // Reusable modal
 import EmployeeTable from '../../components/payroll/EmployeeTable'; // Reusable table
 import { useTranslation } from 'react-i18next';
 
