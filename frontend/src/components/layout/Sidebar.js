@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { useTour } from '../../context/TourContext';
 import {
   HomeIcon,
   WalletIcon,
@@ -22,6 +23,7 @@ import {
   ArrowLeftOnRectangleIcon,
   DocumentTextIcon,
   BuildingOffice2Icon,
+  QuestionMarkCircleIcon,
   BriefcaseIcon,
   BookOpenIcon,
   //BanknotesIcon, // Added BanknotesIcon for Deposit
@@ -41,8 +43,9 @@ const Logo = () => (
 );
 
 // --- [THE UPDATE] The SidebarNavLink component is updated to accept and pass an `id` prop ---
-const SidebarNavLink = ({ to, icon: Icon, children, onClick }) => (
+const SidebarNavLink = ({ id, to, icon: Icon, children, onClick }) => (
   <NavLink
+    id={id} // The passed id is applied here
     to={to}
     end={to === '/dashboard'} // A more robust way to handle the 'end' prop
     onClick={onClick}
@@ -62,21 +65,22 @@ const SidebarNavLink = ({ to, icon: Icon, children, onClick }) => (
 
 const Sidebar = ({ onLinkClick }) => {
   const { dbUser, isAdmin, logout, activeProfile, switchToBusiness, switchToPersonal } = useAuth();
+  const { startDashboardTour } = useTour();
 
   // --- [THE UPDATE] We will map over these arrays and add the IDs directly in the JSX ---
   const mainNavLinks = [
-    { name: 'Dashboard', href: '/dashboard', icon: HomeIcon}, // Added tourId
-    { name: 'Wallets', href: '/dashboard/wallets', icon: WalletIcon},
-    //{ name: 'Deposit Funds', href: '/dashboard/deposit', icon: BanknotesIcon},
-    { name: 'Withdraw Funds', href: '/dashboard/withdraw', icon: ArrowUpTrayIcon },
-    { name: 'Send Global', href: '/dashboard/global-transfer', icon: GlobeAmericasIcon},
-    { name: 'Exchange', href: '/dashboard/exchange', icon: ScaleIcon },
-    { name: 'Transactions', href: '/dashboard/transactions', icon: ArrowsRightLeftIcon },
-    { name: 'Pay Bills', href: '/dashboard/pay-bills', icon: ReceiptPercentIcon },
-    { name: 'Shared Vaults', href: '/dashboard/vaults', icon: UsersIcon },
-    { name: 'Smart USSD', href: '/dashboard/smart-ussd', icon: SignalIcon },
-    { name: 'My Expenses', href: '/dashboard/my-expenses', icon: DocumentTextIcon },
-    { name: 'Developer', href: '/dashboard/developer', icon: CodeBracketIcon },
+    { name: t('sidebar_dashboard'), href: '/dashboard', icon: HomeIcon, tourId: 'tour-dashboard-link' }, // Added tourId
+    { name: t('sidebar_wallets'), href: '/dashboard/wallets', icon: WalletIcon, tourId: 'tour-wallets-link' },
+    //{ name: 'Deposit Funds', href: '/dashboard/deposit', icon: BanknotesIcon, tourId: 'tour-deposit-link' },
+    { name: t('sidebar_withdraw'), href: '/dashboard/withdraw', icon: ArrowUpTrayIcon },
+    { name: t('sidebar_send_global'), href: '/dashboard/global-transfer', icon: GlobeAmericasIcon, tourId: 'tour-global-transfer-link' },
+    { name: t('sidebar_exchange'), href: '/dashboard/exchange', icon: ScaleIcon },
+    { name: t('sidebar_transactions'), href: '/dashboard/transactions', icon: ArrowsRightLeftIcon },
+    { name: t('sidebar_pay_bills'), href: '/dashboard/pay-bills', icon: ReceiptPercentIcon },
+    { name: t('sidebar_shared_vaults'), href: '/dashboard/vaults', icon: UsersIcon },
+    { name: t('sidebar_smart_ussd'), href: '/dashboard/smart-ussd', icon: SignalIcon },
+    { name: t('sidebar_my_expenses'), href: '/dashboard/my-expenses', icon: DocumentTextIcon },
+    { name: t('sidebar_developer'), href: '/dashboard/developer', icon: CodeBracketIcon },
   ];
 
   const adminNavLinks = [
@@ -126,6 +130,7 @@ const Sidebar = ({ onLinkClick }) => {
             // --- [THE UPDATE] We pass the tourId as the id prop ---
             <SidebarNavLink
                 key={item.name}
+                id={item.tourId} // Pass the id here
                 to={item.href}
                 icon={item.icon}
                 onClick={onLinkClick}
@@ -187,15 +192,22 @@ const Sidebar = ({ onLinkClick }) => {
                 </div>
             </Link>
             <SidebarNavLink to="/dashboard/kyc" icon={DocumentCheckIcon} onClick={onLinkClick}>
-            Verification
+            {t('sidebar_verification')}
             </SidebarNavLink>
+            <button
+                    onClick={startDashboardTour}
+                    className="flex items-center w-full px-4 py-2.5 text-sm font-medium rounded-lg text-neutral-700 dark:text-neutral-300 hover:bg-neutral-800"
+                >
+                    <QuestionMarkCircleIcon className="h-5 w-5 mr-3"/>
+                    {t('sidebar_help_tour')}
+                </button>
 
             <button
                 onClick={logout}
                 className="flex items-center w-full px-4 py-2.5 text-sm font-medium rounded-lg text-neutral-700 dark:text-neutral-300 hover:bg-red-600/20 hover:text-red-400 transition-colors mt-2"
             >
                 <ArrowLeftOnRectangleIcon className="h-5 w-5 mr-3"/>
-                Logout
+                {t('sidebar_logout')}
             </button>
         </div>
       </div>
@@ -203,6 +215,4 @@ const Sidebar = ({ onLinkClick }) => {
   );
 };
 
-
 export default Sidebar;
-
