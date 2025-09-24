@@ -38,7 +38,6 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    // [THE FIX] Add CI=false before the build command.
     "build": "CI=false react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
