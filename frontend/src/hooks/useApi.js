@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import apiClient from '../api/axiosConfig';
-import toast from 'react-hot-toast';
+import { toastSuccess, toastError } from '../components/common/Toast';
 
 // This is a plain JavaScript file, so we remove the TypeScript interface.
 // The structure of the error object will be the same, just without the explicit type definition.
@@ -17,38 +17,25 @@ const useApi = (url, options = {}, manual = false) => {
     try {
       const finalOptions = { ...options, ...requestOptions };
       const response = await apiClient(url, finalOptions);
-      setData(response.data);
 
+      if (response.data && response.data.message) {
+                toastSuccess(response.data.message);
+            }
+            // If there's no message, we don't show a generic "success" toast anymore.
+            // A success is implied by the UI updating.
 
-      // 1. Check if the response data is an object and has a 'message' key.
-      if (response.data && typeof response.data === 'object' && response.data.message) {
-      toast.success(response.data.message);
-       }
-      // 2. Provide a sensible default for other successful actions, but ignore 204 No Content.
-      else if (response.status !== 204) {
-      toast.success('Success!');
-      }
-      // For DELETE or 204 No Content, no success toast is needed by default.
-    return { success: true, data: response.data };
-    } catch (err) {
-      const errorMessage = err.response?.data?.detail || err.message || 'An API error occurred.';
-      const errorStatus = err.response?.status;
-      const errorData = err.response?.data;
-
-      // We create the same structured error object, just without the TypeScript type.
-      const structuredError = {
-          message: errorMessage,
-          status: errorStatus,
-          data: errorData
-      };
-      setError(structuredError);
-
-      console.error(`API Error on ${url}:`, structuredError);
-      return { success: false, error: structuredError };
-    } finally {
-      setLoading(false);
-    }
-  }, [url, JSON.stringify(options)]);
+            setData(response.data);
+            return { success: true, data: response.data };
+        } catch (err) {
+            // [THE FIX] Use the new specific error toast
+            const errorMessage = err.response?.data?.detail || err.message || 'An unknown error occurred.';
+            toastError(errorMessage);
+            setError({ message: errorMessage });
+            return { success: false, error: { message: errorMessage } };
+        } finally {
+            setLoading(false);
+        }
+    }, [url, options]);
 
   useEffect(() => {
     if (!manual) {
