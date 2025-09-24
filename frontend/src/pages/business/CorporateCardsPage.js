@@ -99,8 +99,8 @@ const CorporateCardsPage = () => {
                                    <tr>
                                        <td colSpan="5" className="text-center py-12">
                                            <CreditCardIcon className="mx-auto h-10 w-10 text-neutral-500"/>
-                                           <h3 className="mt-2 font-semibold text-neutral-600 dark:text-white">No corporate cards issued</h3>
-                                           <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-400">Get started by issuing your first card.</p>
+                                           <h3 className="mt-2 font-semibold text-neutral-600 dark:text-white">{t('cards_none_issued')}</h3>
+                                           <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-400">{t('cards_get_started')}</p>
                                        </td>
                                    </tr>
                                )}
