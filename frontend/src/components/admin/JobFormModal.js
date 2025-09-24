@@ -19,15 +19,14 @@ const generateSlug = (title) => {
 };
 
 const JobSchema = Yup.object().shape({
-    id: Yup.string()
-        .matches(/^[a-z0-9-]+$/, 'Slug can only contain lowercase letters, numbers, and hyphens')
-        .required('A unique URL slug is required'),
+    id: Yup.string().matches(/^[a-z0-9-]+$/, 'Slug can only contain lowercase letters, numbers, and hyphens').required('A unique URL slug is required'),
     title: Yup.string().required('Job title is required'),
     location: Yup.string().required('Location is required'),
     department: Yup.string().required('Department is required'),
     commitment: Yup.string().required('Commitment type is required'),
     short_description: Yup.string().max(200, 'Must be 200 characters or less').required('A short summary is required'),
     full_description: Yup.string().min(50, 'Description is too short').required('The full job description is required'),
+    // The schema correctly includes apply_url
     apply_url: Yup.string().url('Must be a valid URL').required('An application link is required'),
     is_active: Yup.boolean(),
 });
@@ -55,6 +54,7 @@ const JobFormModal = ({ isOpen, onClose, onSuccess, job }) => {
                     commitment: job?.commitment || 'Full-time',
                     short_description: job?.short_description || '',
                     full_description: job?.full_description || '',
+                    // [THE FIX] Add the missing 'apply_url' field to the initial values.
                     apply_url: job?.apply_url || '',
                     is_active: job?.is_active ?? true,
                 }}
