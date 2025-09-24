@@ -66,8 +66,6 @@ const ManageBlogPage = lazy(() => import('./pages/admin/ManageBlogPage'));
 
 function App() {
   return (
-    <AppearanceProvider>
-      <AuthProvider>
         <Router>
           {/* [THE FIX] Wrap the adjacent components in a React Fragment */}
           <>
@@ -129,9 +127,8 @@ function App() {
           </>
           {/* [THE FIX] Close the React Fragment */}
         </Router>
-      </AuthProvider>
-    </AppearanceProvider>
   );
 }
 
 export default App;
+
