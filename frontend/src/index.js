@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { AppearanceProvider } from './context/AppearanceContext';
-
+import { CustomToaster } from './components/common/Toast';
 
 // Import global styles from the CSS file
 import './index.css';
