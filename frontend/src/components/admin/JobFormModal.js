@@ -1,13 +1,27 @@
 import React from 'react';
 import Modal from '../common/Modal';
-import { Formik, Form, Field } from 'formik';
+import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import FormInput from '../common/FormInput';
 import Button from '../common/Button';
 import { useApiPost } from '../../hooks/useApi';
 import { Switch } from '@headlessui/react';
 
+// Helper function to generate a URL-friendly slug from the title
+const generateSlug = (title) => {
+    if (!title) return '';
+    return title
+        .toLowerCase()
+        .trim()
+        .replace(/[^\w\s-]/g, '')     // Remove all non-word, non-space, non-hyphen chars
+        .replace(/[\s_-]+/g, '-')     // Replace spaces and underscores with a single hyphen
+        .replace(/^-+|-+$/g, '');       // Remove leading/trailing hyphens
+};
+
 const JobSchema = Yup.object().shape({
+    id: Yup.string()
+        .matches(/^[a-z0-9-]+$/, 'Slug can only contain lowercase letters, numbers, and hyphens')
+        .required('A unique URL slug is required'),
     title: Yup.string().required('Job title is required'),
     location: Yup.string().required('Location is required'),
     department: Yup.string().required('Department is required'),
@@ -34,6 +48,7 @@ const JobFormModal = ({ isOpen, onClose, onSuccess, job }) => {
         <Modal isOpen={isOpen} onClose={onClose} title={isEditing ? 'Edit Job Listing' : 'Create Job Listing'} size="2xl">
             <Formik
                 initialValues={{
+                    id: job?.id || '',
                     title: job?.title || '',
                     location: job?.location || 'Remote',
                     department: job?.department || 'Engineering',
@@ -49,7 +64,22 @@ const JobFormModal = ({ isOpen, onClose, onSuccess, job }) => {
             >
                 {({ values, setFieldValue }) => (
                     <Form className="space-y-4">
-                        <FormInput name="title" label="Job Title" />
+                        <FormInput
+                            name="title"
+                            label="Job Title"
+                            onChange={(e) => {
+                                setFieldValue('title', e.target.value);
+                                if (!isEditing) {
+                                    setFieldValue('id', generateSlug(e.target.value));
+                                }
+                            }}
+                        />
+                        <FormInput
+                            name="id"
+                            label="URL Slug (Unique ID)"
+                            disabled={isEditing}
+                            helpText="URL-friendly identifier. Auto-generated from title."
+                        />
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <FormInput name="location" label="Location" />
                             <FormInput name="department" label="Department" />
