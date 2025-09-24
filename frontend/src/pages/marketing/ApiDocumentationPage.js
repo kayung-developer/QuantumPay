@@ -1,10 +1,15 @@
+// FILE: src/pages/marketing/ApiDocumentationPage.js
+
 import React, { useState, useEffect, useMemo } from 'react';
-import { motion } from 'framer-motion';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-// [THEME AWARE] Import both a dark and a light theme for the code snippets
 import { vscDarkPlus, ghcolors } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { ClipboardDocumentIcon, CheckIcon } from '@heroicons/react/24/outline';
-import { useAppearance } from '../../context/AppearanceContext'; // To detect the current theme
+import { useAppearance } from '../../context/AppearanceContext';
+import toast from 'react-hot-toast';
+
+// [THE UPGRADE] Use the environment variable for the API base URL.
+// This should be the public URL of your DEPLOYED backend, not the Netlify frontend URL.
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://kayung-developer-quantumpay-backend.hf.space';
 
 // --- Reusable, Theme-Aware CodeSnippet Component ---
 const CodeSnippet = ({ snippets }) => {
@@ -15,6 +20,7 @@ const CodeSnippet = ({ snippets }) => {
     const handleCopy = () => {
         navigator.clipboard.writeText(snippets[activeLang]);
         setCopied(true);
+        toast.success("Code snippet copied!");
         setTimeout(() => setCopied(false), 2000);
     };
 
@@ -40,12 +46,12 @@ const CodeSnippet = ({ snippets }) => {
                         </button>
                     ))}
                 </div>
-                <button onClick={handleCopy} className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors">
+                <button onClick={handleCopy} className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors" aria-label="Copy code">
                     {copied ? <CheckIcon className="h-5 w-5 text-green-400" /> : <ClipboardDocumentIcon className="h-5 w-5" />}
                 </button>
             </div>
-            <div className="p-4 text-sm">
-                <SyntaxHighlighter language={activeLang.toLowerCase()} style={activeSyntaxTheme} customStyle={{ margin: 0, background: 'transparent', fontSize: '0.875rem' }}>
+            <div className="p-4 text-sm overflow-x-auto">
+                <SyntaxHighlighter language={activeLang.toLowerCase()} style={activeSyntaxTheme} customStyle={{ margin: 0, padding: 0, background: 'transparent', fontSize: '0.875rem' }}>
                     {snippets[activeLang].trim()}
                 </SyntaxHighlighter>
             </div>
@@ -58,11 +64,10 @@ const ApiDocumentationPage = () => {
     const [activeSection, setActiveSection] = useState('introduction');
 
     const docSections = useMemo(() => [
-        { id: 'introduction', title: 'Introduction', headers: [] },
-        { id: 'authentication', title: 'Authentication', headers: [] },
-        { id: 'wallets', title: 'Wallets API', headers: ['Retrieve Wallets'] },
-        { id: 'transactions', title: 'Transactions API', headers: ['Create P2P Transfer', 'Create QR Payment'] },
-        { id: 'invoicing', title: 'Invoicing API', headers: ['Create Invoice'] },
+        { id: 'introduction', title: 'Introduction' },
+        { id: 'authentication', title: 'Authentication' },
+        { id: 'transactions', title: 'Transactions API' },
+        { id: 'invoicing', title: 'Invoicing API' },
     ], []);
 
     useEffect(() => {
@@ -85,12 +90,26 @@ const ApiDocumentationPage = () => {
         return () => observer.disconnect();
     }, [docSections]);
 
+    // [THE UPGRADE] Define complete, realistic code snippets for each language
+    const authSnippets = {
+        'cURL': `curl "${API_BASE_URL}/users/me" \\\n  -H "Authorization: Bearer YOUR_SECRET_KEY"`,
+        'Node.js': `const axios = require('axios');\n\nconst apiKey = 'YOUR_SECRET_KEY';\n\naxios.get('${API_BASE_URL}/users/me', {\n  headers: {\n    'Authorization': \`Bearer \${apiKey}\`\n  }\n})\n.then(response => console.log(response.data))\n.catch(error => console.error(error));`,
+        'Python': `import requests\n\napi_key = "YOUR_SECRET_KEY"\nurl = "${API_BASE_URL}/users/me"\n\nheaders = {\n    "Authorization": f"Bearer {api_key}"\n}\n\nresponse = requests.get(url, headers=headers)\nprint(response.json())`,
+        'JavaScript': `const apiKey = 'YOUR_SECRET_KEY';\n\nfetch('${API_BASE_URL}/users/me', {\n  method: 'GET',\n  headers: {\n    'Authorization': \`Bearer \${apiKey}\`,\n    'Content-Type': 'application/json'\n  }\n})\n.then(response => response.json())\n.then(data => console.log(data))\n.catch(error => console.error(error));`
+    };
+
+    const p2pSnippets = {
+        'cURL': `curl -X POST "${API_BASE_URL}/transactions/p2p" \\\n  -H "Authorization: Bearer YOUR_SECRET_KEY" \\\n  -H "Content-Type: application/json" \\\n  -d '{\n    "receiver_email": "receiver@example.com",\n    "amount": 50.00,\n    "currency_code": "USD",\n    "description": "Payment for services"\n  }'`,
+        'Node.js': `const axios = require('axios');\n\nconst apiKey = 'YOUR_SECRET_KEY';\nconst payload = {\n  receiver_email: 'receiver@example.com',\n  amount: 50.00,\n  currency_code: 'USD',\n  description: 'Payment for services'\n};\n\naxios.post('${API_BASE_URL}/transactions/p2p', payload, {\n  headers: {\n    'Authorization': \`Bearer \${apiKey}\`\n  }\n})\n.then(response => console.log(response.data))\n.catch(error => console.error(error));`,
+        'Python': `import requests\n\napi_key = "YOUR_SECRET_KEY"\nurl = "${API_BASE_URL}/transactions/p2p"\n\npayload = {\n    "receiver_email": "receiver@example.com",\n    "amount": 50.00,\n    "currency_code": "USD",\n    "description": "Payment for services"\n}\n\nheaders = {\n    "Authorization": f"Bearer {api_key}",\n    "Content-Type": "application/json"\n}\n\nresponse = requests.post(url, json=payload, headers=headers)\nprint(response.json())`,
+        'JavaScript': `const apiKey = 'YOUR_SECRET_KEY';\nconst payload = {\n  receiver_email: 'receiver@example.com',\n  amount: 50.00,\n  currency_code: 'USD',\n  description: 'Payment for services'\n};\n\nfetch('${API_BASE_URL}/transactions/p2p', {\n  method: 'POST',\n  headers: {\n    'Authorization': \`Bearer \${apiKey}\`,\n    'Content-Type': 'application/json'\n  },\n  body: JSON.stringify(payload)\n})\n.then(response => response.json())\n.then(data => console.log(data))\n.catch(error => console.error(error));`
+    };
+
     return (
         <div className="bg-white dark:bg-neutral-950">
              <div className="mx-auto max-w-7xl px-6 lg:px-8 pt-24 pb-20 sm:pt-32 sm:pb-28">
                 <div className="lg:grid lg:grid-cols-12 lg:gap-8">
-                    {/* Left Sidebar Navigation */}
-                    <nav className="hidden lg:block lg:col-span-2 sticky top-24 self-start">
+                    <nav className="hidden lg:block lg:col-span-3 sticky top-24 self-start">
                          <h3 className="font-semibold text-neutral-900 dark:text-white">API Reference</h3>
                         <ul className="space-y-2 mt-4">
                             {docSections.map(section => (
@@ -110,56 +129,34 @@ const ApiDocumentationPage = () => {
                         </ul>
                     </nav>
 
-                    {/* Main Content */}
-                    <main className="lg:col-span-7">
+                    <main className="lg:col-span-9">
                         <section id="introduction">
                             <h1 className="text-3xl font-bold font-display text-neutral-900 dark:text-white">API Introduction</h1>
                             <p className="mt-4 text-neutral-600 dark:text-neutral-300">Welcome to the QuantumPay API. Our API is designed to be predictable, resource-oriented, and uses standard HTTP response codes. All API requests must be made over HTTPS.</p>
-                            <p className="mt-2 text-neutral-600 dark:text-neutral-300">The base URL for all API requests is: <code>https://api.quantumpay.com</code></p>
+                            <p className="mt-2 text-neutral-600 dark:text-neutral-300">The base URL for all API requests is: <code className="bg-neutral-100 dark:bg-neutral-800 p-1 rounded text-sm">{API_BASE_URL}</code></p>
                         </section>
 
-                         <section id="authentication" className="mt-12">
+                        <section id="authentication" className="mt-12 pt-8 border-t border-neutral-200 dark:border-neutral-800">
                             <h2 className="text-2xl font-bold font-display text-neutral-900 dark:text-white">Authentication</h2>
                             <p className="mt-4 text-neutral-600 dark:text-neutral-300">All API requests must be authenticated with an API key. Your API keys carry many privileges; be sure to keep them secure! Authentication is done by providing your secret key in the HTTP <code>Authorization</code> header as a Bearer token.</p>
-                            <CodeSnippet snippets={{ 'cURL': `curl "https://api.quantumpay.com/users/me" \\\n  -H "Authorization: Bearer YOUR_SECRET_KEY"` }} />
+                            <CodeSnippet snippets={authSnippets} />
                         </section>
 
-                         <section id="wallets" className="mt-12">
-                            <h2 className="text-2xl font-bold font-display text-neutral-900 dark:text-white">Wallets API</h2>
-                            <h3 className="text-xl font-semibold mt-6 text-neutral-800 dark:text-neutral-100">Retrieve Wallets</h3>
-                            <p className="mt-2 text-neutral-600 dark:text-neutral-300">Returns a list of all wallet objects associated with your account.</p>
-                             <CodeSnippet snippets={{ 'Endpoint': `GET /wallets/me` }} />
-                        </section>
-
-                        <section id="transactions" className="mt-12">
+                        <section id="transactions" className="mt-12 pt-8 border-t border-neutral-200 dark:border-neutral-800">
                              <h2 className="text-2xl font-bold font-display text-neutral-900 dark:text-white">Transactions API</h2>
                             <h3 className="text-xl font-semibold mt-6 text-neutral-800 dark:text-neutral-100">Create P2P Transfer</h3>
-                             <p className="mt-2 text-neutral-600 dark:text-neutral-300">Creates a peer-to-peer transfer to another QuantumPay user.</p>
-                              <CodeSnippet snippets={{ 'Endpoint': `POST /transactions/p2p` }} />
+                             <p className="mt-2 text-neutral-600 dark:text-neutral-300">Creates a peer-to-peer transfer to another QuantumPay user. This endpoint is idempotent and processes the transfer atomically.</p>
+                            <p className="mt-1 text-sm text-neutral-500"><code className="bg-neutral-100 dark:bg-neutral-800 p-1 rounded">POST</code> <code className="bg-neutral-100 dark:bg-neutral-800 p-1 rounded">/transactions/p2p</code></p>
+                            <CodeSnippet snippets={p2pSnippets} />
                         </section>
 
-                         <section id="invoicing" className="mt-12">
+                         <section id="invoicing" className="mt-12 pt-8 border-t border-neutral-200 dark:border-neutral-800">
                             <h2 className="text-2xl font-bold font-display text-neutral-900 dark:text-white">Invoicing API</h2>
-                            <h3 className="text-xl font-semibold mt-6 text-neutral-800 dark:text-neutral-100">Create Invoice</h3>
-                            <p className="mt-2 text-neutral-600 dark:text-neutral-300">Creates a new invoice for a customer. The invoice is automatically sent upon creation.</p>
-                            <CodeSnippet snippets={{ 'Endpoint': `POST /business/invoices` }} />
-                            <p className="mt-2 text-neutral-600 dark:text-neutral-300">Body parameters include <code>customer_email</code>, <code>currency</code>, <code>due_date</code>, and an array of <code>items</code>.</p>
-                        </section>
+                            <p className="mt-4 text-neutral-600 dark:text-neutral-300">The invoicing API is available to users with an active Business Profile. It allows for the creation and management of invoices.</p>
+                             <h3 className="text-xl font-semibold mt-6 text-neutral-800 dark:text-neutral-100">Create an Invoice</h3>
+                            <p className="mt-1 text-sm text-neutral-500"><code className="bg-neutral-100 dark:bg-neutral-800 p-1 rounded">POST</code> <code className="bg-neutral-100 dark:bg-neutral-800 p-1 rounded">/business/invoices</code></p>
+                         </section>
                     </main>
-
-                     {/* Right "On This Page" Sidebar */}
-                    <aside className="hidden lg:block lg:col-span-3 sticky top-24 self-start">
-                         <h3 className="font-semibold text-neutral-900 dark:text-white">On this page</h3>
-                         <ul className="space-y-2 mt-4">
-                            {docSections.find(s => s.id === activeSection)?.headers.map(header => (
-                                <li key={header}>
-                                     <a href={`#`} className="block pl-3 py-1 text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white">
-                                        {header}
-                                    </a>
-                                </li>
-                            ))}
-                         </ul>
-                    </aside>
                 </div>
             </div>
         </div>
