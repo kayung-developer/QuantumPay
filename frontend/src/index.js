@@ -1,36 +1,32 @@
-// FILE: frontend/src/index.js
-
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
+import { AppearanceProvider } from './context/AppearanceContext';
 
-// Import global CSS and i18n configuration
+
+// Import global styles from the CSS file
 import './index.css';
 import './i18n';
-
-// Import top-level providers
-import { AuthProvider } from './context/AuthContext';
-import { AppearanceProvider } from './context/AppearanceContext';
 
 // Import the main App component
 import App from './App';
 
+// Import the Auth Provider to wrap the entire application
+import { AuthProvider } from './context/AuthContext';
+
+// Create a root element for React to render into.
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
+// Render the application
 root.render(
   <React.StrictMode>
-    {/*
-      [DEFINITIVE STRUCTURE]
-      1. Router provides routing capabilities to the entire app.
-      2. AuthProvider provides user authentication state.
-      3. AppearanceProvider provides theme and language state.
-      These wrap the <App /> component so all pages can access their context.
-    */}
-    <Router>
+    <BrowserRouter>
       <AuthProvider>
-        <AppearanceProvider>
-          <App />
+      <AppearanceProvider>
+        <App />
         </AppearanceProvider>
       </AuthProvider>
-    </Router>
+    </BrowserRouter>
   </React.StrictMode>
 );
+//document.body.classList.add('react-loaded');
