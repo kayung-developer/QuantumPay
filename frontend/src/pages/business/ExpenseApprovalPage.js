@@ -26,7 +26,7 @@ const ExpenseApprovalPage = () => {
 
 const renderContent = () => {
         if (loading) return <div className="flex justify-center p-8"><Spinner size="lg" /></div>;
-        if (error) return <p className="text-center text-red-400">Could not load pending expenses.</p>;
+        if (error) return <p className="text-center text-red-400">{t('expenses_none_pending')}</p>;
 
         return (
              <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-lg overflow-hidden">
