@@ -81,7 +81,15 @@ const resources = {
 "cards_issue_button": "Issue Card",
 "expenses_header_subtitle": "Review and approve expense reports from your team.",
 "settings_header_subtitle": "Manage your business profile, legal information, and operational settings.",
-"cashflow_header_subtitle": "AI-powered 30-day forecast based on your historical transaction data."    }
+"cashflow_header_subtitle": "AI-powered 30-day forecast based on your historical transaction data.",
+"cards_none_issued": "No corporate cards issued",
+      "cards_get_started": "Get started by issuing your first card.",
+      "expenses_none_pending": "No pending expenses to review.",
+      "invoice_create_success": "Invoice created and sent successfully!",
+      "currency_label": "Currency",
+      "dashboard_header_subtitle": "Here's a snapshot of your financial activity."
+
+  }
   },
   fr: {
     translation: {
@@ -105,7 +113,13 @@ const resources = {
 "cards_issue_button": "Émettre une Carte",
 "expenses_header_subtitle": "Examinez et approuvez les notes de frais de votre équipe.",
 "settings_header_subtitle": "Gérez le profil de votre entreprise, les informations légales et les paramètres opérationnels.",
-"cashflow_header_subtitle": "Prévision de flux de trésorerie sur 30 jours alimentée par l'IA, basée sur vos données de transactions historiques."
+"cashflow_header_subtitle": "Prévision de flux de trésorerie sur 30 jours alimentée par l'IA, basée sur vos données de transactions historiques.",
+"cards_none_issued": "Aucune carte d'entreprise émise",
+      "cards_get_started": "Commencez par émettre votre première carte.",
+      "expenses_none_pending": "Aucune dépense en attente d'examen.",
+      "invoice_create_success": "Facture créée et envoyée avec succès !",
+      "currency_label": "Devise",
+      "dashboard_header_subtitle": "Voici un aperçu de votre activité financière."
 
 
     }
@@ -132,7 +146,13 @@ const resources = {
 "cards_issue_button": "Emitir Tarjeta",
 "expenses_header_subtitle": "Revise y apruebe los informes de gastos de su equipo.",
 "settings_header_subtitle": "Gestione el perfil de su empresa, la información legal y la configuración operativa.",
-"cashflow_header_subtitle": "Previsión de flujo de caja de 30 días impulsada por IA, basada en sus datos históricos de transacciones."
+"cashflow_header_subtitle": "Previsión de flujo de caja de 30 días impulsada por IA, basada en sus datos históricos de transacciones.",
+"cards_none_issued": "No se han emitido tarjetas corporativas",
+      "cards_get_started": "Empiece emitiendo su primera tarjeta.",
+      "expenses_none_pending": "No hay gastos pendientes de revisar.",
+      "invoice_create_success": "¡Factura creada y enviada con éxito!",
+      "currency_label": "Moneda",
+      "dashboard_header_subtitle": "Aquí tiene un resumen de su actividad financiera."
 
     }
   },
@@ -158,7 +178,13 @@ const resources = {
 "cards_issue_button": "Emitir Cartão",
 "expenses_header_subtitle": "Revise e aprove os relatórios de despesas da sua equipe.",
 "settings_header_subtitle": "Gerencie o perfil da sua empresa, informações legais e configurações operacionais.",
-"cashflow_header_subtitle": "Previsão de fluxo de caixa de 30 dias com IA, baseada nos seus dados históricos de transações."
+"cashflow_header_subtitle": "Previsão de fluxo de caixa de 30 dias com IA, baseada nos seus dados históricos de transações.",
+"cards_none_issued": "Nenhum cartão corporativo emitido",
+      "cards_get_started": "Comece emitindo seu primeiro cartão.",
+      "expenses_none_pending": "Nenhuma despesa pendente para revisar.",
+      "invoice_create_success": "Fatura criada e enviada com sucesso!",
+      "currency_label": "Moeda",
+      "dashboard_header_subtitle": "Aqui está um resumo da sua atividade financeira."
 
     }
   },
@@ -185,6 +211,13 @@ const resources = {
 "expenses_header_subtitle": "Kagua na idhinisha ripoti za gharama za timu yako.",
 "settings_header_subtitle": "Dhibiti wasifu wa biashara yako, taarifa za kisheria, na mipangilio ya uendeshaji.",
 "cashflow_header_subtitle": "Utabiri wa mtiririko wa pesa wa siku 30 unaoendeshwa na AI, kulingana na data yako ya kihistoria ya miamala."
+ "cards_none_issued": "Hakuna kadi za kampuni zilizotolewa",
+      "cards_get_started": "Anza kwa kutoa kadi yako ya kwanza.",
+      "expenses_none_pending": "Hakuna gharama zinazosubiri kukaguliwa.",
+      "invoice_create_success": "Ankara imetengenezwa na kutumwa kikamilifu!",
+      "currency_label": "Sarafu",
+      "dashboard_header_subtitle": "Huu ni muhtasari wa shughuli zako za kifedha."
+
 
     }
   }
