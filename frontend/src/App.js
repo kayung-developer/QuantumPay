@@ -82,6 +82,7 @@ const NotFoundPage = lazy(() => import('./pages/utility/NotFoundPage'));
 function App() {
   return (
     // [THE FIX] All providers must wrap the Router to provide context to all routes.
+    <Router>
           <>
             <CustomToaster />
             <Suspense fallback={<div className="flex h-screen w-full items-center justify-center"><Spinner size="lg" /></div>}>
@@ -149,6 +150,7 @@ function App() {
               </Routes>
             </Suspense>
           </>
+        </Router>
   );
 }
 
