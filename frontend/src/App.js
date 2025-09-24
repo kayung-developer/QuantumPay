@@ -8,6 +8,7 @@ import Spinner from './components/common/Spinner';
 // Import custom route protection components (we will create these)
 import ProtectedRoute from './components/utility/ProtectedRoute';
 import AdminRoute from './components/utility/AdminRoute';
+import { CustomToaster } from './components/common/Toast';
 
 // =================================================================================
 // LAZY LOADING PAGES
@@ -48,6 +49,7 @@ const DeveloperPage = lazy(() => import('./pages/dashboard/DeveloperPage'));
 
 // --- [NEW] Business Pages ---
 const BusinessDashboardPage = lazy(() => import('./pages/business/BusinessDashboardPage'));
+//const TeamManagementPage = lazy(() => import('./pages/business/TeamManagementPage'));
 const ExpenseApprovalPage = lazy(() => import('./pages/business/ExpenseApprovalPage'));
 const InvoicingPage = lazy(() => import('./pages/business/InvoicingPage'));
 const CreateInvoicePage = lazy(() => import('./pages/business/CreateInvoicePage'));
@@ -80,6 +82,7 @@ const TermsOfServicePage = lazy(() => import('./pages/utility/TermsOfServicePage
 
 function App() {
   return (
+  <CustomToaster />
     // The Suspense component shows a fallback UI (our Spinner) while lazy-loaded components are being fetched.
     <Suspense fallback={<div className="flex h-screen w-full items-center justify-center"><Spinner size="lg" /></div>}>
       <Routes>
@@ -150,6 +153,5 @@ function App() {
     </Suspense>
   );
 }
-
 
 export default App;
