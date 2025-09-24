@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 // --- Context Providers (CRITICAL - These must wrap the entire app) ---
 import { AuthProvider } from './context/AuthContext';
-import { AppearanceProvider } from './context/AppearanceContext';
 
 // --- Layout & Utility Components ---
 import PageWrapper from './components/layout/PageWrapper';
