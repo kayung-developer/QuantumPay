@@ -68,7 +68,7 @@ const CreateInvoicePage = () => {
         };
         const result = await createInvoice(payload);
         if (result.success) {
-            toast.success("Invoice created and sent successfully!");
+            toast.success(t('invoice_create_success'));
             navigate('/business/invoicing');
         }
     };
@@ -101,7 +101,7 @@ const CreateInvoicePage = () => {
                                     <div className="md:col-span-2"><FormInput label="Customer Email" name="customer_email" type="email" placeholder="customer@example.com"/>
                                     </div>
                                     <div>
-                                    <label htmlFor="currency" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Currency</label>
+                                    <label htmlFor="currency" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">{t('currency_label')}</label>
                                         <Field
                                             as="select"
                                             name="currency"
