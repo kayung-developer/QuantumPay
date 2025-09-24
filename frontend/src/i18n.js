@@ -210,7 +210,7 @@ const resources = {
 "cards_issue_button": "Toa Kadi",
 "expenses_header_subtitle": "Kagua na idhinisha ripoti za gharama za timu yako.",
 "settings_header_subtitle": "Dhibiti wasifu wa biashara yako, taarifa za kisheria, na mipangilio ya uendeshaji.",
-"cashflow_header_subtitle": "Utabiri wa mtiririko wa pesa wa siku 30 unaoendeshwa na AI, kulingana na data yako ya kihistoria ya miamala."
+"cashflow_header_subtitle": "Utabiri wa mtiririko wa pesa wa siku 30 unaoendeshwa na AI, kulingana na data yako ya kihistoria ya miamala.",
  "cards_none_issued": "Hakuna kadi za kampuni zilizotolewa",
       "cards_get_started": "Anza kwa kutoa kadi yako ya kwanza.",
       "expenses_none_pending": "Hakuna gharama zinazosubiri kukaguliwa.",
