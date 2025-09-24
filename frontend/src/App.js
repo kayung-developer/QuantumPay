@@ -48,7 +48,6 @@ const DeveloperPage = lazy(() => import('./pages/dashboard/DeveloperPage'));
 
 // --- [NEW] Business Pages ---
 const BusinessDashboardPage = lazy(() => import('./pages/business/BusinessDashboardPage'));
-const TeamManagementPage = lazy(() => import('./pages/business/TeamManagementPage'));
 const ExpenseApprovalPage = lazy(() => import('./pages/business/ExpenseApprovalPage'));
 const InvoicingPage = lazy(() => import('./pages/business/InvoicingPage'));
 const CreateInvoicePage = lazy(() => import('./pages/business/CreateInvoicePage'));
@@ -116,7 +115,6 @@ function App() {
         <Route path="/dashboard/settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
 
        <Route path="/business/dashboard" element={<ProtectedRoute><BusinessDashboardPage /></ProtectedRoute>} />
-    <Route path="/business/team" element={<ProtectedRoute><TeamManagementPage /></ProtectedRoute>} />
     <Route path="/business/expenses" element={<ProtectedRoute><ExpenseApprovalPage /></ProtectedRoute>} />
     <Route path="/business/invoicing" element={<ProtectedRoute><InvoicingPage /></ProtectedRoute>} />
     <Route path="/business/invoicing/new" element={<ProtectedRoute><CreateInvoicePage /></ProtectedRoute>} />
@@ -152,5 +150,6 @@ function App() {
     </Suspense>
   );
 }
+
 
 export default App;
