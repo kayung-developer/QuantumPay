@@ -88,7 +88,19 @@ const resources = {
       "invoice_create_success": "Invoice created and sent successfully!",
       "currency_label": "Currency",
       "dashboard_header_subtitle": "Here's a snapshot of your financial activity.",
-      "sidebar_business_dashboard": "Business Dashboard", "sidebar_team_management": "Team Management", "sidebar_invoicing": "Invoicing", "sidebar_payroll": "Payroll", "sidebar_corporate_cards": "Corporate Cards", "sidebar_expense_approvals": "Expense Approvals", "sidebar_business_settings": "Business Settings", "sidebar_admin_overview": "Admin Overview", "sidebar_manage_users": "Manage Users", "sidebar_kyc_approvals": "KYC Approvals", "sidebar_live_support": "Live Support", "sidebar_job_listings": "Job Listings", "sidebar_blog_posts": "Blog Posts"
+      "sidebar_business_dashboard": "Business Dashboard", "sidebar_team_management": "Team Management", "sidebar_invoicing": "Invoicing", "sidebar_payroll": "Payroll", "sidebar_corporate_cards": "Corporate Cards", "sidebar_expense_approvals": "Expense Approvals", "sidebar_business_settings": "Business Settings", "sidebar_admin_overview": "Admin Overview", "sidebar_manage_users": "Manage Users", "sidebar_kyc_approvals": "KYC Approvals", "sidebar_live_support": "Live Support", "sidebar_job_listings": "Job Listings", "sidebar_blog_posts": "Blog Posts",
+      "setup_business_title": "Setup Your Business Profile",
+      "setup_business_subtitle": "Provide your business and compliance details to create reserved accounts for receiving payments.",
+      "business_name_label": "Registered Business Name",
+      "bvn_label": "Bank Verification Number (BVN)",
+      "nin_label": "National Identification Number (NIN)",
+      "monnify_code_label": "Monnify Contract Code",
+      "create_profile_button": "Create Business Profile",
+      "setup_business_success": "Congrats! Your business profile has been created!",
+      "validation.too_short": "This field is too short",
+      "validation.required": "This field is required",
+      "validation.bvn_invalid": "Must be a valid 11-digit BVN",
+      "validation.nin_invalid": "Must be a valid 11-digit NIN"
 
   }
   },
@@ -121,8 +133,18 @@ const resources = {
       "invoice_create_success": "Facture créée et envoyée avec succès !",
       "currency_label": "Devise",
       "dashboard_header_subtitle": "Voici un aperçu de votre activité financière.",
-      "sidebar_business_dashboard": "Tableau de Bord Entreprise", "sidebar_team_management": "Gestion d'Équipe", "sidebar_invoicing": "Facturation", "sidebar_payroll": "Paie", "sidebar_corporate_cards": "Cartes d'Entreprise", "sidebar_expense_approvals": "Approbations de Dépenses", "sidebar_business_settings": "Paramètres de l'Entreprise", "sidebar_admin_overview": "Aperçu Admin", "sidebar_manage_users": "Gérer les Utilisateurs", "sidebar_kyc_approvals": "Approbations KYC", "sidebar_live_support": "Support en Direct", "sidebar_job_listings": "Offres d'Emploi", "sidebar_blog_posts": "Articles de Blog"
-
+      "sidebar_business_dashboard": "Tableau de Bord Entreprise", "sidebar_team_management": "Gestion d'Équipe", "sidebar_invoicing": "Facturation", "sidebar_payroll": "Paie", "sidebar_corporate_cards": "Cartes d'Entreprise", "sidebar_expense_approvals": "Approbations de Dépenses", "sidebar_business_settings": "Paramètres de l'Entreprise", "sidebar_admin_overview": "Aperçu Admin", "sidebar_manage_users": "Gérer les Utilisateurs", "sidebar_kyc_approvals": "Approbations KYC", "sidebar_live_support": "Support en Direct", "sidebar_job_listings": "Offres d'Emploi", "sidebar_blog_posts": "Articles de Blog",
+      "setup_business_subtitle": "Fournissez les détails de votre entreprise et de conformité pour créer des comptes réservés pour recevoir des paiements.",
+      "business_name_label": "Nom Commercial Enregistré",
+      "bvn_label": "Numéro de Vérification Bancaire (BVN)",
+      "nin_label": "Numéro d'Identification National (NIN)",
+      "monnify_code_label": "Code de Contrat Monnify",
+      "create_profile_button": "Créer le Profil d'Entreprise",
+      "setup_business_success": "Félicitations ! Votre profil d'entreprise a été créé !",
+      "validation.too_short": "Ce champ est trop court",
+      "validation.required": "Ce champ est requis",
+      "validation.bvn_invalid": "Doit être un BVN valide à 11 chiffres",
+      "validation.nin_invalid": "Doit être un NIN valide à 11 chiffres"
 
 
     }
@@ -156,7 +178,19 @@ const resources = {
       "invoice_create_success": "¡Factura creada y enviada con éxito!",
       "currency_label": "Moneda",
       "dashboard_header_subtitle": "Aquí tiene un resumen de su actividad financiera.",
-       "sidebar_business_dashboard": "Panel de Negocios", "sidebar_team_management": "Gestión de Equipo", "sidebar_invoicing": "Facturación", "sidebar_payroll": "Nómina", "sidebar_corporate_cards": "Tarjetas Corporativas", "sidebar_expense_approvals": "Aprobaciones de Gastos", "sidebar_business_settings": "Configuración del Negocio", "sidebar_admin_overview": "Resumen de Admin", "sidebar_manage_users": "Gestionar Usuarios", "sidebar_kyc_approvals": "Aprobaciones KYC", "sidebar_live_support": "Soporte en Vivo", "sidebar_job_listings": "Ofertas de Empleo", "sidebar_blog_posts": "Publicaciones del Blog"
+       "sidebar_business_dashboard": "Panel de Negocios", "sidebar_team_management": "Gestión de Equipo", "sidebar_invoicing": "Facturación", "sidebar_payroll": "Nómina", "sidebar_corporate_cards": "Tarjetas Corporativas", "sidebar_expense_approvals": "Aprobaciones de Gastos", "sidebar_business_settings": "Configuración del Negocio", "sidebar_admin_overview": "Resumen de Admin", "sidebar_manage_users": "Gestionar Usuarios", "sidebar_kyc_approvals": "Aprobaciones KYC", "sidebar_live_support": "Soporte en Vivo", "sidebar_job_listings": "Ofertas de Empleo", "sidebar_blog_posts": "Publicaciones del Blog",
+       "setup_business_title": "Configure su Perfil de Empresa",
+      "setup_business_subtitle": "Proporcione los detalles de su empresa y de cumplimiento para crear cuentas reservadas para recibir pagos.",
+      "business_name_label": "Nombre Comercial Registrado",
+      "bvn_label": "Número de Verificación Bancaria (BVN)",
+      "nin_label": "Número de Identificación Nacional (NIN)",
+      "monnify_code_label": "Código de Contrato de Monnify",
+      "create_profile_button": "Crear Perfil de Empresa",
+      "setup_business_success": "¡Felicidades! ¡Su perfil de empresa ha sido creado!",
+      "validation.too_short": "Este campo es demasiado corto",
+      "validation.required": "Este campo es obligatorio",
+      "validation.bvn_invalid": "Debe ser un BVN válido de 11 dígitos",
+      "validation.nin_invalid": "Debe ser un NIN válido de 11 dígitos"
 
 
     }
@@ -190,7 +224,20 @@ const resources = {
       "invoice_create_success": "Fatura criada e enviada com sucesso!",
       "currency_label": "Moeda",
       "dashboard_header_subtitle": "Aqui está um resumo da sua atividade financeira.",
-      "sidebar_business_dashboard": "Painel Empresarial", "sidebar_team_management": "Gestão da Equipe", "sidebar_invoicing": "Faturamento", "sidebar_payroll": "Folha de Pagamento", "sidebar_corporate_cards": "Cartões Corporativos", "sidebar_expense_approvals": "Aprovações de Despesas", "sidebar_business_settings": "Configurações da Empresa", "sidebar_admin_overview": "Visão Geral do Admin", "sidebar_manage_users": "Gerenciar Usuários", "sidebar_kyc_approvals": "Aprovações KYC", "sidebar_live_support": "Suporte ao Vivo", "sidebar_job_listings": "Vagas de Emprego", "sidebar_blog_posts": "Postagens do Blog"
+      "sidebar_business_dashboard": "Painel Empresarial", "sidebar_team_management": "Gestão da Equipe", "sidebar_invoicing": "Faturamento", "sidebar_payroll": "Folha de Pagamento", "sidebar_corporate_cards": "Cartões Corporativos", "sidebar_expense_approvals": "Aprovações de Despesas", "sidebar_business_settings": "Configurações da Empresa", "sidebar_admin_overview": "Visão Geral do Admin", "sidebar_manage_users": "Gerenciar Usuários", "sidebar_kyc_approvals": "Aprovações KYC", "sidebar_live_support": "Suporte ao Vivo", "sidebar_job_listings": "Vagas de Emprego", "sidebar_blog_posts": "Postagens do Blog",
+      "setup_business_title": "Configure seu Perfil de Empresa",
+      "setup_business_subtitle": "Forneça os detalhes da sua empresa e de conformidade para criar contas reservadas para receber pagamentos.",
+      "business_name_label": "Nome Comercial Registado",
+      "bvn_label": "Número de Verificação Bancária (BVN)",
+      "nin_label": "Número de Identificação Nacional (NIN)",
+      "monnify_code_label": "Código de Contrato Monnify",
+      "create_profile_button": "Criar Perfil de Empresa",
+      "setup_business_success": "Parabéns! Seu perfil de empresa foi criado!",
+      "validation.too_short": "Este campo é muito curto",
+      "validation.required": "Este campo é obrigatório",
+      "validation.bvn_invalid": "Deve ser um BVN válido de 11 dígitos",
+      "validation.nin_invalid": "Deve ser um NIN válido de 11 dígitos"
+
 
 
     }
@@ -224,8 +271,20 @@ const resources = {
       "invoice_create_success": "Ankara imetengenezwa na kutumwa kikamilifu!",
       "currency_label": "Sarafu",
       "dashboard_header_subtitle": "Huu ni muhtasari wa shughuli zako za kifedha.",
-      "sidebar_business_dashboard": "Dashibodi ya Biashara", "sidebar_team_management": "Usimamizi wa Timu", "sidebar_invoicing": "Ankara", "sidebar_payroll": "Mishahara", "sidebar_corporate_cards": "Kadi za Kampuni", "sidebar_expense_approvals": "Idhini za Gharama", "sidebar_business_settings": "Mipangilio ya Biashara", "sidebar_admin_overview": "Muhtasari wa Msimamizi", "sidebar_manage_users": "Dhibiti Watumiaji", "sidebar_kyc_approvals": "Idhini za KYC", "sidebar_live_support": "Msaada wa Moja kwa Moja", "sidebar_job_listings": "Nafasi za Kazi", "sidebar_blog_posts": "Machapisho ya Blogu"
-      
+      "sidebar_business_dashboard": "Dashibodi ya Biashara", "sidebar_team_management": "Usimamizi wa Timu", "sidebar_invoicing": "Ankara", "sidebar_payroll": "Mishahara", "sidebar_corporate_cards": "Kadi za Kampuni", "sidebar_expense_approvals": "Idhini za Gharama", "sidebar_business_settings": "Mipangilio ya Biashara", "sidebar_admin_overview": "Muhtasari wa Msimamizi", "sidebar_manage_users": "Dhibiti Watumiaji", "sidebar_kyc_approvals": "Idhini za KYC", "sidebar_live_support": "Msaada wa Moja kwa Moja", "sidebar_job_listings": "Nafasi za Kazi", "sidebar_blog_posts": "Machapisho ya Blogu",
+      "setup_business_title": "Sanidi Wasifu Wako wa Biashara",
+      "setup_business_subtitle": "Toa maelezo ya biashara na kufuata sheria ili kuunda akaunti zilizohifadhiwa kwa ajili ya kupokea malipo.",
+      "business_name_label": "Jina la Biashara Lililosajiliwa",
+      "bvn_label": "Nambari ya Uthibitisho wa Benki (BVN)",
+      "nin_label": "Nambari ya Utambulisho wa Kitaifa (NIN)",
+      "monnify_code_label": "Msimbo wa Mkataba wa Monnify",
+      "create_profile_button": "Tengeneza Wasifu wa Biashara",
+      "setup_business_success": "Hongera! Wasifu wako wa biashara umeundwa!",
+      "validation.too_short": "Sehemu hii ni fupi sana",
+      "validation.required": "Sehemu hii inahitajika",
+      "validation.bvn_invalid": "Lazima iwe BVN halali ya tarakimu 11",
+      "validation.nin_invalid": "Lazima iwe NIN halali ya tarakimu 11"
+
 
 
     }
