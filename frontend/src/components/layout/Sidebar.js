@@ -83,22 +83,22 @@ const Sidebar = ({ onLinkClick }) => {
   ];
 
   const adminNavLinks = [
-    { name: 'Admin Overview', href: '/admin', icon: ShieldCheckIcon },
-    { name: 'Manage Users', href: '/admin/users', icon: UserGroupIcon },
-    { name: 'KYC Approvals', href: '/admin/kyc-approvals', icon: DocumentCheckIcon },
-    { name: 'Live Support', href: '/admin/support', icon: ChatBubbleLeftRightIcon },
-    { name: 'Job Listings', href: '/admin/jobs', icon: BriefcaseIcon }, // <-- NEW
-    { name: 'Blog Posts', href: '/admin/blog', icon: BookOpenIcon }, // <-- NEW
-  ];
+        { name: t('sidebar_admin_overview'), href: '/admin', icon: ShieldCheckIcon },
+        { name: t('sidebar_manage_users'), href: '/admin/users', icon: UserGroupIcon },
+        { name: t('sidebar_kyc_approvals'), href: '/admin/kyc-approvals', icon: DocumentCheckIcon },
+        { name: t('sidebar_live_support'), href: '/admin/support', icon: ChatBubbleLeftRightIcon },
+        { name: t('sidebar_job_listings'), href: '/admin/jobs', icon: BriefcaseIcon },
+        { name: t('sidebar_blog_posts'), href: '/admin/blog', icon: BookOpenIcon },
+    ];
 
   const businessNavLinks = [
-        { name: 'Business Dashboard', href: '/business/dashboard', icon: HomeIcon },
-        { name: 'Team Management', href: '/business/team', icon: UserGroupIcon },
-        { name: 'Invoicing', href: '/business/invoicing', icon: DocumentTextIcon },
-        { name: 'Payroll', href: '/business/payroll', icon: BuildingOffice2Icon },
-        { name: 'Corporate Cards', href: '/business/cards', icon: CreditCardIcon },
-        { name: 'Expense Approvals', href: '/business/expenses', icon: ChartBarSquareIcon },
-        { name: 'Business Settings', href: '/business/settings', icon: Cog6ToothIcon },
+        { name: t('sidebar_business_dashboard'), href: '/business/dashboard', icon: HomeIcon },
+        { name: t('sidebar_team_management'), href: '/business/payroll', icon: UserGroupIcon }, // Note: Path is now /payroll
+        { name: t('sidebar_invoicing'), href: '/business/invoicing', icon: DocumentTextIcon },
+        { name: t('sidebar_payroll'), href: '/business/payroll', icon: BuildingOffice2Icon },
+        { name: t('sidebar_corporate_cards'), href: '/business/cards', icon: CreditCardIcon },
+        { name: t('sidebar_expense_approvals'), href: '/business/expenses', icon: ChartBarSquareIcon },
+        { name: t('sidebar_business_settings'), href: '/business/settings', icon: Cog6ToothIcon },
     ];
     const navLinksToDisplay = activeProfile === 'business' ? businessNavLinks : mainNavLinks;
 
@@ -142,7 +142,7 @@ const Sidebar = ({ onLinkClick }) => {
           {dbUser?.business_profile && ( // Changed from merchant_profile for consistency
             <div className="pt-6">
               <h3 className="px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider" id="business-headline">
-                Business Tools
+                {t('sidebar_business_tools')}
               </h3>
               <div className="mt-2 space-y-2" role="group" aria-labelledby="business-headline">
                 {businessNavLinks.map((item) => (
@@ -158,7 +158,7 @@ const Sidebar = ({ onLinkClick }) => {
           {isAdmin && (
             <div className="pt-6">
               <h3 className="px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider" id="admin-headline">
-                Admin Panel
+                {t('sidebar_admin_panel')}
               </h3>
               <div className="mt-2 space-y-2" role="group" aria-labelledby="admin-headline">
                 {adminNavLinks.map((item) => (
@@ -193,7 +193,13 @@ const Sidebar = ({ onLinkClick }) => {
             <SidebarNavLink to="/dashboard/kyc" icon={DocumentCheckIcon} onClick={onLinkClick}>
             {t('sidebar_verification')}
             </SidebarNavLink>
-          
+            <button
+                    onClick={startDashboardTour}
+                    className="flex items-center w-full px-4 py-2.5 text-sm font-medium rounded-lg text-neutral-700 dark:text-neutral-300 hover:bg-neutral-800"
+                >
+                    <QuestionMarkCircleIcon className="h-5 w-5 mr-3"/>
+                    //{t('sidebar_help_tour')}
+                </button>
 
             <button
                 onClick={logout}
@@ -209,4 +215,3 @@ const Sidebar = ({ onLinkClick }) => {
 };
 
 export default Sidebar;
-
