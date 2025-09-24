@@ -24,6 +24,7 @@ root.render(
       <AuthProvider>
       <AppearanceProvider>
         <App />
+        <CustomToaster />
         </AppearanceProvider>
       </AuthProvider>
     </BrowserRouter>
