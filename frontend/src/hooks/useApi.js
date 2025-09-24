@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import apiClient from '../api/axiosConfig';
+import toast from 'react-hot-toast';
 import { useNotification } from '../context/NotificationContext';
 
 // This is a plain JavaScript file, so we remove the TypeScript interface.
