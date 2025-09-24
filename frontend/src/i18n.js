@@ -87,7 +87,8 @@ const resources = {
       "expenses_none_pending": "No pending expenses to review.",
       "invoice_create_success": "Invoice created and sent successfully!",
       "currency_label": "Currency",
-      "dashboard_header_subtitle": "Here's a snapshot of your financial activity."
+      "dashboard_header_subtitle": "Here's a snapshot of your financial activity.",
+      "sidebar_business_dashboard": "Business Dashboard", "sidebar_team_management": "Team Management", "sidebar_invoicing": "Invoicing", "sidebar_payroll": "Payroll", "sidebar_corporate_cards": "Corporate Cards", "sidebar_expense_approvals": "Expense Approvals", "sidebar_business_settings": "Business Settings", "sidebar_admin_overview": "Admin Overview", "sidebar_manage_users": "Manage Users", "sidebar_kyc_approvals": "KYC Approvals", "sidebar_live_support": "Live Support", "sidebar_job_listings": "Job Listings", "sidebar_blog_posts": "Blog Posts"
 
   }
   },
@@ -119,7 +120,9 @@ const resources = {
       "expenses_none_pending": "Aucune dépense en attente d'examen.",
       "invoice_create_success": "Facture créée et envoyée avec succès !",
       "currency_label": "Devise",
-      "dashboard_header_subtitle": "Voici un aperçu de votre activité financière."
+      "dashboard_header_subtitle": "Voici un aperçu de votre activité financière.",
+      "sidebar_business_dashboard": "Tableau de Bord Entreprise", "sidebar_team_management": "Gestion d'Équipe", "sidebar_invoicing": "Facturation", "sidebar_payroll": "Paie", "sidebar_corporate_cards": "Cartes d'Entreprise", "sidebar_expense_approvals": "Approbations de Dépenses", "sidebar_business_settings": "Paramètres de l'Entreprise", "sidebar_admin_overview": "Aperçu Admin", "sidebar_manage_users": "Gérer les Utilisateurs", "sidebar_kyc_approvals": "Approbations KYC", "sidebar_live_support": "Support en Direct", "sidebar_job_listings": "Offres d'Emploi", "sidebar_blog_posts": "Articles de Blog"
+
 
 
     }
@@ -152,7 +155,9 @@ const resources = {
       "expenses_none_pending": "No hay gastos pendientes de revisar.",
       "invoice_create_success": "¡Factura creada y enviada con éxito!",
       "currency_label": "Moneda",
-      "dashboard_header_subtitle": "Aquí tiene un resumen de su actividad financiera."
+      "dashboard_header_subtitle": "Aquí tiene un resumen de su actividad financiera.",
+       "sidebar_business_dashboard": "Panel de Negocios", "sidebar_team_management": "Gestión de Equipo", "sidebar_invoicing": "Facturación", "sidebar_payroll": "Nómina", "sidebar_corporate_cards": "Tarjetas Corporativas", "sidebar_expense_approvals": "Aprobaciones de Gastos", "sidebar_business_settings": "Configuración del Negocio", "sidebar_admin_overview": "Resumen de Admin", "sidebar_manage_users": "Gestionar Usuarios", "sidebar_kyc_approvals": "Aprobaciones KYC", "sidebar_live_support": "Soporte en Vivo", "sidebar_job_listings": "Ofertas de Empleo", "sidebar_blog_posts": "Publicaciones del Blog"
+
 
     }
   },
@@ -184,7 +189,9 @@ const resources = {
       "expenses_none_pending": "Nenhuma despesa pendente para revisar.",
       "invoice_create_success": "Fatura criada e enviada com sucesso!",
       "currency_label": "Moeda",
-      "dashboard_header_subtitle": "Aqui está um resumo da sua atividade financeira."
+      "dashboard_header_subtitle": "Aqui está um resumo da sua atividade financeira.",
+      "sidebar_business_dashboard": "Painel Empresarial", "sidebar_team_management": "Gestão da Equipe", "sidebar_invoicing": "Faturamento", "sidebar_payroll": "Folha de Pagamento", "sidebar_corporate_cards": "Cartões Corporativos", "sidebar_expense_approvals": "Aprovações de Despesas", "sidebar_business_settings": "Configurações da Empresa", "sidebar_admin_overview": "Visão Geral do Admin", "sidebar_manage_users": "Gerenciar Usuários", "sidebar_kyc_approvals": "Aprovações KYC", "sidebar_live_support": "Suporte ao Vivo", "sidebar_job_listings": "Vagas de Emprego", "sidebar_blog_posts": "Postagens do Blog"
+
 
     }
   },
@@ -216,7 +223,9 @@ const resources = {
       "expenses_none_pending": "Hakuna gharama zinazosubiri kukaguliwa.",
       "invoice_create_success": "Ankara imetengenezwa na kutumwa kikamilifu!",
       "currency_label": "Sarafu",
-      "dashboard_header_subtitle": "Huu ni muhtasari wa shughuli zako za kifedha."
+      "dashboard_header_subtitle": "Huu ni muhtasari wa shughuli zako za kifedha.",
+      "sidebar_business_dashboard": "Dashibodi ya Biashara", "sidebar_team_management": "Usimamizi wa Timu", "sidebar_invoicing": "Ankara", "sidebar_payroll": "Mishahara", "sidebar_corporate_cards": "Kadi za Kampuni", "sidebar_expense_approvals": "Idhini za Gharama", "sidebar_business_settings": "Mipangilio ya Biashara", "sidebar_admin_overview": "Muhtasari wa Msimamizi", "sidebar_manage_users": "Dhibiti Watumiaji", "sidebar_kyc_approvals": "Idhini za KYC", "sidebar_live_support": "Msaada wa Moja kwa Moja", "sidebar_job_listings": "Nafasi za Kazi", "sidebar_blog_posts": "Machapisho ya Blogu"
+      
 
 
     }
