@@ -75,9 +75,9 @@ module.exports = {
       },
     },
   },
-  plugins: [
-    // This plugin provides better default styling for form elements.
-    require('@tailwindcss/forms'),
-    require('@tailwindcss/typography'),
+ plugins: [
+    require('@tailwindcss/typography'), // For styling blog posts and legal pages with the `prose` class
+    require('@tailwindcss/forms'),      // For better default styling of form elements
   ],
 }
+
