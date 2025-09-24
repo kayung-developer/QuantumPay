@@ -193,13 +193,7 @@ const Sidebar = ({ onLinkClick }) => {
             <SidebarNavLink to="/dashboard/kyc" icon={DocumentCheckIcon} onClick={onLinkClick}>
             {t('sidebar_verification')}
             </SidebarNavLink>
-            <button
-                    onClick={startDashboardTour}
-                    className="flex items-center w-full px-4 py-2.5 text-sm font-medium rounded-lg text-neutral-700 dark:text-neutral-300 hover:bg-neutral-800"
-                >
-                    <QuestionMarkCircleIcon className="h-5 w-5 mr-3"/>
-                    //{t('sidebar_help_tour')}
-                </button>
+          
 
             <button
                 onClick={logout}
@@ -215,3 +209,4 @@ const Sidebar = ({ onLinkClick }) => {
 };
 
 export default Sidebar;
+
