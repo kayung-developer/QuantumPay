@@ -1,14 +1,15 @@
 # FILE: netlify.toml (at the VERY ROOT of your repository)
 
-# [build] context: all build settings apply here
 [build]
-  # Base directory: Tell Netlify to change to this directory before running the build command.
+  # Base directory: Where your frontend code lives.
   base = "frontend"
-  # Build command: This is run from within the 'base' directory.
+
+  # Build command: To be run inside the 'base' directory.
   command = "npm run build"
-  # Publish directory: Netlify will deploy this folder (relative to the 'base' directory).
-  # If you are using Vite, this is correct. If you are using Create React App, change "dist" to "build".
-  publish = "frontend/build"
+
+  # Publish directory: The folder to deploy, relative to the 'base' directory.
+  # Since the `build` folder is created inside `frontend`, this is the correct path.
+  publish = "build"
 
 [[redirects]]
   from = "/*"
