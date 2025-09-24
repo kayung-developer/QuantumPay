@@ -1,4 +1,4 @@
-@type {import('tailwindcss').Config}
+/** @type {import('tailwindcss').Config} */
 const defaultTheme = require('tailwindcss/defaultTheme');
 
 module.exports = {
@@ -75,9 +75,10 @@ module.exports = {
       },
     },
   },
- plugins: [
-    require('@tailwindcss/typography'), // For styling blog posts and legal pages with the `prose` class
-    require('@tailwindcss/forms'),      // For better default styling of form elements
+  plugins: [
+    // This plugin provides better default styling for form elements.
+    require('@tailwindcss/typography'),
+    require('@tailwindcss/forms'),
+    
   ],
 }
-
