@@ -9,19 +9,6 @@ import { Toaster, toast, resolveValue } from 'react-hot-toast';
 // Import custom route protection components (we will create these)
 import ProtectedRoute from './components/utility/ProtectedRoute';
 import AdminRoute from './components/utility/AdminRoute';
-import { CustomToaster } from './components/common/Toast';
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -249,5 +236,6 @@ function App() {
     </>
   );
 }
+
 
 export default App;
