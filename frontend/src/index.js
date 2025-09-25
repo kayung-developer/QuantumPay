@@ -1,0 +1,32 @@
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { AppearanceProvider } from './context/AppearanceContext';
+
+
+// Import global styles from the CSS file
+import './index.css';
+import './i18n';
+
+// Import the main App component
+import App from './App';
+
+// Import the Auth Provider to wrap the entire application
+import { AuthProvider } from './context/AuthContext';
+
+// Create a root element for React to render into.
+const root = ReactDOM.createRoot(document.getElementById('root'));
+
+// Render the application
+root.render(
+  <React.StrictMode>
+    <Router>
+      <AuthProvider>
+      <AppearanceProvider>
+        <App />
+        </AppearanceProvider>
+      </AuthProvider>
+    </Router>
+  </React.StrictMode>
+);
+//document.body.classList.add('react-loaded');
