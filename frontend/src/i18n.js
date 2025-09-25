@@ -132,7 +132,24 @@ const resources = {
       "validation.password_too_short": "Password must be at least {{min}} characters",
       "validation.too_short": "This field is too short",
       "validation.too_long": "This field is too long",
-      "validation.phone_invalid": "Enter a valid phone number"
+      "validation.phone_invalid": "Enter a valid phone number",
+      "support_title": "Support Center",
+      "support_subtitle": "We're here to help. Find answers to common questions or get in touch with our support team.",
+      "faq_title": "Frequently Asked Questions",
+      "faq_search_placeholder": "Search for answers...",
+      "faq_no_results": "No results found for \"{{searchTerm}}\".",
+      "contact_us_title": "Contact Us",
+      "contact_us_subtitle": "Can't find an answer? Our team will get back to you within 24 hours.",
+      "message_label": "Message",
+      "send_message_button": "Send Message",
+      "faq.q1": "What is QuantumPay?",
+      "faq.a1": "QuantumPay is a comprehensive financial super-app...",
+      "faq.q2": "Is my money safe?",
+      "faq.a2": "Yes. Security is our top priority. We use bank-grade encryption...",
+      "faq.q3": "How long do transfers take?",
+      "faq.a3": "Transfers between QuantumPay users are instant...",
+      "faq.q4": "How do I create a business account?",
+      "faq.a4": "After signing up, you will see a 'Become a Merchant'..."
 
   }
   },
@@ -209,6 +226,23 @@ const resources = {
       "validation.too_short": "Ce champ est trop court",
       "validation.too_long": "Ce champ est trop long",
       "validation.phone_invalid": "Entrez un numéro de téléphone valide",
+      "support_title": "Centre d'Assistance",
+      "support_subtitle": "Nous sommes là pour vous aider. Trouvez des réponses aux questions fréquentes ou contactez notre équipe de support.",
+      "faq_title": "Questions Fréquemment Posées",
+      "faq_search_placeholder": "Rechercher des réponses...",
+      "faq_no_results": "Aucun résultat trouvé pour \"{{searchTerm}}\".",
+      "contact_us_title": "Contactez-nous",
+      "contact_us_subtitle": "Vous ne trouvez pas de réponse ? Notre équipe vous répondra dans les 24 heures.",
+      "message_label": "Message",
+      "send_message_button": "Envoyer le Message",
+      "faq.q1": "Qu'est-ce que QuantumPay ?",
+      "faq.a1": "QuantumPay est une super-application financière complète...",
+      "faq.q2": "Mon argent est-il en sécurité ?",
+      "faq.a2": "Oui. La sécurité est notre priorité absolue. Nous utilisons un cryptage de niveau bancaire...",
+      "faq.q3": "Combien de temps prennent les transferts ?",
+      "faq.a3": "Les transferts entre utilisateurs de QuantumPay sont instantanés...",
+      "faq.q4": "Comment créer un compte professionnel ?",
+      "faq.a4": "Après votre inscription, vous verrez une invite « Devenir un marchand »..."
 
 
     }
@@ -286,7 +320,24 @@ const resources = {
       "validation.password_too_short": "La contraseña debe tener al menos {{min}} caracteres",
       "validation.too_short": "Este campo es demasiado corto",
       "validation.too_long": "Este campo es demasiado largo",
-      "validation.phone_invalid": "Ingrese un número de teléfono válido"
+      "validation.phone_invalid": "Ingrese un número de teléfono válido",
+      "support_title": "Centro de Soporte",
+      "support_subtitle": "Estamos aquí para ayudar. Encuentre respuestas a preguntas frecuentes o póngase en contacto con nuestro equipo de soporte.",
+      "faq_title": "Preguntas Frecuentes",
+      "faq_search_placeholder": "Buscar respuestas...",
+      "faq_no_results": "No se encontraron resultados para \"{{searchTerm}}\".",
+      "contact_us_title": "Contáctenos",
+      "contact_us_subtitle": "¿No encuentra una respuesta? Nuestro equipo se pondrá en contacto con usted en 24 horas.",
+      "message_label": "Mensaje",
+      "send_message_button": "Enviar Mensaje",
+      "faq.q1": "¿Qué es QuantumPay?",
+      "faq.a1": "QuantumPay es una súper aplicación financiera integral...",
+      "faq.q2": "¿Está seguro mi dinero?",
+      "faq.a2": "Sí. La seguridad es nuestra máxima prioridad. Usamos encriptación de grado bancario...",
+      "faq.q3": "¿Cuánto tardan las transferencias?",
+      "faq.a3": "Las transferencias entre usuarios de QuantumPay son instantáneas...",
+      "faq.q4": "¿Cómo creo una cuenta de empresa?",
+      "faq.a4": "Después de registrarse, verá un aviso de 'Convertirse en comerciante'..."
 
 
     }
@@ -364,7 +415,24 @@ const resources = {
       "validation.password_too_short": "A senha deve ter pelo menos {{min}} caracteres",
       "validation.too_short": "Este campo é muito curto",
       "validation.too_long": "Este campo é muito longo",
-      "validation.phone_invalid": "Digite um número de telefone válido"
+      "validation.phone_invalid": "Digite um número de telefone válido",
+      "support_title": "Centro de Suporte",
+      "support_subtitle": "Estamos aqui para ajudar. Encontre respostas para perguntas frequentes ou entre em contato com nossa equipe de suporte.",
+      "faq_title": "Perguntas Frequentes",
+      "faq_search_placeholder": "Procurar por respostas...",
+      "faq_no_results": "Nenhum resultado encontrado para \"{{searchTerm}}\".",
+      "contact_us_title": "Fale Conosco",
+      "contact_us_subtitle": "Não consegue encontrar uma resposta? Nossa equipe retornará em até 24 horas.",
+      "message_label": "Mensagem",
+      "send_message_button": "Enviar Mensagem",
+      "faq.q1": "O que é a QuantumPay?",
+      "faq.a1": "A QuantumPay é uma super-aplicação financeira abrangente...",
+      "faq.q2": "O meu dinheiro está seguro?",
+      "faq.a2": "Sim. A segurança é a nossa principal prioridade. Usamos criptografia de nível bancário...",
+      "faq.q3": "Quanto tempo demoram as transferências?",
+      "faq.a3": "As transferências entre utilizadores da QuantumPay são instantâneas...",
+      "faq.q4": "Como crio uma conta empresarial?",
+      "faq.a4": "Após se inscrever, você verá um prompt 'Torne-se um Comerciante'..."
 
 
 
@@ -444,6 +512,23 @@ const resources = {
       "validation.too_short": "Sehemu hii ni fupi sana",
       "validation.too_long": "Sehemu hii ni ndefu sana",
       "validation.phone_invalid": "Ingiza nambari halali ya simu",
+      "support_title": "Kituo cha Usaidizi",
+      "support_subtitle": "Tuko hapa kusaidia. Pata majibu ya maswali ya kawaida au wasiliana na timu yetu ya usaidizi.",
+      "faq_title": "Maswali Yanayoulizwa Mara kwa Mara",
+      "faq_search_placeholder": "Tafuta majibu...",
+      "faq_no_results": "Hakuna matokeo yaliyopatikana kwa \"{{searchTerm}}\".",
+      "contact_us_title": "Wasiliana Nasi",
+      "contact_us_subtitle": "Hupati jibu? Timu yetu itakujibu ndani ya saa 24.",
+      "message_label": "Ujumbe",
+      "send_message_button": "Tuma Ujumbe",
+      "faq.q1": "QuantumPay ni nini?",
+      "faq.a1": "QuantumPay ni programu kuu ya kifedha...",
+      "faq.q2": "Pesa zangu ziko salama?",
+      "faq.a2": "Ndiyo. Usalama ni kipaumbele chetu kikuu. Tunatumia usimbaji fiche wa kiwango cha benki...",
+      "faq.q3": "Uhamisho unachukua muda gani?",
+      "faq.a3": "Uhamisho kati ya watumiaji wa QuantumPay ni wa papo hapo...",
+      "faq.q4": "Ninawezaje kufungua akaunti ya biashara?",
+      "faq.a4": "Baada ya kujisajili, utaona kidokezo cha 'Kuwa Mfanyabiashara'..."
 
 
 
