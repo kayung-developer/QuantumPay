@@ -85,6 +85,7 @@ const TermsOfServicePage = lazy(() => import('./pages/utility/TermsOfServicePage
 
 function App() {
   return (
+  <>
     <Suspense fallback={<div className="flex h-screen w-full items-center justify-center"><Spinner size="lg" /></div>}>
       <Routes>
         {/* --- Public Marketing & Auth Routes --- */}
@@ -152,6 +153,7 @@ function App() {
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Suspense>
+    </>
   );
 }
 
