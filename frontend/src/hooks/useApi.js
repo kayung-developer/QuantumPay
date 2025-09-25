@@ -1,123 +1,123 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import apiClient from '../api/axiosConfig';
-import { toast } from 'react-hot-toast';
-import { useAuth } from '../context/AuthContext';
+import { Toaster, toast, resolveValue } from 'react-hot-toast';
 
-/**
- * Custom hook for making GET API requests.
- * It is now "auth-aware" and will wait for an auth token before firing to prevent race conditions.
- *
- * @param {string} url - The API endpoint to fetch data from.
- * @param {object} [options={}] - Optional Axios config (e.g., params).
- * @param {boolean} [manual=false] - If true, request is not fired on mount.
- */
-export const useApi = (url, options = {}, manual = false) => {
-    const [data, setData] = useState(null);
-    const [error, setError] = useState(null);
-    const [loading, setLoading] = useState(!manual);
-    const { authToken } = useAuth();
+// This is a plain JavaScript file, so we remove the TypeScript interface.
+// The structure of the error object will be the same, just without the explicit type definition.
 
-    // [THE FIX - Part 1] Memoize the stringified options to create a stable dependency.
-    // This prevents the hook from refetching on every parent component re-render.
-    const optionsString = useMemo(() => JSON.stringify(options), [options]);
+const useApi = (url, options = {}, manual = false) => {
+  const [data, setData] = useState(null);
+  // The state hook does not need the type annotation.
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(!manual);
 
-    const request = useCallback(async (requestOptions) => {
-        if (!authToken) {
-            // Wait for authentication to complete to prevent race conditions on page load.
-            return { success: false, error: { message: "Authentication token not yet available." } };
-        }
-        
-        setLoading(true);
-        setError(null);
-        try {
-            const finalOptions = { ...JSON.parse(optionsString), ...requestOptions };
-            const response = await apiClient(url, {
-                method: 'GET',
-                headers: { Authorization: `Bearer ${authToken}` },
-                ...finalOptions,
-            });
-            setData(response.data);
-            return { success: true, data: response.data };
-        } catch (err) {
-            const errorMessage = err.response?.data?.detail || err.message || 'Could not fetch data.';
-            const structuredError = { message: errorMessage, status: err.response?.status, data: err.response?.data };
-            setError(structuredError);
-            console.error(`API GET Error on ${url}:`, structuredError);
-            return { success: false, error: structuredError };
-        } finally {
-            setLoading(false);
-        }
-    }, [url, authToken, optionsString]);
+  const fetchData = useCallback(async (requestOptions) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const finalOptions = { ...options, ...requestOptions };
+      const response = await apiClient(url, finalOptions);
+      setData(response.data);
 
-    useEffect(() => {
-        // This effect now only runs if it's not manual AND the authToken exists.
-        // It will re-run correctly if the authToken changes from null to a real token.
-        if (!manual && authToken) {
-            request();
-        }
-        if (!authToken && !manual) {
-            setLoading(false);
-        }
-    }, [request, manual, authToken]);
 
-    return { data, error, loading, request };
+      // 1. Check if the response data is an object and has a 'message' key.
+      if (response.data && typeof response.data === 'object' && response.data.message) {
+      toast.success(response.data.message);
+       }
+      // 2. Provide a sensible default for other successful actions, but ignore 204 No Content.
+      else if (response.status !== 204) {
+      toast.success('Success!');
+      }
+      // For DELETE or 204 No Content, no success toast is needed by default.
+    return { success: true, data: response.data };
+    } catch (err) {
+      const errorMessage = err.response?.data?.detail || err.message || 'An API error occurred.';
+      const errorStatus = err.response?.status;
+      const errorData = err.response?.data;
+
+      // We create the same structured error object, just without the TypeScript type.
+      const structuredError = {
+          message: errorMessage,
+          status: errorStatus,
+          data: errorData
+      };
+      setError(structuredError);
+
+      console.error(`API Error on ${url}:`, structuredError);
+      return { success: false, error: structuredError };
+    } finally {
+      setLoading(false);
+    }
+  }, [url, JSON.stringify(options)]);
+
+  useEffect(() => {
+    if (!manual) {
+      fetchData();
+    }
+  }, [fetchData, manual]);
+
+  return { data, error, loading, request: fetchData };
 };
 
-/**
- * Custom hook for making data-mutating API requests (POST, PUT, DELETE).
- * Automatically shows specific success or error toasts with de-duplication.
- */
+
 export const useApiPost = (url, config = {}) => {
     const [data, setData] = useState(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
-    const { authToken } = useAuth();
-    
-    // [THE FIX - Part 1] Memoize the config string for a stable dependency.
-    const configString = useMemo(() => JSON.stringify(config), [config]);
 
     const post = useCallback(async (postData, requestConfig = {}) => {
-        setLoading(true);
-        setError(null);
-        try {
-            const baseConfig = JSON.parse(configString);
-            const finalConfig = { ...baseConfig, ...requestConfig };
-            const method = finalConfig.method?.toLowerCase() || 'post';
-            const finalUrl = finalConfig.url || url;
+      setLoading(true);
+      setError(null);
+      try {
+        const finalConfig = { ...config, ...requestConfig };
+        const method = finalConfig.method ? finalConfig.method.toLowerCase() : 'post';
 
-            const response = await apiClient({
-                url: finalUrl,
-                method: method,
-                data: postData,
-                headers: { Authorization: `Bearer ${authToken}` },
-                ...finalConfig.headers,
-            });
+        let response;
+        const finalUrl = finalConfig.url || url;
 
-            setData(response.data);
-
-            if (response.data && typeof response.data === 'object' && response.data.message) {
-                // [THE FIX - Part 2] Add a unique ID to the toast call.
-                // This tells react-hot-toast to not render a new toast if one with the same ID is already visible.
-                toast.success(response.data.message, { id: response.data.message });
-            }
-
-            return { success: true, data: response.data };
-        } catch (err) {
-            const errorMessage = err.response?.data?.detail || err.message || 'An API error occurred.';
-            const structuredError = { message: errorMessage, status: err.response?.status, data: err.response?.data };
-            setError(structuredError);
-
-            // [THE FIX - Part 2] Add a unique ID to the error toast as well.
-            toast.error(errorMessage, { id: errorMessage });
-
-            console.error(`API POST/PUT/DELETE Error on ${url}:`, structuredError);
-            return { success: false, error: structuredError };
-        } finally {
-            setLoading(false);
+        if (method === 'put') {
+            response = await apiClient.put(finalUrl, postData, finalConfig);
+        } else if (method === 'delete') {
+            response = await apiClient.delete(finalUrl, finalConfig);
+        } else {
+            response = await apiClient.post(finalUrl, postData, finalConfig);
         }
-    }, [url, authToken, configString]);
+
+        setData(response.data);
+
+        // --- [THE DEFINITIVE FIX] ---
+        // 1. Check if the response data is an object and has a 'message' key.
+        //    Many of our backend endpoints return a success message (e.g., {"message": "User updated successfully"}).
+        if (response.data && typeof response.data === 'object' && response.data.message) {
+            toast.success(response.data.message);
+        }
+        // 2. Provide a sensible default for endpoints that don't return a message (like DELETE).
+        else if (method !== 'delete' && response.status !== 204) {
+            toast.success('Operation successful!');
+        }
+        // For DELETE or 204 No Content, no success toast is needed.
+
+        return { success: true, data: response.data };
+      } catch (err) {
+        const errorMessage = err.response?.data?.detail || err.message || 'An API error occurred.';
+        const errorStatus = err.response?.status;
+        const errorData = err.response?.data;
+
+        const structuredError = {
+            message: errorMessage,
+            status: errorStatus,
+            data: errorData
+        };
+        setError({ message: errorMessage, status: err.response?.status, data: err.response?.data });
+        toast.error(errorMessage);
+        return { success: false, error: { message: errorMessage, status: err.response?.status, data: err.response?.data } };
+      } finally {
+        setLoading(false);
+      }
+    }, [url, JSON.stringify(config)]);
 
     return { post, data, loading, error };
-};
+  };
+
 
 export default useApi;
