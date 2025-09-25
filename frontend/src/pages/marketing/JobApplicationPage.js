@@ -4,7 +4,7 @@ import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import useApi from '../../hooks/useApi';
 import Spinner from '../../components/common/Spinner';
-import ApplicationForm from '../../components/forms/ApplicationForm'; // <-- Your form component
+import ApplicationForm from '../../components/careers/ApplicationForm'; // <-- Your form component
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 
 const JobApplicationPage = () => {
@@ -53,5 +53,6 @@ const JobApplicationPage = () => {
         </div>
     );
 };
+
 
 export default JobApplicationPage;
