@@ -4,8 +4,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Toaster, toast, resolveValue } from 'react-hot-toast'; // <-- Import toast and resolveValue
-import { Transition } from '@headlessui/react';
-import { CheckCircleIcon, XCircleIcon, InformationCircleIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline';
+
 
 // --- Context Providers ---
 import { AuthProvider } from './context/AuthContext';
@@ -30,4 +29,5 @@ root.render(
       </AuthProvider>
     </Router>
   </React.StrictMode>
+
 );
