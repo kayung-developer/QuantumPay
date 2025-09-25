@@ -10,7 +10,6 @@ import { CheckCircleIcon, XCircleIcon, InformationCircleIcon, ExclamationTriangl
 // --- Context Providers ---
 import { AuthProvider } from './context/AuthContext';
 import { AppearanceProvider, useAppearance } from './context/AppearanceContext'; // <-- Import useAppearance
-import { Transition } from '@headlessui/react';
 import { CheckCircleIcon, XCircleIcon, InformationCircleIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 
 // --- Other Imports ---
