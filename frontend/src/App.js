@@ -82,6 +82,7 @@ const TermsOfServicePage = lazy(() => import('./pages/utility/TermsOfServicePage
 
 function App() {
   return (
+  <>
    <CustomToaster />
     // The Suspense component shows a fallback UI (our Spinner) while lazy-loaded components are being fetched.
     <Suspense fallback={<div className="flex h-screen w-full items-center justify-center"><Spinner size="lg" /></div>}>
@@ -151,6 +152,7 @@ function App() {
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Suspense>
+    </>
   );
 }
 
