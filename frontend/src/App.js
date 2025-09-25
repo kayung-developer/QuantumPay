@@ -22,6 +22,7 @@ const AboutPage = lazy(() => import('./pages/marketing/AboutPage'));
 const PricingPage = lazy(() => import('./pages/marketing/PricingPage'));
 const SecurityPage = lazy(() => import('./pages/marketing/SecurityPage'));
 const IntegrationsPage = lazy(() => import('./pages/marketing/IntegrationsPage'));
+const JobApplicationPage = lazy(() => import('./pages/marketing/JobApplicationPage'));
 const CareersPage = lazy(() => import('./pages/marketing/CareersPage')); // NEW
 const ManageJobsPage = lazy(() => import('./pages/admin/ManageJobsPage'));
 const ManageBlogPage = lazy(() => import('./pages/admin/ManageBlogPage'));
@@ -95,6 +96,7 @@ function App() {
         <Route path="/security" element={<PageWrapper><SecurityPage /></PageWrapper>} />
         <Route path="/integrations" element={<PageWrapper><IntegrationsPage /></PageWrapper>} />
         <Route path="/careers" element={<PageWrapper><CareersPage /></PageWrapper>} /> {/* NEW */}
+        <Route path="/careers/:jobId" element={<PageWrapper><JobApplicationPage /></PageWrapper>} />
         <Route path="/blog" element={<PageWrapper><BlogPage /></PageWrapper>} /> {/* NEW */}
         <Route path="/blog/:postId" element={<PageWrapper><BlogPostPage /></PageWrapper>} />
         <Route path="/press" element={<PageWrapper><PressPage /></PageWrapper>} /> {/* NEW */}
