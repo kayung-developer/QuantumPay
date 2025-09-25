@@ -8,7 +8,7 @@ import Spinner from './components/common/Spinner';
 // Import custom route protection components (we will create these)
 import ProtectedRoute from './components/utility/ProtectedRoute';
 import AdminRoute from './components/utility/AdminRoute';
-import { CustomToaster } from '../components/common/Toast';
+import { CustomToaster } from './components/common/Toast';
 
 // =================================================================================
 // LAZY LOADING PAGES
@@ -155,5 +155,6 @@ function App() {
     </>
   );
 }
+
 
 export default App;
