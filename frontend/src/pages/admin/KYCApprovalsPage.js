@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import DashboardLayout from '../../components/layout/DashboardLayout';
-import useApi, useApiPost from '../../hooks/useApi';
+import useApi, { useApiPost } from '../../hooks/useApi';
 import Button from '../../components/common/Button';
 import { format, parseISO } from 'date-fns';
 import Modal from '../../components/common/Modal';
@@ -171,3 +171,4 @@ const KYCApprovalsPage = () => {
 
 
 export default KYCApprovalsPage;
+
