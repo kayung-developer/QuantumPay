@@ -22,11 +22,7 @@ const useApi = (url, options = {}, manual = false) => {
 
       // 1. Check if the response data is an object and has a 'message' key.
       if (response.data && typeof response.data === 'object' && response.data.message) {
-      toast.success(response.data.message);
-       }
-      // 2. Provide a sensible default for other successful actions, but ignore 204 No Content.
-      else if (response.status !== 204) {
-      toast.success('Success!');
+        toast.success(response.data.message);
       }
       // For DELETE or 204 No Content, no success toast is needed by default.
     return { success: true, data: response.data };
@@ -121,3 +117,4 @@ export const useApiPost = (url, config = {}) => {
 
 
 export default useApi;
+
