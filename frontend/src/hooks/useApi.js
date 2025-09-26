@@ -19,19 +19,12 @@ const finalOptions = { ...options, ...requestOptions };
 const response = await apiClient(url, finalOptions);
 setData(response.data);
 
-code
-Code
-download
-content_copy
-expand_less
 // 1. Check if the response data is an object and has a 'message' key.
   if (response.data && typeof response.data === 'object' && response.data.message) {
   toast.success(response.data.message);
    }
   // 2. Provide a sensible default for other successful actions, but ignore 204 No Content.
-  else if (response.status !== 204) {
-  //toast.success('Success!');
-  }
+
   // For DELETE or 204 No Content, no success toast is needed by default.
 return { success: true, data: response.data };
 } catch (err) {
@@ -69,11 +62,7 @@ const [data, setData] = useState(null);
 const [error, setError] = useState(null);
 const [loading, setLoading] = useState(false);
 
-code
-Code
-download
-content_copy
-expand_less
+
 const post = useCallback(async (postData, requestConfig = {}) => {
   setLoading(true);
   setError(null);
@@ -101,9 +90,6 @@ const post = useCallback(async (postData, requestConfig = {}) => {
         toast.success(response.data.message);
     }
     // 2. Provide a sensible default for endpoints that don't return a message (like DELETE).
-    else if (method !== 'delete' && response.status !== 204) {
-        //toast.success('Operation successful!');
-    }
     // For DELETE or 204 No Content, no success toast is needed.
 
     return { success: true, data: response.data };
@@ -130,3 +116,4 @@ return { post, data, loading, error };
 };
 
 export default useApi;
+
