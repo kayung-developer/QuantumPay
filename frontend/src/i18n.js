@@ -154,7 +154,11 @@ const resources = {
       "ai_assistant_title": "QuantumAI Assistant",
       "ai_welcome_message": "Hello! I'm your QuantumAI Assistant. Ask me about your spending or balance.",
       "ai_error_message": "Sorry, I encountered an error. Please try again.",
-      "ai_input_placeholder": "Ask me anything..."
+      "ai_input_placeholder": "Ask me anything...", 
+      "support_chat_title": "Support Chat",
+      "chat_placeholder": "Type your message...",
+      "chat_welcome": "Welcome to Live Support! Our agents will be with you shortly.",
+      "start_chat_button": "Start New Conversation"
 
   }
   },
@@ -252,7 +256,11 @@ const resources = {
       "ai_assistant_title": "Assistant QuantumAI",
       "ai_welcome_message": "Bonjour ! Je suis votre assistant QuantumAI. Posez-moi des questions sur vos dépenses ou votre solde.",
       "ai_error_message": "Désolé, j'ai rencontré une erreur. Veuillez réessayer.",
-      "ai_input_placeholder": "Posez-moi n'importe quelle question..."
+      "ai_input_placeholder": "Posez-moi n'importe quelle question...", 
+      "support_chat_title": "Chat d'Assistance",
+      "chat_placeholder": "Écrivez votre message...",
+      "chat_welcome": "Bienvenue au support en direct ! Nos agents seront bientôt avec vous.",
+      "start_chat_button": "Commencer une nouvelle conversation"
 
 
     }
@@ -352,7 +360,11 @@ const resources = {
       "ai_assistant_title": "Asistente QuantumAI",
       "ai_welcome_message": "¡Hola! Soy su Asistente QuantumAI. Pregúnteme sobre sus gastos o su saldo.",
       "ai_error_message": "Lo siento, he encontrado un error. Por favor, inténtelo de nuevo.",
-      "ai_input_placeholder": "Pregúntame lo que sea..."
+      "ai_input_placeholder": "Pregúntame lo que sea...", 
+      "support_chat_title": "Chat de Soporte",
+      "chat_placeholder": "Escriba su mensaje...",
+      "chat_welcome": "¡Bienvenido al Soporte en Vivo! Nuestros agentes estarán con usted en breve.",
+      "start_chat_button": "Iniciar nueva conversación"
 
 
     }
@@ -452,7 +464,11 @@ const resources = {
       "ai_assistant_title": "Assistente QuantumAI",
       "ai_welcome_message": "Olá! Eu sou o seu Assistente QuantumAI. Pergunte-me sobre os seus gastos ou saldo.",
       "ai_error_message": "Desculpe, encontrei um erro. Por favor, tente novamente.",
-      "ai_input_placeholder": "Pergunte-me qualquer coisa..."
+      "ai_input_placeholder": "Pergunte-me qualquer coisa...", 
+      "support_chat_title": "Chat de Suporte",
+      "chat_placeholder": "Escreva sua mensagem...",
+      "chat_welcome": "Bem-vindo ao Suporte ao Vivo! Nossos agentes estarão com você em breve.",
+      "start_chat_button": "Iniciar Nova Conversa"
 
 
 
@@ -553,7 +569,11 @@ const resources = {
       "ai_assistant_title": "Msaidizi wa QuantumAI",
       "ai_welcome_message": "Habari! Mimi ni Msaidizi wako wa QuantumAI. Niulize kuhusu matumizi au salio lako.",
       "ai_error_message": "Samahani, nimepata hitilafu. Tafadhali jaribu tena.",
-      "ai_input_placeholder": "Niulize chochote..."
+      "ai_input_placeholder": "Niulize chochote...", 
+      "support_chat_title": "Gumzo la Usaidizi",
+      "chat_placeholder": "Andika ujumbe wako...",
+      "chat_welcome": "Karibu kwenye Usaidizi wa Moja kwa Moja! Mawakala wetu watakuwa nawe hivi punde.",
+      "start_chat_button": "Anzisha Mazungumzo Mapya"
 
 
 
@@ -578,5 +598,6 @@ i18n
   });
 
 export default i18n;
+
 
 
