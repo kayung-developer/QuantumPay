@@ -12,7 +12,7 @@ import { MinusSmallIcon, PlusSmallIcon, LifebuoyIcon, EnvelopeIcon, CheckCircleI
 import FormInput from '../../components/common/FormInput';
 import Button from '../../components/common/Button';
 import Spinner from '../../components/common/Spinner';
-import { useApi, useApiPost } from '../../hooks/useApi';
+import useApi, { useApiPost } from '../../hooks/useApi';
 
 const SupportPage = () => {
     const { t } = useTranslation();
@@ -168,3 +168,4 @@ const SupportPage = () => {
 };
 
 export default SupportPage;
+
