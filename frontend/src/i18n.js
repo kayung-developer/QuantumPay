@@ -149,7 +149,8 @@ const resources = {
       "faq.q3": "How long do transfers take?",
       "faq.a3": "Transfers between QuantumPay users are instant...",
       "faq.q4": "How do I create a business account?",
-      "faq.a4": "After signing up, you will see a 'Become a Merchant'..."
+      "faq.a4": "After signing up, you will see a 'Become a Merchant'...", 
+      "register_success_toast": "Registration successful! Please log in."
 
   }
   },
@@ -242,7 +243,8 @@ const resources = {
       "faq.q3": "Combien de temps prennent les transferts ?",
       "faq.a3": "Les transferts entre utilisateurs de QuantumPay sont instantanés...",
       "faq.q4": "Comment créer un compte professionnel ?",
-      "faq.a4": "Après votre inscription, vous verrez une invite « Devenir un marchand »..."
+      "faq.a4": "Après votre inscription, vous verrez une invite « Devenir un marchand »...", 
+      "register_success_toast": "Inscription réussie ! Veuillez vous connecter."
 
 
     }
@@ -337,7 +339,8 @@ const resources = {
       "faq.q3": "¿Cuánto tardan las transferencias?",
       "faq.a3": "Las transferencias entre usuarios de QuantumPay son instantáneas...",
       "faq.q4": "¿Cómo creo una cuenta de empresa?",
-      "faq.a4": "Después de registrarse, verá un aviso de 'Convertirse en comerciante'..."
+      "faq.a4": "Después de registrarse, verá un aviso de 'Convertirse en comerciante'...", 
+      "register_success_toast": "¡Registro completado con éxito! Por favor, inicie sesión."
 
 
     }
@@ -432,7 +435,8 @@ const resources = {
       "faq.q3": "Quanto tempo demoram as transferências?",
       "faq.a3": "As transferências entre utilizadores da QuantumPay são instantâneas...",
       "faq.q4": "Como crio uma conta empresarial?",
-      "faq.a4": "Após se inscrever, você verá um prompt 'Torne-se um Comerciante'..."
+      "faq.a4": "Após se inscrever, você verá um prompt 'Torne-se um Comerciante'...", 
+      "register_success_toast": "Cadastro realizado com sucesso! Por favor, faça o login."
 
 
 
@@ -528,7 +532,8 @@ const resources = {
       "faq.q3": "Uhamisho unachukua muda gani?",
       "faq.a3": "Uhamisho kati ya watumiaji wa QuantumPay ni wa papo hapo...",
       "faq.q4": "Ninawezaje kufungua akaunti ya biashara?",
-      "faq.a4": "Baada ya kujisajili, utaona kidokezo cha 'Kuwa Mfanyabiashara'..."
+      "faq.a4": "Baada ya kujisajili, utaona kidokezo cha 'Kuwa Mfanyabiashara'...",
+      "register_success_toast": "Usajili umefaulu! Tafadhali ingia."
 
 
 
@@ -553,3 +558,4 @@ i18n
   });
 
 export default i18n;
+
