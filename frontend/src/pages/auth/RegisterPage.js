@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { toast } from 'react-hot-toast';
 
 // --- Component Imports ---
 import { useAuth } from '../../context/AuthContext';
@@ -100,8 +101,10 @@ const RegisterPage = () => {
                                 );
 
                                 // Log the user in to trigger the AuthContext update
-                                await login(values.email, values.password);
-                                navigate('/dashboard');
+                              //  await login(values.email, values.password);
+                               //navigate('/dashboard');
+                                navigate('/login');
+                                toast.success(t('register_success_toast'))
                             } catch (error) {
                                 if (error.code === 'auth/email-already-in-use') {
                                     setFieldError('email', t('email_in_use_error'));
@@ -153,5 +156,6 @@ const RegisterPage = () => {
         </div>
     );
 };
+
 
 export default RegisterPage;
