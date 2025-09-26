@@ -150,7 +150,11 @@ const resources = {
       "faq.a3": "Transfers between QuantumPay users are instant...",
       "faq.q4": "How do I create a business account?",
       "faq.a4": "After signing up, you will see a 'Become a Merchant'...", 
-      "register_success_toast": "Registration successful! Please log in."
+      "register_success_toast": "Registration successful! Please log in.", 
+      "ai_assistant_title": "QuantumAI Assistant",
+      "ai_welcome_message": "Hello! I'm your QuantumAI Assistant. Ask me about your spending or balance.",
+      "ai_error_message": "Sorry, I encountered an error. Please try again.",
+      "ai_input_placeholder": "Ask me anything..."
 
   }
   },
@@ -244,7 +248,11 @@ const resources = {
       "faq.a3": "Les transferts entre utilisateurs de QuantumPay sont instantanés...",
       "faq.q4": "Comment créer un compte professionnel ?",
       "faq.a4": "Après votre inscription, vous verrez une invite « Devenir un marchand »...", 
-      "register_success_toast": "Inscription réussie ! Veuillez vous connecter."
+      "register_success_toast": "Inscription réussie ! Veuillez vous connecter.", 
+      "ai_assistant_title": "Assistant QuantumAI",
+      "ai_welcome_message": "Bonjour ! Je suis votre assistant QuantumAI. Posez-moi des questions sur vos dépenses ou votre solde.",
+      "ai_error_message": "Désolé, j'ai rencontré une erreur. Veuillez réessayer.",
+      "ai_input_placeholder": "Posez-moi n'importe quelle question..."
 
 
     }
@@ -340,7 +348,11 @@ const resources = {
       "faq.a3": "Las transferencias entre usuarios de QuantumPay son instantáneas...",
       "faq.q4": "¿Cómo creo una cuenta de empresa?",
       "faq.a4": "Después de registrarse, verá un aviso de 'Convertirse en comerciante'...", 
-      "register_success_toast": "¡Registro completado con éxito! Por favor, inicie sesión."
+      "register_success_toast": "¡Registro completado con éxito! Por favor, inicie sesión.", 
+      "ai_assistant_title": "Asistente QuantumAI",
+      "ai_welcome_message": "¡Hola! Soy su Asistente QuantumAI. Pregúnteme sobre sus gastos o su saldo.",
+      "ai_error_message": "Lo siento, he encontrado un error. Por favor, inténtelo de nuevo.",
+      "ai_input_placeholder": "Pregúntame lo que sea..."
 
 
     }
@@ -436,7 +448,11 @@ const resources = {
       "faq.a3": "As transferências entre utilizadores da QuantumPay são instantâneas...",
       "faq.q4": "Como crio uma conta empresarial?",
       "faq.a4": "Após se inscrever, você verá um prompt 'Torne-se um Comerciante'...", 
-      "register_success_toast": "Cadastro realizado com sucesso! Por favor, faça o login."
+      "register_success_toast": "Cadastro realizado com sucesso! Por favor, faça o login.", 
+      "ai_assistant_title": "Assistente QuantumAI",
+      "ai_welcome_message": "Olá! Eu sou o seu Assistente QuantumAI. Pergunte-me sobre os seus gastos ou saldo.",
+      "ai_error_message": "Desculpe, encontrei um erro. Por favor, tente novamente.",
+      "ai_input_placeholder": "Pergunte-me qualquer coisa..."
 
 
 
@@ -533,7 +549,11 @@ const resources = {
       "faq.a3": "Uhamisho kati ya watumiaji wa QuantumPay ni wa papo hapo...",
       "faq.q4": "Ninawezaje kufungua akaunti ya biashara?",
       "faq.a4": "Baada ya kujisajili, utaona kidokezo cha 'Kuwa Mfanyabiashara'...",
-      "register_success_toast": "Usajili umefaulu! Tafadhali ingia."
+      "register_success_toast": "Usajili umefaulu! Tafadhali ingia.", 
+      "ai_assistant_title": "Msaidizi wa QuantumAI",
+      "ai_welcome_message": "Habari! Mimi ni Msaidizi wako wa QuantumAI. Niulize kuhusu matumizi au salio lako.",
+      "ai_error_message": "Samahani, nimepata hitilafu. Tafadhali jaribu tena.",
+      "ai_input_placeholder": "Niulize chochote..."
 
 
 
@@ -558,4 +578,5 @@ i18n
   });
 
 export default i18n;
+
 
