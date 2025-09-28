@@ -15,10 +15,9 @@ const TABS = [
     // [THE IMPLEMENTATION] Add the new Appearance tab
     { name: 'Appearance', icon: PaintBrushIcon, component: AppearanceSettings },
     { name: 'Security', icon: ShieldCheckIcon, component: SecuritySettings },
-    { name: t('settings_nav_security'), href: '/dashboard/settings/security', icon: ShieldCheckIcon },
     { name: 'Notifications', icon: BellIcon, component: NotificationSettings },
     { name: 'Danger Zone', icon: ExclamationTriangleIcon, component: DangerZone },
-    { name: t('settings_nav_subscription'), href: '/dashboard/settings/subscription', icon: CreditCardIcon, component: SubscriptionSettings },
+    { name: 'Subscription', icon: CreditCardIcon, component: SubscriptionSettings },
 ];
 
 const SettingsPage = () => {
@@ -63,5 +62,6 @@ const SettingsPage = () => {
         </DashboardLayout>
     );
 };
+
 
 export default SettingsPage;
