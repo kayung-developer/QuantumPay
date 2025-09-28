@@ -1,4 +1,4 @@
-// FILE: src/pages/dashboard/settings/SubscriptionSettings.js
+// FILE: src/components/settings/SubscriptionSettings.js
 
 import React from 'react';
 import { Link } from 'react-router-dom';
@@ -7,8 +7,8 @@ import { format, parseISO } from 'date-fns';
 
 // --- Component Imports ---
 import  useApi, { useApiPost } from '../../hooks/useApi';
-import Spinner from '../../../components/common/Spinner';
-import Button from '../../../components/common/Button';
+import Spinner from '../../components/common/Spinner';
+import Button from '../../components/common/Button';
 import SettingsCard from './SettingsCard'; // <-- The new reusable card
 import { CreditCardIcon } from '@heroicons/react/24/solid';
 
@@ -132,5 +132,6 @@ const SubscriptionSettings = () => {
 
 
 export default SubscriptionSettings;
+
 
 
