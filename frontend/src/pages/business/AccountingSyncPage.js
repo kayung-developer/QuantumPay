@@ -58,7 +58,7 @@ const ConnectedState = ({ status, onDisconnect, isLoading }) => {
     );
 };
 
-
+const { post: disconnectApiCall } = useApiPost('/accounting/disconnect');
 // --- Main Accounting Sync Page Component ---
 const AccountingSyncPage = () => {
     const { t } = useTranslation();
@@ -146,5 +146,6 @@ const AccountingSyncPage = () => {
         </DashboardLayout>
     );
 };
+
 
 export default AccountingSyncPage;
