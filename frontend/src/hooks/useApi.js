@@ -50,7 +50,7 @@ const useApi = (url, options = {}, manual = false) => {
 };
 
 
-export const useApiPost = (url, config = {}) => {
+  export const useApiPost = (url, config = {}) => {
     const [data, setData] = useState(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -103,5 +103,3 @@ export const useApiPost = (url, config = {}) => {
 
 
 export default useApi;
-
-
