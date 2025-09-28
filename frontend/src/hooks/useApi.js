@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import apiClient from '../api/axiosConfig';
 import { Toaster, toast, resolveValue } from 'react-hot-toast';
 
-export const useApi = (url, options = {}, manual = false) => {
+const useApi = (url, options = {}, manual = false) => {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(!manual);
@@ -103,4 +103,5 @@ export const useApiPost = (url, config = {}) => {
 
 
 export default useApi;
+
 
