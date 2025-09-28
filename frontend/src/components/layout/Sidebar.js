@@ -26,6 +26,8 @@ import {
   BriefcaseIcon,
   BookOpenIcon,
   CircleStackIcon,
+  LinkIcon, 
+  SparklesIcon,
   BanknotesIcon, // Added BanknotesIcon for Deposit
 } from '@heroicons/react/24/outline';
 import { ArrowsRightLeftIcon as SwitchIcon } from '@heroicons/react/24/solid';
@@ -213,5 +215,6 @@ const Sidebar = ({ onLinkClick }) => {
     </div>
   );
 };
+
 
 export default Sidebar;
