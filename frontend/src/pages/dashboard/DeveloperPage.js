@@ -113,15 +113,15 @@ const ApiKeysManager = ({ keys, loading, onRevoke, onGenerate }) => {
 
 // --- Create Key Modal ---
 const CreateKeyModal = ({ isOpen, onClose, onSuccess }) => {
-    const { post: createKey, loading } = useApiPost('/developer/api-keys');
+     const { post: createKey, loading } = useApiPost('/developer/api-keys');
     const KeySchema = Yup.object().shape({ label: Yup.string().required('A label for the key is required') });
 
     const handleSubmit = async (values) => {
-    const result = await createKey(values);
-    if (result.success) {
-        onSuccess(result.data);
+        const result = await createKey(values);
+        if (result.success) {
+            onSuccess(result.data);
+        }
     }
-}
 
     return (
         <Modal isOpen={isOpen} onClose={onClose} title="Generate New API Key">
@@ -280,7 +280,7 @@ const DeveloperPage = () => {
             
             {/* We can keep modals here or move them into their respective manager components */}
              <Modal isOpen={modal.type === 'createKey'} onClose={() => setModal({ type: null, data: null })} title="Generate New API Key">
-                 <Formik initialValues={{ label: '', is_live_mode: true }} validationSchema={Yup.object().shape({ label: Yup.string().required('A label for the key is required') })} onSubmit={async (values) => {
+                  <Formik initialValues={{ label: '' }} validationSchema={KeySchema} onSubmit={handleSubmit}> {
                     const result = await useApiPost('/developer/api-keys').post(values);
                     if(result.success) handleKeyCreated(result.data);
                  }}>
@@ -301,3 +301,4 @@ const DeveloperPage = () => {
 
 
 export default DeveloperPage;
+
