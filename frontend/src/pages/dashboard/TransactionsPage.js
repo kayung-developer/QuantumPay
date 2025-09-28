@@ -4,7 +4,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { format, subDays } from 'date-fns';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuth } from '../../context/AuthContext';
 import { useApi } from '../../hooks/useApi';
 import apiClient from '../../api/axiosConfig';
 import { toast } from 'react-hot-toast';
@@ -142,3 +142,4 @@ const TransactionsPage = () => {
 };
 
 export default TransactionsPage;
+
