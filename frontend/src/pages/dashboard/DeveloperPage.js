@@ -117,11 +117,12 @@ const CreateKeyModal = ({ isOpen, onClose, onSuccess }) => {
     const KeySchema = Yup.object().shape({ label: Yup.string().required('A label for the key is required') });
 
     const handleSubmit = async (values) => {
-        const result = await createKey(values);
-        if (result.success) {
-            onSuccess(result.data);
-        }
+    const result = await createKey(values);
+    if (result.success) {
+        onSuccess(result.data);
     }
+}
+
     return (
         <Modal isOpen={isOpen} onClose={onClose} title="Generate New API Key">
             <Formik initialValues={{ label: '', is_live_mode: true }} validationSchema={KeySchema} onSubmit={handleSubmit}>
@@ -297,5 +298,6 @@ const DeveloperPage = () => {
         </DashboardLayout>
     );
 };
+
 
 export default DeveloperPage;
