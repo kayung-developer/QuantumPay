@@ -58,7 +58,6 @@ const ConnectedState = ({ status, onDisconnect, isLoading }) => {
     );
 };
 
-const { post: disconnectApiCall } = useApiPost('/accounting/disconnect');
 // --- Main Accounting Sync Page Component ---
 const AccountingSyncPage = () => {
     const { t } = useTranslation();
@@ -70,6 +69,7 @@ const AccountingSyncPage = () => {
     const { data: status, loading, error, request: refetchStatus } = useApi('/accounting/status', {}, !isFeatureUnlocked);
     const { post: getAuthUrl, loading: authUrlLoading } = useApiPost('/accounting/quickbooks/authorize-url');
     const { post: handleCallbackPost, loading: callbackLoading } = useApiPost('/accounting/quickbooks/callback'); // We need a POST endpoint for this
+    const { post: disconnectApiCall } = useApiPost('/accounting/disconnect');
 
     // [REAL SYSTEM] Handle the OAuth2 callback from QuickBooks
     useEffect(() => {
@@ -149,3 +149,4 @@ const AccountingSyncPage = () => {
 
 
 export default AccountingSyncPage;
+
