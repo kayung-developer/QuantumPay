@@ -17,28 +17,10 @@ import Button from '../../components/common/Button';
 import Spinner from '../../components/common/Spinner';
 import { DocumentArrowDownIcon, SparklesIcon, FunnelIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
+import UpgradePrompt from '../../components/common/UpgradePrompt'; 
 
 const TRANSACTIONS_PER_PAGE = 10;
 
-// Reusable component to prompt users to upgrade
-const UpgradePrompt = ({ featureName, requiredPlan }) => (
-  <div className="p-4 bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-200 dark:border-neutral-700 rounded-lg flex items-center justify-between">
-      <div className="flex items-center">
-          <div className="flex-shrink-0 bg-primary/10 p-2 rounded-full">
-            <SparklesIcon className="h-5 w-5 text-primary" aria-hidden="true" />
-          </div>
-          <div className="ml-3">
-              <h3 className="text-sm font-semibold text-neutral-900 dark:text-white">{featureName}</h3>
-              <p className="text-sm text-neutral-600 dark:text-neutral-400">
-                  This feature is available on the <span className="font-bold">{requiredPlan}</span> plan.
-              </p>
-          </div>
-      </div>
-      <Link to="/pricing">
-          <Button size="sm" variant="secondary">View Plans</Button>
-      </Link>
-  </div>
-);
 
 const TransactionsPage = () => {
   const { t } = useTranslation();
@@ -133,7 +115,7 @@ const TransactionsPage = () => {
                     </Button>
                 ) : <div />}
             </div>
-            {!canExport && <UpgradePrompt featureName="Advanced Filtering & PDF Exports" requiredPlan="Premium" />}
+            <UpgradePrompt featureName="Export Statements" requiredPlan="Premium" />
         </div>
         
         <TransactionTable transactions={transactions} isLoading={loading} error={error} />
