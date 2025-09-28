@@ -4,9 +4,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { PaperAirplaneIcon, ChatBubbleLeftRightIcon, XMarkIcon, StarIcon } from '@heroicons/react/24/solid';
 import { useApi, useApiPost } from '../../hooks/useApi';
 import Spinner from '../common/Spinner';
+import Button from '../common/Button';
 import { useTranslation } from 'react-i18next';
 import { formatDistanceToNow } from 'date-fns';
 import { v4 as uuidv4 } from 'uuid'; // Ensure you have installed uuid: npm install uuid
+import ErrorBoundary from './components/utility/ErrorBoundary';
 
 const ChatWidget = () => {
     const { dbUser, authToken, hasActiveSubscription } = useAuth();
@@ -223,3 +225,4 @@ const ChatWidget = () => {
 
 
 export default ChatWidget;
+
