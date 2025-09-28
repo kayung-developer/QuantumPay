@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { PaperAirplaneIcon, ChatBubbleLeftRightIcon, XMarkIcon, StarIcon } from '@heroicons/react/24/solid';
-import { useApi, useApiPost } from '../../hooks/useApi';
+import useApi, { useApiPost } from '../../hooks/useApi';
 import Spinner from '../common/Spinner';
 import { useTranslation } from 'react-i18next';
 import { formatDistanceToNow } from 'date-fns';
@@ -223,5 +223,6 @@ const ChatWidget = () => {
 
 
 export default ChatWidget;
+
 
 
