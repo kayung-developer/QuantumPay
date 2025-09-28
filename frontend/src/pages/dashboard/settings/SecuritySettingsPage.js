@@ -7,7 +7,7 @@ import UAParser from 'ua-parser-js'; // You need to install this: npm install ua
 
 // --- Component Imports ---
 import useApi, { useApiPost } from '../../../hooks/useApi';
-import SettingsCard from './SettingsCard';
+import SettingsCard from '../../../components/settings/SettingsCard';
 import Spinner from '../../../components/common/Spinner';
 import Button from '../../../components/common/Button';
 import { ShieldCheckIcon, KeyIcon, LockClosedIcon, FingerPrintIcon, ComputerDesktopIcon, DevicePhoneMobileIcon } from '@heroicons/react/24/outline';
@@ -152,5 +152,6 @@ const SecuritySettingsPage = () => {
     </div>
     );
 };
+
 
 export default SecuritySettingsPage;
