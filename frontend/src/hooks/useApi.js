@@ -2,28 +2,17 @@ import { useState, useEffect, useCallback } from 'react';
 import apiClient from '../api/axiosConfig';
 import { Toaster, toast, resolveValue } from 'react-hot-toast';
 
-/**
- * Custom hook for making GET API requests.
- * It is now "auth-aware" and will wait for an auth token before firing.
- *
- * @param {string} url - The API endpoint to fetch data from.
- * @param {object} [options={}] - Optional Axios config (e.g., params).
- * @param {boolean} [manual=false] - If true, request is not fired on mount.
- */
-// [THE DEFINITIVE FIX] Add the 'export' keyword here to make the hook importable.
 export const useApi = (url, options = {}, manual = false) => {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(!manual);
   const { authToken } = useAuth();
-
   const optionsString = useMemo(() => JSON.stringify(options), [options]);
 
   const request = useCallback(async (requestOptions) => {
       if (!authToken) {
           return { success: false, error: { message: "Authentication token not yet available." } };
       }
-      
       setLoading(true);
       setError(null);
       try {
@@ -37,11 +26,7 @@ export const useApi = (url, options = {}, manual = false) => {
           return { success: true, data: response.data };
       } catch (err) {
           const errorMessage = err.response?.data?.detail || err.message || 'Could not fetch data.';
-          const structuredError = {
-              message: errorMessage,
-              status: err.response?.status,
-              data: err.response?.data
-          };
+          const structuredError = { message: errorMessage, status: err.response?.status, data: err.response?.data };
           setError(structuredError);
           console.error(`API GET Error on ${url}:`, structuredError);
           return { success: false, error: structuredError };
@@ -62,16 +47,11 @@ export const useApi = (url, options = {}, manual = false) => {
   return { data, error, loading, request };
 };
 
-/**
-* Custom hook for making data-mutating API requests (POST, PUT, DELETE).
-*/
-// [CORRECT] The 'export' keyword is already correct here.
 export const useApiPost = (url, config = {}) => {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const { authToken } = useAuth();
-  
   const configString = useMemo(() => JSON.stringify(config), [config]);
 
   const post = useCallback(async (postData, requestConfig = {}) => {
@@ -96,7 +76,6 @@ export const useApiPost = (url, config = {}) => {
           if (response.data && typeof response.data === 'object' && response.data.message) {
               toast.success(response.data.message, { id: response.data.message });
           }
-
           return { success: true, data: response.data };
       } catch (err) {
           const errorMessage = err.response?.data?.detail || err.message || 'An API error occurred.';
@@ -112,3 +91,7 @@ export const useApiPost = (url, config = {}) => {
 
   return { post, data, loading, error };
 };
+
+// [THE DEFINITIVE FIX] Add this default export line at the end of the file.
+// This allows other files to use `import useApi from ...` without causing an error.
+export default useApi;
