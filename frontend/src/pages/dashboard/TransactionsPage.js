@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { format, subDays } from 'date-fns';
 import { useAuth } from '../../context/AuthContext';
-import { useApi } from '../../hooks/useApi';
+import useApi from '../../hooks/useApi';
 import apiClient from '../../api/axiosConfig';
 import { toast } from 'react-hot-toast';
 import debounce from 'lodash.debounce';
@@ -142,4 +142,5 @@ const TransactionsPage = () => {
 };
 
 export default TransactionsPage;
+
 
