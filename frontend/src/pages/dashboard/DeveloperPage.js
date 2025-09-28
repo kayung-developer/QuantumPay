@@ -279,22 +279,11 @@ const DeveloperPage = () => {
             </div>
             
             {/* We can keep modals here or move them into their respective manager components */}
-             <Modal isOpen={modal.type === 'createKey'} onClose={() => setModal({ type: null, data: null })} title="Generate New API Key">
-                  <Formik initialValues={{ label: '' }} validationSchema={KeySchema} onSubmit={handleSubmit}> {
-                    const result = await useApiPost('/developer/api-keys').post(values);
-                    if(result.success) handleKeyCreated(result.data);
-                 }}>
-                     {({isSubmitting}) => (
-                         <Form className="space-y-4">
-                             <FormInput label="Key Label" name="label" placeholder="e.g., Production Server" />
-                             <div className="pt-4 flex justify-end space-x-3 border-t border-neutral-200 dark:border-neutral-800">
-                                 <Button type="button" variant="secondary" onClick={() => setModal({ type: null, data: null })}>Cancel</Button>
-                                 <Button type="submit" isLoading={isSubmitting}>Generate Key</Button>
-                             </div>
-                         </Form>
-                     )}
-                 </Formik>
-             </Modal>
+             <CreateKeyModal 
+    isOpen={modal.type === 'createKey'} 
+    onClose={() => setModal({ type: null, data: null })} 
+    onSuccess={handleKeyCreated} 
+/>
         </DashboardLayout>
     );
 };
