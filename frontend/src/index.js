@@ -15,6 +15,7 @@ import { AppearanceProvider, useAppearance } from './context/AppearanceContext';
 import './index.css';
 import './i18n';
 import App from './App';
+import ErrorBoundary from './components/utility/ErrorBoundary';
 
 
 // [THE UPGRADE] A small, powerful sub-component to render the correct icon based on toast type.
@@ -112,3 +113,4 @@ root.render(
     </ErrorBoundary>
   </React.StrictMode>
 );
+
