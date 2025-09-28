@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import apiClient from '../api/axiosConfig';
 import { Toaster, toast, resolveValue } from 'react-hot-toast';
+import { useAuth } from '../context/AuthContext';
+
 
 export const useApi = (url, options = {}, manual = false) => {
   const [data, setData] = useState(null);
@@ -95,3 +97,4 @@ export const useApiPost = (url, config = {}) => {
 // [THE DEFINITIVE FIX] Add this default export line at the end of the file.
 // This allows other files to use `import useApi from ...` without causing an error.
 export default useApi;
+
