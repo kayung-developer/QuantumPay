@@ -275,7 +275,10 @@ const resources = {
       "recurring_deposit_title": "Recurring Deposit",
       "recurring_deposit_desc": "Set up a schedule to automatically transfer funds to this vault.",
       "upgrade_for_automation": "Upgrade to Ultimate to unlock automation rules.",
-      "sidebar_savings_vaults": "Savings Vaults"
+      "sidebar_savings_vaults": "Savings Vaults",
+      "upgrade_prompt_title": "Unlock {{featureName}}",
+      "upgrade_prompt_subtitle": "This is an advanced feature available on the {{requiredPlan}} plan.",
+      "upgrade_prompt_button": "View Pricing Plans"
 
 
   }
@@ -495,7 +498,10 @@ const resources = {
       "recurring_deposit_title": "Recurring Deposit",
       "recurring_deposit_desc": "Set up a schedule to automatically transfer funds to this vault.",
       "upgrade_for_automation": "Upgrade to Ultimate to unlock automation rules.",
-      "sidebar_savings_vaults": "Coffres d'Épargne"
+      "sidebar_savings_vaults": "Coffres d'Épargne",
+      "upgrade_prompt_title": "Débloquez {{featureName}}",
+      "upgrade_prompt_subtitle": "Ceci est une fonctionnalité avancée disponible sur le plan {{requiredPlan}}.",
+      "upgrade_prompt_button": "Voir les Plans Tarifaires"
 
 
 
@@ -716,7 +722,10 @@ const resources = {
       "recurring_deposit_title": "Depósito Recurrente",
       "recurring_deposit_desc": "Configure un horario para transferir fondos automáticamente a esta bóveda.",
       "upgrade_for_automation": "Actualice a Ultimate para desbloquear las reglas de automatización.",
-      "sidebar_savings_vaults": "Bóvedas de Ahorro"
+      "sidebar_savings_vaults": "Bóvedas de Ahorro",
+      "upgrade_prompt_title": "Desbloquee {{featureName}}",
+      "upgrade_prompt_subtitle": "Esta es una característica avanzada disponible en el plan {{requiredPlan}}.",
+      "upgrade_prompt_button": "Ver Planes de Precios"
 
 
 
@@ -940,7 +949,10 @@ const resources = {
       "recurring_deposit_title": "Depósito Recorrente",
       "recurring_deposit_desc": "Configure um cronograma para transferir fundos automaticamente para este cofre.",
       "upgrade_for_automation": "Atualize para o Ultimate para desbloquear as regras de automação.",
-      "sidebar_savings_vaults": "Cofres de Poupança"
+      "sidebar_savings_vaults": "Cofres de Poupança",
+      "upgrade_prompt_title": "Desbloqueie {{featureName}}",
+      "upgrade_prompt_subtitle": "Este é um recurso avançado disponível no plano {{requiredPlan}}.",
+      "upgrade_prompt_button": "Ver Planos de Preços"
 
 
 
@@ -1165,7 +1177,10 @@ const resources = {
       "recurring_deposit_title": "Amana ya Kawaida",
       "recurring_deposit_desc": "Weka ratiba ya kuhamisha fedha kiotomatiki kwenye hazina hii.",
       "upgrade_for_automation": "Boresha hadi Ultimate ili ufungue sheria za kiotomatiki.",
-      "sidebar_savings_vaults": "Hazina za Akiba"
+      "sidebar_savings_vaults": "Hazina za Akiba",
+      "upgrade_prompt_title": "Fungua {{featureName}}",
+      "upgrade_prompt_subtitle": "Hiki ni kipengele cha juu kinachopatikana kwenye mpango wa {{requiredPlan}}.",
+      "upgrade_prompt_button": "Tazama Mipango ya Bei"
 
 
 
@@ -1192,6 +1207,3 @@ i18n
   });
 
 export default i18n;
-
-
-
