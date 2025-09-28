@@ -12,7 +12,7 @@ import Spinner from '../../components/common/Spinner';
 
 // --- [FIX] Reusable, Theme-Aware PricingCard Component ---
 // This sub-component keeps the main component clean and is fully theme-aware.
-const PricingCard = ({ plan, isMostPopular, onSubscribe, isLoading, currentPlanId, isLoggedIn }) => {
+const PricingCard = ({ plan, isMostPopular, onSubscribe, isLoading, currentPlanId, isLoggedIn, index }) => {
     const { t } = useTranslation();
     
     // Determine the correct text for the call-to-action button
@@ -29,7 +29,7 @@ const PricingCard = ({ plan, isMostPopular, onSubscribe, isLoading, currentPlanI
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.1 * (plans.findIndex(p => p.id === plan.id) || 0) }}
+            transition={{ duration: 0.5, delay: 0.1 * index }}
             className={`rounded-3xl p-8 ring-1 xl:p-10 transition-all duration-300 ${
                 isMostPopular
                     ? 'ring-2 ring-primary bg-neutral-50 dark:bg-neutral-900 shadow-2xl'
@@ -138,10 +138,11 @@ const PricingPage = () => {
 
         return (
             <div className="isolate mx-auto mt-16 grid max-w-md grid-cols-1 gap-8 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-                {plans.map((plan) => (
+                {plans.map((plan, index) => (
                     <PricingCard
                         key={plan.id}
                         plan={plan}
+                        index={index}
                         isMostPopular={plan.id === 'premium'}
                         onSubscribe={handleSubscribe}
                         isLoading={checkoutLoading}
@@ -170,5 +171,6 @@ const PricingPage = () => {
         </div>
     );
 };
+
 
 export default PricingPage;
