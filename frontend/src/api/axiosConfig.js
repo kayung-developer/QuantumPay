@@ -6,7 +6,7 @@ import NProgress from '../utils/nprogress';
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 if (!API_BASE_URL) {
-  console.error("FATAL ERROR: REACT_APP_API_BASE_URL is not defined. Please check your .env file.");
+  console.error("FATAL ERROR: REACT_APP_API_BASE_URL is not defined.");
 }
 
 const apiClient = axios.create({
@@ -15,47 +15,50 @@ const apiClient = axios.create({
     'Content-Type': 'application/json',
     'Accept': 'application/json',
   },
-  timeout: 15000, // Increased timeout for potentially slow API responses
+  timeout: 15000,
 });
 
 // [THE DEFINITIVE FIX]
-// This request interceptor is the key to solving the race condition.
-// Instead of setting a static default header, this function runs BEFORE every single API call.
-// It will dynamically get the latest token from localStorage (where we'll save it)
-// and inject it into the request's headers at the last possible moment.
-// This completely eliminates any timing issues.
+// We now export a separate function to set up the interceptors.
+// This function will be called from within AuthContext ONLY AFTER Firebase has provided a token.
+// This guarantees that the interceptor has access to the correct, up-to-date token function.
 
-apiClient.interceptors.request.use(
-  (config) => {
-    NProgress.start();
-    // Get the token from storage for each request
-    const token = localStorage.getItem('firebaseAuthToken');
-    if (token) {
-      config.headers['Authorization'] = `Bearer ${token}`;
+export const setupAxiosInterceptors = (getAuthToken) => {
+  apiClient.interceptors.request.eject(0); // Eject any previous interceptor to prevent duplicates
+  
+  const requestInterceptor = apiClient.interceptors.request.use(
+    (config) => {
+      NProgress.start();
+      const token = getAuthToken(); // Call the function to get the latest token
+      if (token) {
+        config.headers['Authorization'] = `Bearer ${token}`;
+      }
+      return config;
+    },
+    (error) => {
+      NProgress.done();
+      return Promise.reject(error);
     }
-    return config;
-  },
-  (error) => {
-    NProgress.done();
-    return Promise.reject(error);
-  }
-);
+  );
 
-apiClient.interceptors.response.use(
-  (response) => {
-    NProgress.done();
-    return response;
-  },
-  (error) => {
-    NProgress.done();
-    // This is where you could add global error handling, e.g.,
-    // if you get a 401, you could trigger a logout.
-    if (error.response && error.response.status === 401) {
-       // The AuthContext will handle the logout, but you could add a toast here.
-       console.error("Axios interceptor caught a 401 Unauthorized error.");
+  apiClient.interceptors.response.eject(0); // Eject previous response interceptor
+
+  const responseInterceptor = apiClient.interceptors.response.use(
+    (response) => {
+      NProgress.done();
+      return response;
+    },
+    (error) => {
+      NProgress.done();
+      if (error.response && error.response.status === 401) {
+        console.error("Axios interceptor caught a 401 Unauthorized error. This may trigger a logout.");
+        // The AuthContext will handle the actual logout logic.
+      }
+      return Promise.reject(error);
     }
-    return Promise.reject(error);
-  }
-);
+  );
+  
+  return { requestInterceptor, responseInterceptor };
+};
 
 export default apiClient;
