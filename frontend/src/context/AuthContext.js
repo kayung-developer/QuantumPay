@@ -1,3 +1,5 @@
+// FILE: src/context/AuthContext.js
+
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import {
   onAuthStateChanged,
@@ -7,8 +9,8 @@ import {
   sendPasswordResetEmail,
   updateProfile,
 } from 'firebase/auth';
-import { auth } from '../firebase'; 
-import apiClient from '../api/axiosConfig'; // Import your configured axios instance
+import { auth } from '../firebase';
+import apiClient from '../api/axiosConfig'; // The interceptor in this file will now handle the token
 import { toast } from 'react-hot-toast';
 
 const AuthContext = createContext(null);
@@ -18,77 +20,71 @@ export const useAuth = () => useContext(AuthContext);
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [dbUser, setDbUser] = useState(null);
-  const [authToken, setAuthToken] = useState(null); // <-- NEW: State to hold the token
   const [loading, setLoading] = useState(true);
-  const [activeProfile, setActiveProfile] = useState('personal'); 
+  const [activeProfile, setActiveProfile] = useState('personal');
 
-  // fetchDbUser remains the same but will now be called AFTER the token is set.
+  // fetchDbUser now relies on the axios interceptor for its auth token.
   const fetchDbUser = useCallback(async () => {
     try {
       const response = await apiClient.get('/users/me');
       setDbUser(response.data);
       return response.data;
     } catch (error) {
-      console.error("Failed to fetch DB user:", error);
-      await signOut(auth); // Force logout on critical failure
+      console.error("Failed to fetch DB user. This likely means the stored token is invalid. Forcing logout.", error);
+      // If we can't get our user, the token is bad. Log out completely.
+      await signOut(auth);
       return null;
     }
   }, []);
 
-  // [THE DEFINITIVE FIX - PART 1: CONTEXT REFACTOR]
-  // This useEffect is the core of the fix.
-  // It listens for Firebase auth changes, gets the token, sets the API client header,
-  // and THEN fetches our backend user, all in the correct sequence.
+  // [THE DEFINITIVE FIX - FINAL VERSION]
+  // This useEffect now manages the token in localStorage, which is read by the axios interceptor.
+  // This is the most robust pattern, immune to React rendering race conditions.
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setLoading(true);
       if (user) {
-        setCurrentUser(user);
         try {
-          // 1. Get the all-important ID token from Firebase.
-          const token = await user.getIdToken(true); // `true` forces a refresh if needed
-          setAuthToken(token); // <-- NEW: Set the token in our state
-
-          // 2. [CRITICAL] Set this token as a default header for all future axios requests.
-          // This ensures every subsequent call from any part of the app is authenticated.
-          apiClient.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-
-          // 3. NOW that authentication is established, fetch our internal user data.
+          const token = await user.getIdToken(true);
+          
+          // 1. Store the token in localStorage. The Axios interceptor will read from here.
+          localStorage.setItem('firebaseAuthToken', token);
+          
+          setCurrentUser(user);
+          
+          // 2. Now that the token is stored, fetch our application-specific user data.
           await fetchDbUser();
 
         } catch (error) {
-            console.error("Error during auth state change handling:", error);
-            // If token fetching or db user fetch fails, force logout.
+            console.error("Critical error during auth state change. Forcing logout.", error);
+            localStorage.removeItem('firebaseAuthToken');
+            setCurrentUser(null);
+            setDbUser(null);
             await signOut(auth);
-            setAuthToken(null);
-            apiClient.defaults.headers.common['Authorization'] = null;
         }
       } else {
-        // No user is signed in, clear everything.
+        // No user is signed in. Clear everything.
+        localStorage.removeItem('firebaseAuthToken');
         setCurrentUser(null);
         setDbUser(null);
-        setAuthToken(null);
-        // [CRITICAL] Clear the authorization header on logout.
-        delete apiClient.defaults.headers.common['Authorization'];
       }
       setLoading(false);
     });
 
-    // Cleanup subscription on unmount
     return () => unsubscribe();
   }, [fetchDbUser]);
 
-
   const login = async (email, password) => {
+    // This function's only job is to sign in with Firebase.
+    // The onAuthStateChanged listener above will handle the entire application state update.
     const toastId = toast.loading('Logging in...');
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      // The onAuthStateChanged listener will handle the rest.
       toast.success('Login successful!', { id: toastId });
     } catch (error) {
       const errorMessage = error.code === 'auth/invalid-credential' 
         ? 'Invalid email or password.' 
-        : error.message;
+        : 'An error occurred. Please check your connection and try again.';
       toast.error(errorMessage, { id: toastId });
       throw error;
     }
@@ -97,29 +93,28 @@ export const AuthProvider = ({ children }) => {
   const register = async (email, password, fullName, country_code, phone_number) => {
     const toastId = toast.loading('Creating your account...');
     try {
+      // Step 1: Create the user in Firebase.
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
       await updateProfile(user, { displayName: fullName });
-
+      
+      // Step 2: [SIMPLIFIED] Send user info to our backend.
+      // This is still useful if you need to pass extra info not available to the JIT endpoint.
       const token = await user.getIdToken();
-      await apiClient.post('/auth/complete-registration',
-          {
-              firebase_uid: user.uid, email, full_name: fullName, country_code, phone_number,
-          },
-          { headers: { Authorization: `Bearer ${token}` } }
-      );
+      apiClient.defaults.headers.common['Authorization'] = `Bearer ${token}`; // Temporarily set header for this one call
+      await apiClient.post('/auth/complete-registration', {
+          firebase_uid: user.uid, email, full_name: fullName, country_code, phone_number,
+      });
+      delete apiClient.defaults.headers.common['Authorization']; // Unset temporary header
 
-      // The onAuthStateChanged listener will handle the final login state
       toast.success('Registration successful! Welcome.', { id: toastId });
-
+      // The onAuthStateChanged listener will automatically log them in and fetch their data.
+      
     } catch (error) {
-        // [THE FIX] Check for the specific network error code here as well
-        if (error.code === 'auth/network-request-failed') {
-            toast.error('Could not connect. Please check your internet connection.', { id: toastId });
-        } else if (error.code === 'auth/email-already-in-use') {
+        if (error.code === 'auth/email-already-in-use') {
              toast.error('This email address is already registered.', { id: toastId });
         } else {
-            toast.error(error.response?.data?.detail || error.message, { id: toastId });
+            toast.error(error.response?.data?.detail || 'Registration failed. Please try again.', { id: toastId });
         }
       throw error;
     }
@@ -127,18 +122,19 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     await signOut(auth);
-    toast.success('You have been logged out..');
+    toast.success('You have been logged out.');
   };
 
   const resetPassword = async (email) => {
-        try {
-            await sendPasswordResetEmail(auth, email);
-            toast.success('Password reset email sent. Please check your inbox.');
-        } catch (error) {
-            toast.error('Failed to send password reset email.');
-            throw error;
-        }
-    };
+    try {
+        await sendPasswordResetEmail(auth, email);
+        toast.success('Password reset email sent. Please check your inbox.');
+    } catch (error) {
+        toast.error('Failed to send password reset email.');
+        throw error;
+    }
+  };
+
    const switchToBusiness = () => {
         if (dbUser?.business_profile) {
             setActiveProfile('business');
@@ -149,23 +145,31 @@ export const AuthProvider = ({ children }) => {
     const switchToPersonal = () => {
         setActiveProfile('personal');
     };
+    
+    // [THE UPGRADE] Implement role-based overrides for subscription features.
+    const hasActiveSubscription = useCallback((plan_id = null) => {
+        if (!dbUser) return false;
+        // Superusers have access to everything.
+        if (dbUser.role === 'superuser') return true;
+        // Admins have access to premium features and below.
+        if (dbUser.role === 'admin' && plan_id !== 'ultimate') return true;
 
-    const hasActiveSubscription = (plan_id = null) => {
-      const sub = dbUser?.subscription;
-      if (!sub || sub.status !== 'active') return false;
-      if (plan_id) {
-          // Check for a specific plan or higher
-          const planHierarchy = { free: 0, premium: 1, ultimate: 2 };
-          return planHierarchy[sub.plan.id] >= planHierarchy[plan_id];
-      }
-      return true;
-  };
+        const sub = dbUser.subscription;
+        if (!sub || sub.status !== 'active') return false;
+        
+        if (plan_id) {
+            const planHierarchy = { free: 0, premium: 1, ultimate: 2 };
+            const userPlanLevel = planHierarchy[sub.plan.id] ?? -1;
+            const requiredPlanLevel = planHierarchy[plan_id] ?? -1;
+            return userPlanLevel >= requiredPlanLevel;
+        }
+        return true;
+    }, [dbUser]);
 
   const value = {
     currentUser,
     dbUser,
-    authToken,
-    isAuthenticated: !!dbUser, // User is authenticated only if we have their details from our DB
+    isAuthenticated: !!dbUser,
     isAdmin: dbUser?.role === 'admin' || dbUser?.role === 'superuser',
     loading,
     login,
@@ -176,13 +180,13 @@ export const AuthProvider = ({ children }) => {
     activeProfile,
     switchToBusiness,
     switchToPersonal,
-    subscription: dbUser?.subscription,
     hasActiveSubscription,
   };
 
   return (
         <AuthContext.Provider value={value}>
-                {children}
+            {/* Don't render children until the initial auth check is complete */}
+            {!loading && children}
         </AuthContext.Provider>
     );
 };
