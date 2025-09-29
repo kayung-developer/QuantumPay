@@ -278,7 +278,13 @@ const resources = {
       "sidebar_savings_vaults": "Savings Vaults",
       "upgrade_prompt_title": "Unlock {{featureName}}",
       "upgrade_prompt_subtitle": "This is an advanced feature available on the {{requiredPlan}} plan.",
-      "upgrade_prompt_button": "View Pricing Plans"
+      "upgrade_prompt_button": "View Pricing Plans",
+      "recent_transactions_title": "Recent Transactions",
+      "view_all_button": "View All",
+      "no_transactions_message": "No recent transactions.",
+      "tx_description_to": "To: {{recipient}}",
+      "tx_description_from": "From: {{sender}}",
+      "tx_description_deposit": "Deposit"
 
 
   }
@@ -501,7 +507,13 @@ const resources = {
       "sidebar_savings_vaults": "Coffres d'Épargne",
       "upgrade_prompt_title": "Débloquez {{featureName}}",
       "upgrade_prompt_subtitle": "Ceci est une fonctionnalité avancée disponible sur le plan {{requiredPlan}}.",
-      "upgrade_prompt_button": "Voir les Plans Tarifaires"
+      "upgrade_prompt_button": "Voir les Plans Tarifaires",
+      "recent_transactions_title": "Transactions Récentes",
+      "view_all_button": "Tout Voir",
+      "no_transactions_message": "Aucune transaction récente.",
+      "tx_description_to": "À : {{recipient}}",
+      "tx_description_from": "De : {{sender}}",
+      "tx_description_deposit": "Dépôt"
 
 
 
@@ -725,7 +737,13 @@ const resources = {
       "sidebar_savings_vaults": "Bóvedas de Ahorro",
       "upgrade_prompt_title": "Desbloquee {{featureName}}",
       "upgrade_prompt_subtitle": "Esta es una característica avanzada disponible en el plan {{requiredPlan}}.",
-      "upgrade_prompt_button": "Ver Planes de Precios"
+      "upgrade_prompt_button": "Ver Planes de Precios",
+      "recent_transactions_title": "Transacciones Recientes",
+      "view_all_button": "Ver Todo",
+      "no_transactions_message": "No hay transacciones recientes.",
+      "tx_description_to": "A: {{recipient}}",
+      "tx_description_from": "De: {{sender}}",
+      "tx_description_deposit": "Depósito"
 
 
 
@@ -952,7 +970,13 @@ const resources = {
       "sidebar_savings_vaults": "Cofres de Poupança",
       "upgrade_prompt_title": "Desbloqueie {{featureName}}",
       "upgrade_prompt_subtitle": "Este é um recurso avançado disponível no plano {{requiredPlan}}.",
-      "upgrade_prompt_button": "Ver Planos de Preços"
+      "upgrade_prompt_button": "Ver Planos de Preços",
+      "recent_transactions_title": "Transações Recentes",
+      "view_all_button": "Ver Tudo",
+      "no_transactions_message": "Nenhuma transação recente.",
+      "tx_description_to": "Para: {{recipient}}",
+      "tx_description_from": "De: {{sender}}",
+      "tx_description_deposit": "Depósito"
 
 
 
@@ -1180,7 +1204,13 @@ const resources = {
       "sidebar_savings_vaults": "Hazina za Akiba",
       "upgrade_prompt_title": "Fungua {{featureName}}",
       "upgrade_prompt_subtitle": "Hiki ni kipengele cha juu kinachopatikana kwenye mpango wa {{requiredPlan}}.",
-      "upgrade_prompt_button": "Tazama Mipango ya Bei"
+      "upgrade_prompt_button": "Tazama Mipango ya Bei",
+      "recent_transactions_title": "Miamala ya Hivi Karibuni",
+      "view_all_button": "Tazama Zote",
+      "no_transactions_message": "Hakuna miamala ya hivi karibuni.",
+      "tx_description_to": "Kwa: {{recipient}}",
+      "tx_description_from": "Kutoka: {{sender}}",
+      "tx_description_deposit": "Amana"
 
 
 
@@ -1207,6 +1237,3 @@ i18n
   });
 
 export default i18n;
-
-
-
