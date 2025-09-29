@@ -19,17 +19,17 @@ const apiClient = axios.create({
 });
 
 // [THE DEFINITIVE FIX]
-// We now export a separate function to set up the interceptors.
-// This function will be called from within AuthContext ONLY AFTER Firebase has provided a token.
-// This guarantees that the interceptor has access to the correct, up-to-date token function.
-
+// Export a function to set up interceptors. This will be called by AuthContext
+// after Firebase is initialized, ensuring the token logic is always correct.
 export const setupAxiosInterceptors = (getAuthToken) => {
-  apiClient.interceptors.request.eject(0); // Eject any previous interceptor to prevent duplicates
-  
-  const requestInterceptor = apiClient.interceptors.request.use(
+  // Clear any existing interceptors to prevent duplicates during hot-reloads
+  apiClient.interceptors.request.eject(0);
+  apiClient.interceptors.response.eject(0);
+
+  apiClient.interceptors.request.use(
     (config) => {
       NProgress.start();
-      const token = getAuthToken(); // Call the function to get the latest token
+      const token = getAuthToken(); // Dynamically get the latest token
       if (token) {
         config.headers['Authorization'] = `Bearer ${token}`;
       }
@@ -41,9 +41,7 @@ export const setupAxiosInterceptors = (getAuthToken) => {
     }
   );
 
-  apiClient.interceptors.response.eject(0); // Eject previous response interceptor
-
-  const responseInterceptor = apiClient.interceptors.response.use(
+  apiClient.interceptors.response.use(
     (response) => {
       NProgress.done();
       return response;
@@ -51,14 +49,12 @@ export const setupAxiosInterceptors = (getAuthToken) => {
     (error) => {
       NProgress.done();
       if (error.response && error.response.status === 401) {
-        console.error("Axios interceptor caught a 401 Unauthorized error. This may trigger a logout.");
-        // The AuthContext will handle the actual logout logic.
+        console.error("Axios interceptor caught a 401 Unauthorized error.");
+        // Here, you could trigger a global logout event if desired.
       }
       return Promise.reject(error);
     }
   );
-  
-  return { requestInterceptor, responseInterceptor };
 };
 
 export default apiClient;
