@@ -10,10 +10,10 @@ import { toast } from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
 import EmployeeTable from '../../components/payroll/EmployeeTable';
-import PayrollHistory from '../../components/business/PayrollHistory';
-import EmployeeFormModal from '../../components/business/EmployeeFormModal';
-import CreatePayrollRunModal from '../../components/business/CreatePayrollRunModal';
-import ExecutePayrollModal from '../../components/business/ExecutePayrollModal';
+import PayrollHistory from '../../components/payroll/PayrollHistory';
+import EmployeeFormModal from '../../components/payroll/EmployeeFormModal';
+import CreatePayrollRunModal from '../../components/payroll/CreatePayrollRunModal';
+import ExecutePayrollModal from '../../components/payroll/ExecutePayrollModal';
 
 const PayrollPage = () => {
     const { t } = useTranslation();
@@ -118,3 +118,4 @@ const PayrollPage = () => {
 
 
 export default PayrollPage;
+
