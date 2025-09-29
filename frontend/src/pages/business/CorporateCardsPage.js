@@ -15,7 +15,7 @@ import Modal from '../../components/common/Modal';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import FormInput from '../../components/common/FormInput';
-import CardDetailsModal from '../../components/business/CardDetailsModal';
+import CardDetailsModal from '../../components/dashboard/business/CardDetailsModal';
 
 
 const IssueCardModal = ({ isOpen, onClose, onSuccess }) => {
@@ -129,5 +129,6 @@ const CorporateCardsPage = () => {
         </DashboardLayout>
     );
 };
+
 
 export default CorporateCardsPage;
