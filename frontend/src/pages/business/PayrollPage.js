@@ -9,7 +9,7 @@ import { PlusIcon, ChevronRightIcon, ExclamationTriangleIcon } from '@heroicons/
 import { toast } from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
-import EmployeeTable from '../../components/business/EmployeeTable';
+import EmployeeTable from '../../components/payroll/EmployeeTable';
 import PayrollHistory from '../../components/business/PayrollHistory';
 import EmployeeFormModal from '../../components/business/EmployeeFormModal';
 import CreatePayrollRunModal from '../../components/business/CreatePayrollRunModal';
@@ -115,5 +115,6 @@ const PayrollPage = () => {
         </DashboardLayout>
     );
 };
+
 
 export default PayrollPage;
