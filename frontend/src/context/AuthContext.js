@@ -13,7 +13,7 @@ export const useAuth = () => useContext(AuthContext);
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [dbUser, setDbUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true); // Start as true
   const [activeProfile, setActiveProfile] = useState('personal');
 
   const tokenRef = useRef(null);
@@ -31,6 +31,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
+    // Setup the interceptor ONCE. It will dynamically get the token from the ref.
     setupAxiosInterceptors(() => tokenRef.current);
 
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -61,17 +62,13 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     await signInWithEmailAndPassword(auth, email, password);
   };
-  
-  // [THE DEFINITIVE FIX - PART 1]
-  // The register function is now simplified. It only handles Firebase creation.
-  // The onAuthStateChanged listener handles everything else, including JIT provisioning.
-  // The phone_number and country_code are no longer needed here as the backend infers the country.
+
   const register = async (email, password, fullName) => {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     await updateProfile(userCredential.user, { displayName: fullName });
-    // That's it! Firebase automatically signs the user in, which triggers our robust onAuthStateChanged listener.
+    // JIT provisioning will be handled by onAuthStateChanged
   };
-  
+
   const logout = async () => {
     await signOut(auth);
     setActiveProfile('personal');
@@ -82,10 +79,10 @@ export const AuthProvider = ({ children }) => {
     await sendPasswordResetEmail(auth, email);
     toast.success('Password reset email sent.');
   };
-  
+
   const switchToBusiness = () => { if (dbUser?.business_profile) setActiveProfile('business'); };
   const switchToPersonal = () => { setActiveProfile('personal'); };
-    
+
   const hasActiveSubscription = useCallback((plan_id = null) => {
     if (!dbUser) return false;
     if (dbUser.role === 'superuser') return true;
@@ -93,8 +90,8 @@ export const AuthProvider = ({ children }) => {
     const sub = dbUser.subscription;
     if (!sub || sub.status !== 'active') return false;
     if (plan_id) {
-      const planHierarchy = { free: 0, premium: 1, ultimate: 2 };
-      return (planHierarchy[sub.plan.id] ?? -1) >= (planHierarchy[plan_id] ?? -1);
+        const planHierarchy = { free: 0, premium: 1, ultimate: 2 };
+        return (planHierarchy[sub.plan.id] ?? -1) >= (planHierarchy[plan_id] ?? -1);
     }
     return true;
   }, [dbUser]);
@@ -118,6 +115,12 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider value={value}>
+      {/* 
+        [THE DEFINITIVE FIX]
+        We DO NOT render the rest of the application until the initial authentication
+        check is complete (loading is false). This prevents the pricing page (and others)
+        from trying to fetch data before the auth state is known.
+      */}
       {!loading && children}
     </AuthContext.Provider>
   );
