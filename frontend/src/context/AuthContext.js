@@ -27,11 +27,11 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await apiClient.get('/users/me');
       setDbUser(response.data);
-      setActiveProfile('personal'); // Reset to personal profile on user fetch
       return response.data;
     } catch (error) {
       console.error("Failed to fetch DB user. Forcing logout.", error);
-      await signOut(auth); // This triggers the onAuthStateChanged listener to clean up
+      // This automatically triggers the onAuthStateChanged listener to clean up the state.
+      await signOut(auth);
       return null;
     }
   }, []);
@@ -39,16 +39,15 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
+        setCurrentUser(user);
         try {
           const token = await user.getIdToken(true);
           localStorage.setItem('firebaseAuthToken', token);
-          setCurrentUser(user);
-          // Only after the token is set, we fetch the user.
           await fetchDbUser();
         } catch (error) {
-          console.error("Critical error during auth state change. Forcing logout.", error);
-          localStorage.removeItem('firebaseAuthToken');
-          await signOut(auth); // This will re-trigger this listener with user=null
+            console.error("Critical error during auth state change. Forcing logout.", error);
+            localStorage.removeItem('firebaseAuthToken');
+            await signOut(auth);
         }
       } else {
         localStorage.removeItem('firebaseAuthToken');
@@ -61,28 +60,23 @@ export const AuthProvider = ({ children }) => {
   }, [fetchDbUser]);
 
   const login = async (email, password) => {
-    // onAuthStateChanged will handle the entire post-login flow.
     await signInWithEmailAndPassword(auth, email, password);
   };
 
   const register = async (email, password, fullName) => {
-    // [THE DEFINITIVE FIX] This function's ONLY job is to create the user in Firebase.
-    // The onAuthStateChanged listener will handle JIT provisioning when the user is auto-signed in.
-    // The separate call to `/auth/complete-registration` is removed as it's redundant.
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     await updateProfile(userCredential.user, { displayName: fullName });
-    // Firebase automatically signs in the user here, which triggers onAuthStateChanged.
   };
   
   const logout = async () => {
     await signOut(auth);
-    setActiveProfile('personal'); // Reset profile on logout
+    setActiveProfile('personal');
     toast.success('You have been logged out.');
   };
 
   const resetPassword = async (email) => {
     await sendPasswordResetEmail(auth, email);
-    toast.success('Password reset email sent. Please check your inbox.');
+    toast.success('Password reset email sent.');
   };
   
   const switchToBusiness = () => {
@@ -97,10 +91,8 @@ export const AuthProvider = ({ children }) => {
     if (!dbUser) return false;
     if (dbUser.role === 'superuser') return true;
     if (dbUser.role === 'admin' && plan_id !== 'ultimate') return true;
-
     const sub = dbUser.subscription;
     if (!sub || sub.status !== 'active') return false;
-    
     if (plan_id) {
         const planHierarchy = { free: 0, premium: 1, ultimate: 2 };
         return (planHierarchy[sub.plan.id] ?? -1) >= (planHierarchy[plan_id] ?? -1);
@@ -111,7 +103,8 @@ export const AuthProvider = ({ children }) => {
   const value = {
     currentUser,
     dbUser,
-    isAuthenticated: !!dbUser && !!localStorage.getItem('firebaseAuthToken'),
+    // [THE DEFINITIVE FIX] The single source of truth for authentication status.
+    isAuthenticated: !loading && !!dbUser,
     isAdmin: dbUser?.role === 'admin' || dbUser?.role === 'superuser',
     loading,
     login,
