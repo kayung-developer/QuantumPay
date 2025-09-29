@@ -4,6 +4,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus, ghcolors } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { toast } from 'react-hot-toast';
+import { Link } from 'react-router-dom';
 
 // --- Component Imports ---
 import PageWrapper from '../../components/layout/PageWrapper';
@@ -149,5 +150,6 @@ const ApiDocumentationPage = () => {
         </PageWrapper>
     );
 };
+
 
 export default ApiDocumentationPage;
