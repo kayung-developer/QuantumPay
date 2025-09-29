@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { format, parseISO } from 'date-fns';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
@@ -140,3 +140,4 @@ const RecentTransactions = ({ transactions = [], isLoading, error, currentUserId
 };
 
 export default RecentTransactions;
+
