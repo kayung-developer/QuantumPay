@@ -296,7 +296,22 @@ const resources = {
       "kyc_status_not_verified": "Your Account is Not Verified",
       "kyc_not_verified_desc": "Please submit your documents to access all features.",
       "kyc_submit_button": "Submit Your Documents",
-      "kyc_load_error": "Could not load verification requirements for your country."
+      "kyc_load_error": "Could not load verification requirements for your country.",
+      "wallets_title": "My Wallets",
+      "wallets_subtitle": "Manage your balances across all available currencies.",
+      "add_wallet_button": "Add Wallet",
+      "create_wallet_title": "Create a New Wallet",
+      "create_wallet_button": "Create Wallet",
+      "wallet_card_balance_label": "Total Balance",
+      "wallet_card_deposit_button": "Deposit",
+      "wallet_card_withdraw_button": "Withdraw",
+      "wallets_loading_error_title": "Could Not Load Wallets",
+      "wallets_loading_error_desc": "There was an issue connecting to the server. Please check your internet connection.",
+      "wallets_try_again_button": "Try Again",
+      "wallets_empty_state_title": "No wallets found",
+      "wallets_empty_state_desc": "Get started by creating your first currency wallet.",
+      "wallet_add_success_toast": "Your new {{currency}} wallet has been added!",
+      "deposit_success_toast": "Deposit initiated! Your {{currency}} balance will be updated shortly."
 
 
   }
@@ -537,7 +552,22 @@ const resources = {
       "kyc_status_not_verified": "Votre Compte n'est pas Vérifié",
       "kyc_not_verified_desc": "Veuillez soumettre vos documents pour accéder à toutes les fonctionnalités.",
       "kyc_submit_button": "Soumettre Vos Documents",
-      "kyc_load_error": "Impossible de charger les exigences de vérification pour votre pays."
+      "kyc_load_error": "Impossible de charger les exigences de vérification pour votre pays.",
+      "wallets_title": "Mes Portefeuilles",
+      "wallets_subtitle": "Gérez vos soldes dans toutes les devises disponibles.",
+      "add_wallet_button": "Ajouter Portefeuille",
+      "create_wallet_title": "Créer un Nouveau Portefeuille",
+      "create_wallet_button": "Créer Portefeuille",
+      "wallet_card_balance_label": "Solde Total",
+      "wallet_card_deposit_button": "Déposer",
+      "wallet_card_withdraw_button": "Retirer",
+      "wallets_loading_error_title": "Impossible de Charger les Portefeuilles",
+      "wallets_loading_error_desc": "Un problème est survenu lors de la connexion au serveur. Veuillez vérifier votre connexion internet.",
+      "wallets_try_again_button": "Réessayer",
+      "wallets_empty_state_title": "Aucun portefeuille trouvé",
+      "wallets_empty_state_desc": "Commencez par créer votre premier portefeuille de devises.",
+      "wallet_add_success_toast": "Votre nouveau portefeuille {{currency}} a été ajouté !",
+      "deposit_success_toast": "Dépôt initié ! Votre solde en {{currency}} sera mis à jour sous peu."
 
 
 
@@ -779,7 +809,22 @@ const resources = {
       "kyc_status_not_verified": "Su Cuenta no está Verificada",
       "kyc_not_verified_desc": "Por favor, envíe sus documentos para acceder a todas las funciones.",
       "kyc_submit_button": "Enviar Sus Documentos",
-      "kyc_load_error": "No se pudieron cargar los requisitos de verificación para su país."
+      "kyc_load_error": "No se pudieron cargar los requisitos de verificación para su país.",
+      "wallets_title": "Mis Billeteras",
+      "wallets_subtitle": "Administre sus saldos en todas las monedas disponibles.",
+      "add_wallet_button": "Añadir Billetera",
+      "create_wallet_title": "Crear una Nueva Billetera",
+      "create_wallet_button": "Crear Billetera",
+      "wallet_card_balance_label": "Balance Total",
+      "wallet_card_deposit_button": "Depositar",
+      "wallet_card_withdraw_button": "Retirar",
+      "wallets_loading_error_title": "No se Pudieron Cargar las Billeteras",
+      "wallets_loading_error_desc": "Hubo un problema al conectar con el servidor. Por favor, revise su conexión a internet.",
+      "wallets_try_again_button": "Intentar de Nuevo",
+      "wallets_empty_state_title": "No se encontraron billeteras",
+      "wallets_empty_state_desc": "Comience creando su primera billetera de moneda.",
+      "wallet_add_success_toast": "¡Su nueva billetera de {{currency}} ha sido añadida!",
+      "deposit_success_toast": "¡Depósito iniciado! Su saldo en {{currency}} se actualizará en breve."
 
 
 
@@ -1024,7 +1069,22 @@ const resources = {
       "kyc_status_not_verified": "Sua Conta não está Verificada",
       "kyc_not_verified_desc": "Envie seus documentos para acessar todos os recursos.",
       "kyc_submit_button": "Enviar Seus Documentos",
-      "kyc_load_error": "Não foi possível carregar os requisitos de verificação para o seu país."
+      "kyc_load_error": "Não foi possível carregar os requisitos de verificação para o seu país.",
+      "wallets_title": "Minhas Carteiras",
+      "wallets_subtitle": "Gerencie seus saldos em todas as moedas disponíveis.",
+      "add_wallet_button": "Adicionar Carteira",
+      "create_wallet_title": "Criar uma Nova Carteira",
+      "create_wallet_button": "Criar Carteira",
+      "wallet_card_balance_label": "Saldo Total",
+      "wallet_card_deposit_button": "Depositar",
+      "wallet_card_withdraw_button": "Retirar",
+      "wallets_loading_error_title": "Não Foi Possível Carregar as Carteiras",
+      "wallets_loading_error_desc": "Ocorreu um problema ao conectar-se ao servidor. Por favor, verifique sua conexão com a internet.",
+      "wallets_try_again_button": "Tentar Novamente",
+      "wallets_empty_state_title": "Nenhuma carteira encontrada",
+      "wallets_empty_state_desc": "Comece criando sua primeira carteira de moeda.",
+      "wallet_add_success_toast": "Sua nova carteira de {{currency}} foi adicionada!",
+      "deposit_success_toast": "Depósito iniciado! O saldo da sua carteira {{currency}} será atualizado em breve."
 
 
 
@@ -1270,7 +1330,22 @@ const resources = {
       "kyc_status_not_verified": "Akaunti Yako Haijathibitishwa",
       "kyc_not_verified_desc": "Tafadhali wasilisha hati zako ili kufikia vipengele vyote.",
       "kyc_submit_button": "Wasilisha Hati Zako",
-      "kyc_load_error": "Imeshindwa kupakia masharti ya uthibitishaji kwa nchi yako."
+      "kyc_load_error": "Imeshindwa kupakia masharti ya uthibitishaji kwa nchi yako.",
+      "wallets_title": "Pochi Zangu",
+      "wallets_subtitle": "Dhibiti salio lako katika sarafu zote zinazopatikana.",
+      "add_wallet_button": "Ongeza Pochi",
+      "create_wallet_title": "Fungua Pochi Mpya",
+      "create_wallet_button": "Fungua Pochi",
+      "wallet_card_balance_label": "Salio Kamili",
+      "wallet_card_deposit_button": "Weka Pesa",
+      "wallet_card_withdraw_button": "Toa Pesa",
+      "wallets_loading_error_title": "Imeshindwa Kupakia Pochi",
+      "wallets_loading_error_desc": "Kulikuwa na tatizo la kuunganisha na seva. Tafadhali angalia muunganisho wako wa intaneti.",
+      "wallets_try_again_button": "Jaribu Tena",
+      "wallets_empty_state_title": "Hakuna pochi zilizopatikana",
+      "wallets_empty_state_desc": "Anza kwa kufungua pochi yako ya kwanza ya sarafu.",
+      "wallet_add_success_toast": "Pochi yako mpya ya {{currency}} imeongezwa!",
+      "deposit_success_toast": "Uwekaji pesa umeanza! Salio lako la {{currency}} litasasishwa hivi karibuni."
 
 
 
@@ -1297,4 +1372,3 @@ i18n
   });
 
 export default i18n;
-
