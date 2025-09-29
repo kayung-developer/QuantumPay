@@ -52,7 +52,7 @@ const GlobalTransferPage = lazy(() => import('./pages/dashboard/GlobalTransferPa
 const WithdrawPage = lazy(() => import('./pages/dashboard/WithdrawPage'));
 const MyExpensesPage = lazy(() => import('./pages/dashboard/MyExpensesPage'));
 const SavingsVaultsPage = lazy(() => import('./pages/dashboard/SavingsVaultsPage'));
-const SharedVaultsPage = lazy(() => import('./pages/dashboard/SharedVaultsPage'));
+
 
 // --- Business Pages (Protected) ---
 const BusinessDashboardPage = lazy(() => import('./pages/business/BusinessDashboardPage'));
@@ -130,7 +130,6 @@ function App() {
           <Route path="/dashboard/withdraw" element={<ProtectedRoute><WithdrawPage /></ProtectedRoute>} />
           <Route path="/dashboard/smart-ussd" element={<ProtectedRoute><SmartUSSDPage /></ProtectedRoute>} />
           <Route path="/dashboard/savings-vaults" element={<ProtectedRoute><SavingsVaultsPage /></ProtectedRoute>} />
-          <Route path="/dashboard/shared-vaults" element={<ProtectedRoute><SharedVaultsPage /></ProtectedRoute>} />
           <Route path="/dashboard/kyc" element={<ProtectedRoute><KYCCenterPage /></ProtectedRoute>} />
           
           {/* --- Protected Business Routes --- */}
@@ -167,5 +166,6 @@ const AdminRoutes = () => (
         <Route path="/blog" element={<ManageBlogPage />} />
     </Routes>
 );
+
 
 export default App;
