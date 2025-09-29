@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import { useTranslation } from 'react-i18next';
 import { formatDistanceToNow, parseISO } from 'date-fns';
 import { motion } from 'framer-motion';
+import { toast } from 'react-hot-toast'; // <-- [THE DEFINITIVE FIX] Import toast
 
 // --- Component Imports ---
 import DashboardLayout from '../../components/layout/DashboardLayout';
@@ -37,14 +38,13 @@ const LiveSupportPage = () => {
     const { t } = useTranslation();
     const { authToken, dbUser } = useAuth();
     
-    // API call now correctly uses the admin endpoint which sorts by priority.
     const { data: conversations, loading, error, request: refetch } = useApi('/admin/support/conversations');
     
     const [selectedConvo, setSelectedConvo] = useState(null);
     const [messages, setMessages] = useState([]);
     const ws = useRef(null);
     const messagesEndRef = useRef(null);
-    const selectedConvoIdRef = useRef(null); // Ref to hold the current ID for the WebSocket closure
+    const selectedConvoIdRef = useRef(null);
 
     useEffect(() => {
         if (selectedConvo) {
@@ -73,7 +73,6 @@ const LiveSupportPage = () => {
             if (data.type === 'new_message' && data.payload.conversation_id === selectedConvoIdRef.current) {
                 setMessages(prev => [...prev, data.payload]);
             } else if (data.type === 'admin_notification' || (data.type === 'new_message' && data.payload.conversation_id !== selectedConvoIdRef.current)) {
-                // A message arrived for another conversation, or a new one started. Refetch the list.
                 toast.success(`New message in conversation with ${data.payload.user?.email || 'a user'}`);
                 refetch();
             }
