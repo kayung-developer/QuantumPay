@@ -284,7 +284,11 @@ const resources = {
       "no_transactions_message": "No recent transactions.",
       "tx_description_to": "To: {{recipient}}",
       "tx_description_from": "From: {{sender}}",
-      "tx_description_deposit": "Deposit"
+      "tx_description_deposit": "Deposit",
+      "chart_title": "Income vs. Expense",
+      "chart_income_label": "Income",
+      "chart_expenses_label": "Expenses",
+      "chart_empty_message": "Not enough transaction data to generate a chart."
 
 
   }
@@ -513,7 +517,11 @@ const resources = {
       "no_transactions_message": "Aucune transaction récente.",
       "tx_description_to": "À : {{recipient}}",
       "tx_description_from": "De : {{sender}}",
-      "tx_description_deposit": "Dépôt"
+      "tx_description_deposit": "Dépôt",
+      "chart_title": "Revenus vs. Dépenses",
+      "chart_income_label": "Revenus",
+      "chart_expenses_label": "Dépenses",
+      "chart_empty_message": "Pas assez de données de transaction pour générer un graphique."
 
 
 
@@ -743,7 +751,11 @@ const resources = {
       "no_transactions_message": "No hay transacciones recientes.",
       "tx_description_to": "A: {{recipient}}",
       "tx_description_from": "De: {{sender}}",
-      "tx_description_deposit": "Depósito"
+      "tx_description_deposit": "Depósito",
+      "chart_title": "Ingresos vs. Gastos",
+      "chart_income_label": "Ingresos",
+      "chart_expenses_label": "Gastos",
+      "chart_empty_message": "No hay suficientes datos de transacciones para generar un gráfico."
 
 
 
@@ -976,7 +988,11 @@ const resources = {
       "no_transactions_message": "Nenhuma transação recente.",
       "tx_description_to": "Para: {{recipient}}",
       "tx_description_from": "De: {{sender}}",
-      "tx_description_deposit": "Depósito"
+      "tx_description_deposit": "Depósito",
+      "chart_title": "Receitas vs. Despesas",
+      "chart_income_label": "Receitas",
+      "chart_expenses_label": "Despesas",
+      "chart_empty_message": "Não há dados de transação suficientes para gerar um gráfico."
 
 
 
@@ -1210,7 +1226,11 @@ const resources = {
       "no_transactions_message": "Hakuna miamala ya hivi karibuni.",
       "tx_description_to": "Kwa: {{recipient}}",
       "tx_description_from": "Kutoka: {{sender}}",
-      "tx_description_deposit": "Amana"
+      "tx_description_deposit": "Amana",
+      "chart_title": "Mapato dhidi ya Matumizi",
+      "chart_income_label": "Mapato",
+      "chart_expenses_label": "Matumizi",
+      "chart_empty_message": "Hakuna data ya kutosha ya miamala ya kutengeneza chati."
 
 
 
