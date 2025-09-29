@@ -11,7 +11,7 @@ import { useApi, useApiPost } from '../../hooks/useApi';
 import DashboardLayout from '../../components/layout/DashboardLayout';
 import Spinner from '../../components/common/Spinner';
 import Button from '../../components/common/Button';
-import { toastError, toastSuccess } from '../../components/common/Toast';
+import { toast } from 'react-hot-toast';
 import apiClient from '../../api/axiosConfig';
 
 // --- Icon Imports ---
@@ -62,7 +62,7 @@ const KYCSubmissionForm = ({ kycRules, onSuccess }) => {
     const onDrop = useCallback(acceptedFiles => {
         if (acceptedFiles.length > 0) {
             if (acceptedFiles[0].size > 5 * 1024 * 1024) { // 5MB limit
-                toastError("File is too large. Please upload a document under 5MB.");
+                toast.error("File is too large. Please upload a document under 5MB.");
                 return;
             }
             setFile(acceptedFiles[0]);
@@ -77,7 +77,7 @@ const KYCSubmissionForm = ({ kycRules, onSuccess }) => {
     
     const handleSubmit = async (values) => {
         if (!file) {
-            toastError("Please upload a document file to submit.");
+            toast.error("Please upload a document file to submit.");
             return;
         }
         setIsUploading(true);
@@ -103,11 +103,11 @@ const KYCSubmissionForm = ({ kycRules, onSuccess }) => {
             const payload = { ...values, document_url: uploadData.secure_url };
             const result = await submitKyc(payload);
             if (result.success) {
-                toastSuccess("Documents submitted successfully for review!");
+                toast.success("Documents submitted successfully for review!");
                 onSuccess();
             }
         } catch (err) {
-            toastError(err.message || "An error occurred during upload. Please try again.");
+            toast.error(err.message || "An error occurred during upload. Please try again.");
             setIsUploading(false);
         }
     };
