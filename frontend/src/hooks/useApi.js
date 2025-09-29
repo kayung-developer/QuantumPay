@@ -3,55 +3,49 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import apiClient from '../api/axiosConfig';
 import { toast } from 'react-hot-toast';
-import { useAuth } from '../context/AuthContext'; // <-- Import useAuth
+import { useAuth } from '../context/AuthContext';
 
 /**
  * Custom hook for making GET API requests.
- * It is now "auth-aware" and will wait for an auth token before firing automatically.
+ * It is now "auth-aware" and waits for the user to be authenticated before firing.
  */
 export const useApi = (url, options = {}, manual = false) => {
     const [data, setData] = useState(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(!manual);
-    const { authToken } = useAuth(); // <-- Get the token from our reliable context
+    // [THE FIX] We now depend on `isAuthenticated`, a reliable boolean from AuthContext,
+    // not the async `authToken` state.
+    const { isAuthenticated } = useAuth();
     const optionsString = useMemo(() => JSON.stringify(options), [options]);
 
     const request = useCallback(async (requestOptions) => {
-        // [THE FIX] The useEffect below now waits for the authToken, but we also
-        // add a guard here for manual requests for extra safety.
-        if (!authToken) {
-            console.warn("useApi request called manually without an auth token.");
-            return;
-        }
         setLoading(true);
         setError(null);
         try {
             const finalOptions = { ...JSON.parse(optionsString), ...requestOptions };
-            // We no longer need to manually add the header here, as axiosConfig now has it by default.
+            // The Axios interceptor now handles adding the token header automatically.
             const response = await apiClient(url, { method: 'GET', ...finalOptions });
             setData(response.data);
             return { success: true, data: response.data };
         } catch (err) {
             const errorMessage = err.response?.data?.detail || err.message || 'Could not fetch data.';
-            const structuredError = { message: errorMessage, status: err.response?.status, data: err.response?.data };
+            const structuredError = { message: errorMessage, status: err.response?.status };
             setError(structuredError);
             console.error(`API GET Error on ${url}:`, structuredError);
             return { success: false, error: structuredError };
         } finally {
             setLoading(false);
         }
-    }, [url, authToken, optionsString]);
+    }, [url, optionsString]);
 
     useEffect(() => {
-        // [THE DEFINITIVE FIX - PART 2A: GET HOOK]
-        // This effect will now ONLY run if it's not manual AND if the authToken exists.
-        // It prevents the initial automatic fetch from firing too early.
-        if (!manual && authToken) {
+        // This effect now runs only when it's not manual AND the user is confirmed to be authenticated.
+        if (!manual && isAuthenticated) {
             request();
         }
-        // If there's no token yet, it does nothing and waits for a re-render
-        // which will happen when the AuthContext provides the token.
-    }, [request, manual, authToken]); // <-- authToken is now a dependency
+        // If not authenticated, it waits. If the user logs in, `isAuthenticated` becomes true,
+        // and this hook will re-run, triggering the fetch.
+    }, [request, manual, isAuthenticated]);
 
     return { data, error, loading, request };
 };
@@ -63,33 +57,29 @@ export const useApiPost = (url, config = {}) => {
     const [data, setData] = useState(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
-    const { authToken } = useAuth(); // <-- Get the token from our reliable context
+    const { isAuthenticated } = useAuth(); // <-- [THE FIX] Depend on the boolean
     const configString = useMemo(() => JSON.stringify(config), [config]);
 
     const post = useCallback(async (postData, requestConfig = {}) => {
         setLoading(true);
         setError(null);
 
-        // --- [THE DEFINITIVE FIX - PART 2B: POST HOOK] ---
-        // This guard clause is the most critical fix for user-triggered actions.
-        // It prevents any API call from being made if the authentication token
-        // hasn't loaded yet, solving the "token: b'undefined'" error.
-        if (!authToken) {
-            const errorMessage = "Authentication is not ready. Please wait a moment and try again.";
+        // [THE DEFINITIVE FIX] The guard clause is now simpler and more reliable.
+        // It checks the synchronous boolean `isAuthenticated`.
+        if (!isAuthenticated) {
+            const errorMessage = "You must be logged in to perform this action.";
             toast.error(errorMessage);
             setError({ message: errorMessage });
             setLoading(false);
             return { success: false, error: { message: errorMessage } };
         }
-        // --- [END OF FIX] ---
-
+        
         try {
             const baseConfig = JSON.parse(configString);
             const finalConfig = { ...baseConfig, ...requestConfig };
             const method = finalConfig.method?.toLowerCase() || 'post';
             const finalUrl = finalConfig.url || url;
 
-            // Again, no need to manually add the header. It's on the axios instance.
             const response = await apiClient({
                 url: finalUrl,
                 method: method,
@@ -105,7 +95,7 @@ export const useApiPost = (url, config = {}) => {
             return { success: true, data: response.data };
         } catch (err) {
             const errorMessage = err.response?.data?.detail || err.message || 'An API error occurred.';
-            const structuredError = { message: errorMessage, status: err.response?.status, data: err.response?.data };
+            const structuredError = { message: errorMessage, status: err.response?.status };
             setError(structuredError);
             toast.error(errorMessage);
             console.error(`API POST/PUT/DELETE Error on ${url}:`, structuredError);
@@ -113,7 +103,7 @@ export const useApiPost = (url, config = {}) => {
         } finally {
             setLoading(false);
         }
-    }, [url, authToken, configString]);
+    }, [url, isAuthenticated, configString]);
 
     return { post, data, loading, error };
 };
