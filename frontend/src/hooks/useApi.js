@@ -3,19 +3,15 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import apiClient from '../api/axiosConfig';
 import { toast } from 'react-hot-toast';
-import { useAuth } from '../context/AuthContext';
+// [THE FIX] We no longer need useAuth here, simplifying the hook.
 
 /**
  * Custom hook for making GET API requests.
- * It is now "auth-aware" and waits for the user to be authenticated before firing.
  */
 export const useApi = (url, options = {}, manual = false) => {
     const [data, setData] = useState(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(!manual);
-    // [THE FIX] We now depend on `isAuthenticated`, a reliable boolean from AuthContext,
-    // not the async `authToken` state.
-    const { isAuthenticated } = useAuth();
     const optionsString = useMemo(() => JSON.stringify(options), [options]);
 
     const request = useCallback(async (requestOptions) => {
@@ -23,7 +19,7 @@ export const useApi = (url, options = {}, manual = false) => {
         setError(null);
         try {
             const finalOptions = { ...JSON.parse(optionsString), ...requestOptions };
-            // The Axios interceptor now handles adding the token header automatically.
+            // The Axios interceptor handles adding the token header automatically.
             const response = await apiClient(url, { method: 'GET', ...finalOptions });
             setData(response.data);
             return { success: true, data: response.data };
@@ -39,13 +35,15 @@ export const useApi = (url, options = {}, manual = false) => {
     }, [url, optionsString]);
 
     useEffect(() => {
-        // This effect now runs only when it's not manual AND the user is confirmed to be authenticated.
-        if (!manual && isAuthenticated) {
+        // [THE DEFINITIVE FIX] This effect now runs once on mount if not manual.
+        // It trusts the Axios interceptor to attach the token if it exists.
+        // If the user is not logged in, the interceptor does nothing, the API
+        // returns a 401, and the `error` state is correctly set.
+        // This is a simpler and more robust pattern.
+        if (!manual) {
             request();
         }
-        // If not authenticated, it waits. If the user logs in, `isAuthenticated` becomes true,
-        // and this hook will re-run, triggering the fetch.
-    }, [request, manual, isAuthenticated]);
+    }, [request, manual]); // The dependency array is now simpler.
 
     return { data, error, loading, request };
 };
@@ -57,22 +55,15 @@ export const useApiPost = (url, config = {}) => {
     const [data, setData] = useState(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
-    const { isAuthenticated } = useAuth(); // <-- [THE FIX] Depend on the boolean
     const configString = useMemo(() => JSON.stringify(config), [config]);
 
     const post = useCallback(async (postData, requestConfig = {}) => {
         setLoading(true);
         setError(null);
-
-        // [THE DEFINITIVE FIX] The guard clause is now simpler and more reliable.
-        // It checks the synchronous boolean `isAuthenticated`.
-        if (!isAuthenticated) {
-            const errorMessage = "You must be logged in to perform this action.";
-            toast.error(errorMessage);
-            setError({ message: errorMessage });
-            setLoading(false);
-            return { success: false, error: { message: errorMessage } };
-        }
+        
+        // [THE DEFINITIVE FIX] The guard clause is removed. We trust the interceptor.
+        // If the user tries to POST while logged out, the API will correctly reject
+        // with a 401, and the error will be caught and displayed as a toast.
         
         try {
             const baseConfig = JSON.parse(configString);
@@ -103,7 +94,7 @@ export const useApiPost = (url, config = {}) => {
         } finally {
             setLoading(false);
         }
-    }, [url, isAuthenticated, configString]);
+    }, [url, configString]);
 
     return { post, data, loading, error };
 };
