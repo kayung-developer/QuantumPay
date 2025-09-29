@@ -79,33 +79,29 @@ const RegisterPage = () => {
                         validationSchema={RegisterSchema}
                         onSubmit={async (values, { setSubmitting, setFieldError }) => {
                             try {
+                                // Step 1: Create the user in Firebase Auth
                                 const userCredential = await createUserWithEmailAndPassword(firebaseAuth, values.email, values.password);
                                 const user = userCredential.user;
+                                
+                                // Step 2: Update their Firebase profile with their name
                                 await updateProfile(user, { displayName: values.full_name });
-                                const token = await user.getIdToken();
 
-                                await apiClient.post('/auth/complete-registration',
-                                    {
-                                        firebase_uid: user.uid,
-                                        email: values.email,
-                                        full_name: values.full_name,
-                                        country_code: values.country_code,
-                                        phone_number: values.phone_number,
-                                    },
-                                    { headers: { Authorization: `Bearer ${token}` } }
-                                );
-
-                                // Log the user in to trigger the AuthContext update
-                              //  await login(values.email, values.password);
-                               //navigate('/dashboard');
-                                navigate('/login');
+                                // [THE DEFINITIVE FIX] Step 3: Log the user in.
+                                // This will trigger the onAuthStateChanged listener, which calls our
+                                // robust `/users/me` endpoint. The JIT provisioning will create the user
+                                // in our database. The separate API call is no longer needed.
                                 toast.success(t('register_success_toast'))
+                                await login(values.email, values.password);
+
+                                // Step 4: Navigate to the dashboard.
+                                navigate('/dashboard');
+
                             } catch (error) {
                                 if (error.code === 'auth/email-already-in-use') {
                                     setFieldError('email', t('email_in_use_error'));
                                 } else {
-                                    // The error toast from AuthContext will handle generic errors.
-                                    setFieldError('password', error.response?.data?.detail || t('error.unexpected'));
+                                    // The error toast from the login function in AuthContext will handle generic errors.
+                                    setFieldError('password', error.message || t('error.unexpected'));
                                 }
                             } finally {
                                 setSubmitting(false);
