@@ -288,7 +288,15 @@ const resources = {
       "chart_title": "Income vs. Expense",
       "chart_income_label": "Income",
       "chart_expenses_label": "Expenses",
-      "chart_empty_message": "Not enough transaction data to generate a chart."
+      "chart_empty_message": "Not enough transaction data to generate a chart.",
+      "kyc_title": "KYC Verification Center",
+      "kyc_subtitle": "Secure your account and unlock higher transaction limits by verifying your identity.",
+      "kyc_status_verified": "Your Account is Verified",
+      "kyc_verified_desc": "You have successfully completed identity verification and have access to all features.",
+      "kyc_status_not_verified": "Your Account is Not Verified",
+      "kyc_not_verified_desc": "Please submit your documents to access all features.",
+      "kyc_submit_button": "Submit Your Documents",
+      "kyc_load_error": "Could not load verification requirements for your country."
 
 
   }
@@ -521,7 +529,15 @@ const resources = {
       "chart_title": "Revenus vs. Dépenses",
       "chart_income_label": "Revenus",
       "chart_expenses_label": "Dépenses",
-      "chart_empty_message": "Pas assez de données de transaction pour générer un graphique."
+      "chart_empty_message": "Pas assez de données de transaction pour générer un graphique.",
+      "kyc_title": "Centre de Vérification KYC",
+      "kyc_subtitle": "Sécurisez votre compte et débloquez des limites de transaction plus élevées en vérifiant votre identité.",
+      "kyc_status_verified": "Votre Compte est Vérifié",
+      "kyc_verified_desc": "Vous avez terminé la vérification d'identité avec succès et avez accès à toutes les fonctionnalités.",
+      "kyc_status_not_verified": "Votre Compte n'est pas Vérifié",
+      "kyc_not_verified_desc": "Veuillez soumettre vos documents pour accéder à toutes les fonctionnalités.",
+      "kyc_submit_button": "Soumettre Vos Documents",
+      "kyc_load_error": "Impossible de charger les exigences de vérification pour votre pays."
 
 
 
@@ -755,7 +771,15 @@ const resources = {
       "chart_title": "Ingresos vs. Gastos",
       "chart_income_label": "Ingresos",
       "chart_expenses_label": "Gastos",
-      "chart_empty_message": "No hay suficientes datos de transacciones para generar un gráfico."
+      "chart_empty_message": "No hay suficientes datos de transacciones para generar un gráfico.",
+      "kyc_title": "Centro de Verificación KYC",
+      "kyc_subtitle": "Asegure su cuenta y desbloquee límites de transacción más altos verificando su identidad.",
+      "kyc_status_verified": "Su Cuenta está Verificada",
+      "kyc_verified_desc": "Ha completado la verificación de identidad con éxito y tiene acceso a todas las funciones.",
+      "kyc_status_not_verified": "Su Cuenta no está Verificada",
+      "kyc_not_verified_desc": "Por favor, envíe sus documentos para acceder a todas las funciones.",
+      "kyc_submit_button": "Enviar Sus Documentos",
+      "kyc_load_error": "No se pudieron cargar los requisitos de verificación para su país."
 
 
 
@@ -992,7 +1016,15 @@ const resources = {
       "chart_title": "Receitas vs. Despesas",
       "chart_income_label": "Receitas",
       "chart_expenses_label": "Despesas",
-      "chart_empty_message": "Não há dados de transação suficientes para gerar um gráfico."
+      "chart_empty_message": "Não há dados de transação suficientes para gerar um gráfico.",
+      "kyc_title": "Centro de Verificação KYC",
+      "kyc_subtitle": "Proteja sua conta e desbloqueie limites de transação mais altos verificando sua identidade.",
+      "kyc_status_verified": "Sua Conta está Verificada",
+      "kyc_verified_desc": "Você concluiu a verificação de identidade com sucesso e tem acesso a todos os recursos.",
+      "kyc_status_not_verified": "Sua Conta não está Verificada",
+      "kyc_not_verified_desc": "Envie seus documentos para acessar todos os recursos.",
+      "kyc_submit_button": "Enviar Seus Documentos",
+      "kyc_load_error": "Não foi possível carregar os requisitos de verificação para o seu país."
 
 
 
@@ -1230,7 +1262,15 @@ const resources = {
       "chart_title": "Mapato dhidi ya Matumizi",
       "chart_income_label": "Mapato",
       "chart_expenses_label": "Matumizi",
-      "chart_empty_message": "Hakuna data ya kutosha ya miamala ya kutengeneza chati."
+      "chart_empty_message": "Hakuna data ya kutosha ya miamala ya kutengeneza chati.",
+      "kyc_title": "Kituo cha Uthibitishaji KYC",
+      "kyc_subtitle": "Linda akaunti yako na ufungue viwango vya juu vya miamala kwa kuthibitisha utambulisho wako.",
+      "kyc_status_verified": "Akaunti Yako Imethibitishwa",
+      "kyc_verified_desc": "Umekamilisha uthibitishaji wa utambulisho na unaweza kufikia vipengele vyote.",
+      "kyc_status_not_verified": "Akaunti Yako Haijathibitishwa",
+      "kyc_not_verified_desc": "Tafadhali wasilisha hati zako ili kufikia vipengele vyote.",
+      "kyc_submit_button": "Wasilisha Hati Zako",
+      "kyc_load_error": "Imeshindwa kupakia masharti ya uthibitishaji kwa nchi yako."
 
 
 
@@ -1257,3 +1297,4 @@ i18n
   });
 
 export default i18n;
+
