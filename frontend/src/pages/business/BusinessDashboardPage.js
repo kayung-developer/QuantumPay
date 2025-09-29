@@ -8,7 +8,7 @@ import { motion } from 'framer-motion';
 import DashboardLayout from '../../components/layout/DashboardLayout';
 import StatCard from '../../components/dashboard/StatCard';
 import IncomeExpenseChart from '../../components/dashboard/IncomeExpenseChart';
-import BusinessActivityFeed from '../../components/dashboard/business/BusinessActivityFeed';
+import BusinessActivityFeed from '../../components/dashboard/BusinessActivityFeed';
 import Button from '../../components/common/Button';
 
 // --- Hook Imports ---
@@ -127,5 +127,6 @@ const BusinessDashboardPage = () => {
         </DashboardLayout>
     );
 };
+
 
 export default BusinessDashboardPage;
