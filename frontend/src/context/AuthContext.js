@@ -13,7 +13,7 @@ export const useAuth = () => useContext(AuthContext);
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [dbUser, setDbUser] = useState(null);
-  const [loading, setLoading] = useState(true); // Start as true
+  const [loading, setLoading] = useState(true);
   const [activeProfile, setActiveProfile] = useState('personal');
 
   const tokenRef = useRef(null);
@@ -66,7 +66,7 @@ export const AuthProvider = ({ children }) => {
   const register = async (email, password, fullName) => {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     await updateProfile(userCredential.user, { displayName: fullName });
-    // JIT provisioning will be handled by onAuthStateChanged
+    // The onAuthStateChanged listener will automatically handle JIT provisioning.
   };
 
   const logout = async () => {
@@ -85,22 +85,29 @@ export const AuthProvider = ({ children }) => {
 
   const hasActiveSubscription = useCallback((plan_id = null) => {
     if (!dbUser) return false;
+    // Admins and superusers get elevated privileges
     if (dbUser.role === 'superuser') return true;
     if (dbUser.role === 'admin' && plan_id !== 'ultimate') return true;
+
     const sub = dbUser.subscription;
     if (!sub || sub.status !== 'active') return false;
-    if (plan_id) {
-        const planHierarchy = { free: 0, premium: 1, ultimate: 2 };
-        return (planHierarchy[sub.plan.id] ?? -1) >= (planHierarchy[plan_id] ?? -1);
-    }
-    return true;
+
+    // If just checking for any active subscription
+    if (!plan_id) return true;
+
+    // If checking for a specific plan level or higher
+    const planHierarchy = { free: 0, premium: 1, ultimate: 2 };
+    const userPlanLevel = planHierarchy[sub.plan.id] ?? -1;
+    const requiredPlanLevel = planHierarchy[plan_id] ?? -1;
+
+    return userPlanLevel >= requiredPlanLevel;
   }, [dbUser]);
 
   const value = {
     currentUser,
     dbUser,
-    isAuthenticated: !loading && !!dbUser,
-    isAdmin: dbUser?.role === 'admin' || dbUser?.role === 'superuser',
+    isAuthenticated: !loading && !!currentUser && !!dbUser,
+    isAdmin: !loading && (dbUser?.role === 'admin' || dbUser?.role === 'superuser'),
     loading,
     login,
     register,
@@ -115,11 +122,11 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider value={value}>
-      {/* 
+      {/*
         [THE DEFINITIVE FIX]
         We DO NOT render the rest of the application until the initial authentication
-        check is complete (loading is false). This prevents the pricing page (and others)
-        from trying to fetch data before the auth state is known.
+        check is complete (loading is false). This prevents components from trying
+        to make API calls before the auth state and token are definitively known.
       */}
       {!loading && children}
     </AuthContext.Provider>
