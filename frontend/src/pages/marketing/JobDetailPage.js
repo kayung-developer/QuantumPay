@@ -1,10 +1,14 @@
+// FILE: src/pages/marketing/JobDetailPage.js
+
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useApi } from '../../hooks/useApi';
 import Spinner from '../../components/common/Spinner';
-import { ArrowLeftIcon, MapPinIcon, BuildingOffice2Icon, ClockIcon } from '@heroicons/react/24/outline';
 import ApplicationForm from '../../components/careers/ApplicationForm';
+import { ArrowLeftIcon, MapPinIcon, BuildingOffice2Icon, ClockIcon } from '@heroicons/react/24/outline';
 import { motion } from 'framer-motion';
+// [THE FIX] Removed PageWrapper as it's handled by App.js
+// import PageWrapper from '../../components/layout/PageWrapper';
 
 const JobDetailPage = () => {
     const { jobId } = useParams();
@@ -35,7 +39,6 @@ const JobDetailPage = () => {
         if (!job) return null;
 
         return (
-            <>
             <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -71,15 +74,13 @@ const JobDetailPage = () => {
     }
 
     return (
-        // The main container inherits its theme from PageWrapper
+        // [THE FIX] Removed PageWrapper from here. The page now returns a fragment.
         <div className="bg-white dark:bg-neutral-950 py-20">
             <div className="max-w-4xl mx-auto px-6">
                {renderContent()}
             </div>
         </div>
-     </>
     );
-};
-
+}; // <-- [THE FIX] Added the missing closing curly brace for the component function.
 
 export default JobDetailPage;
