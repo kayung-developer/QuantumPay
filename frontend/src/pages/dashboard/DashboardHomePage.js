@@ -25,15 +25,21 @@ const DashboardHomePage = () => {
     const { dbUser, fetchDbUser, loading: authLoading } = useAuth();
     const [isSetupModalOpen, setIsSetupModalOpen] = useState(false);
 
+    // --- PARALLEL DATA FETCHING ---
     const { data: stats, loading: statsLoading, error: statsError } = useApi('/analytics/dashboard-stats');
     const { data: rawChartData, loading: chartLoading, error: chartError } = useApi('/analytics/income-expense-chart');
     const { data: transactionsData, loading: transactionsLoading, error: transactionsError } = useApi('/transactions/history?limit=5');
     
-    const transactions = transactionsData?.transactions || [];
+    // [THE DEFINITIVE FIX] - Add a fallback empty object `{}` to the destructuring.
+    // This prevents a crash if `transactionsData` is null or undefined for a new user.
+    const { transactions = [] } = transactionsData || {};
+
     const isLoading = authLoading || statsLoading || chartLoading || transactionsLoading;
 
     const chartData = useMemo(() => {
-        if (!rawChartData || !rawChartData.data_points) return { labels: [], income: [], expenses: [] };
+        if (!rawChartData || !rawChartData.data_points) {
+            return { labels: [], income: [], expenses: [] };
+        }
         const labels = rawChartData.data_points.map(dp => dp.label);
         const incomeData = rawChartData.data_points.map(dp => dp.income);
         const expenseData = rawChartData.data_points.map(dp => dp.expenses);
@@ -47,13 +53,18 @@ const DashboardHomePage = () => {
 
     const containerVariants = {
         hidden: { opacity: 0 },
-        visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
+        visible: {
+            opacity: 1,
+            transition: { staggerChildren: 0.1 },
+        },
     };
     
     if (isLoading && !stats && !dbUser) {
         return (
             <DashboardLayout pageTitleKey="dashboard_overview">
-                <div className="flex h-96 w-full items-center justify-center"><Spinner size="lg" /></div>
+                <div className="flex h-96 w-full items-center justify-center">
+                    <Spinner size="lg" />
+                </div>
             </DashboardLayout>
         );
     }
@@ -65,7 +76,9 @@ const DashboardHomePage = () => {
                     <h1 className="text-3xl font-bold font-display text-neutral-900 dark:text-white">
                         {t('welcome_back', { name: dbUser?.full_name || 'User' })}!
                     </h1>
-                    <p className="mt-1 text-neutral-600 dark:text-neutral-400">{t('dashboard_header_subtitle')}</p>
+                    <p className="mt-1 text-neutral-600 dark:text-neutral-400">
+                        {t('dashboard_header_subtitle')}
+                    </p>
                 </motion.div>
 
                 <motion.div
@@ -95,7 +108,6 @@ const DashboardHomePage = () => {
                     <StatCard
                         title={t('credit_score')}
                         value={stats?.credit_score ?? '...'}
-                        // [THE DEFINITIVE FIX] Add conditional logic to prevent 'NaN' from rendering.
                         change={stats?.credit_score ? `${Math.round(((stats.credit_score - 300) / 550) * 100)}% Secure` : 'Calculating...'}
                         changeType="positive"
                         isLoading={statsLoading}
