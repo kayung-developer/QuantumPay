@@ -11,7 +11,7 @@ import RecentTransactions from '../../components/dashboard/RecentTransactions';
 import BusinessSetupModal from '../../components/business/BusinessSetupModal';
 import Button from '../../components/common/Button';
 import Spinner from '../../components/common/Spinner';
-import IncomeExpenseChart from '../../components/dashboard/IncomeExpenseChart'; // <-- THE UPGRADE
+import IncomeExpenseChart from '../../components/dashboard/IncomeExpenseChart';
 
 // --- Hook Imports ---
 import { useAuth } from '../../context/AuthContext';
@@ -25,22 +25,15 @@ const DashboardHomePage = () => {
     const { dbUser, fetchDbUser, loading: authLoading } = useAuth();
     const [isSetupModalOpen, setIsSetupModalOpen] = useState(false);
 
-    // --- PARALLEL DATA FETCHING ---
     const { data: stats, loading: statsLoading, error: statsError } = useApi('/analytics/dashboard-stats');
     const { data: rawChartData, loading: chartLoading, error: chartError } = useApi('/analytics/income-expense-chart');
     const { data: transactionsData, loading: transactionsLoading, error: transactionsError } = useApi('/transactions/history?limit=5');
     
-    // Extract transactions array from paginated response
     const transactions = transactionsData?.transactions || [];
-
-    // This is the primary fix for the "blank page" / "disappearing UI" bug.
     const isLoading = authLoading || statsLoading || chartLoading || transactionsLoading;
 
-    // Memoize the chart data transformation to prevent re-calculation on every render
     const chartData = useMemo(() => {
-        if (!rawChartData || !rawChartData.data_points) {
-            return { labels: [], income: [], expenses: [] };
-        }
+        if (!rawChartData || !rawChartData.data_points) return { labels: [], income: [], expenses: [] };
         const labels = rawChartData.data_points.map(dp => dp.label);
         const incomeData = rawChartData.data_points.map(dp => dp.income);
         const expenseData = rawChartData.data_points.map(dp => dp.expenses);
@@ -49,24 +42,18 @@ const DashboardHomePage = () => {
 
     const handleBusinessSetupSuccess = () => {
         setIsSetupModalOpen(false);
-        fetchDbUser(); // Refetch the user to get the new business_profile object
+        fetchDbUser();
     };
 
     const containerVariants = {
         hidden: { opacity: 0 },
-        visible: {
-            opacity: 1,
-            transition: { staggerChildren: 0.1 },
-        },
+        visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
     };
     
-    // Show a full-page loading spinner while initial data is being fetched.
     if (isLoading && !stats && !dbUser) {
         return (
             <DashboardLayout pageTitleKey="dashboard_overview">
-                <div className="flex h-96 w-full items-center justify-center">
-                    <Spinner size="lg" />
-                </div>
+                <div className="flex h-96 w-full items-center justify-center"><Spinner size="lg" /></div>
             </DashboardLayout>
         );
     }
@@ -78,9 +65,7 @@ const DashboardHomePage = () => {
                     <h1 className="text-3xl font-bold font-display text-neutral-900 dark:text-white">
                         {t('welcome_back', { name: dbUser?.full_name || 'User' })}!
                     </h1>
-                    <p className="mt-1 text-neutral-600 dark:text-neutral-400">
-                        {t('dashboard_header_subtitle')}
-                    </p>
+                    <p className="mt-1 text-neutral-600 dark:text-neutral-400">{t('dashboard_header_subtitle')}</p>
                 </motion.div>
 
                 <motion.div
@@ -110,8 +95,8 @@ const DashboardHomePage = () => {
                     <StatCard
                         title={t('credit_score')}
                         value={stats?.credit_score ?? '...'}
-                        icon={ShieldCheckIcon}
-                        change={`${Math.round(((stats?.credit_score - 300) / 550) * 100)}% Secure`}
+                        // [THE DEFINITIVE FIX] Add conditional logic to prevent 'NaN' from rendering.
+                        change={stats?.credit_score ? `${Math.round(((stats.credit_score - 300) / 550) * 100)}% Secure` : 'Calculating...'}
                         changeType="positive"
                         isLoading={statsLoading}
                     />
