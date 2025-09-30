@@ -1,3 +1,5 @@
+// FILE: src/components/dashboard/StatCard.js
+
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowUpIcon, ArrowDownIcon } from '@heroicons/react/24/solid';
@@ -10,22 +12,15 @@ const StatCard = ({ title, value, icon: Icon, change, changeType, isLoading }) =
 
   const renderChange = () => {
     if (!change) return null;
-
     const isPositive = changeType === 'positive';
-
     return (
       <div className={`flex items-center text-xs font-medium ${isPositive ? 'text-green-400' : 'text-red-400'}`}>
-        {isPositive ? (
-          <ArrowUpIcon className="h-4 w-4 mr-1" />
-        ) : (
-          <ArrowDownIcon className="h-4 w-4 mr-1" />
-        )}
+        {isPositive ? <ArrowUpIcon className="h-4 w-4 mr-1" /> : <ArrowDownIcon className="h-4 w-4 mr-1" />}
         <span>{change}</span>
       </div>
     );
   };
 
-  // Shimmer effect for loading state
   const Shimmer = () => (
     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-neutral-200/50 dark:via-neutral-700/50 to-transparent animate-shimmer" />
   );
@@ -33,20 +28,21 @@ const StatCard = ({ title, value, icon: Icon, change, changeType, isLoading }) =
   return (
     <motion.div
       variants={cardVariants}
-      className="relative overflow-hidden bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-200 dark:border-neutral-800 rounded-lg p-5 shadow-lg flex items-start justify-between"
+      className="relative overflow-hidden bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-lg p-5 shadow-lg flex items-start justify-between"
     >
       {isLoading && <Shimmer />}
 
-      <div className="flex flex-col space-y-2">
-        <p className={`text-sm font-medium text-neutral-600 dark:text-neutral-600 dark:text-neutral-400 ${isLoading ? 'bg-neutral-200 dark:bg-neutral-700 rounded w-24 h-4' : ''}`}>{!isLoading && title}</p>
+      <div className="flex flex-col space-y-2 z-10">
+        <p className={`text-sm font-medium text-neutral-600 dark:text-neutral-400 ${isLoading ? 'bg-neutral-200 dark:bg-neutral-700 rounded w-24 h-4' : ''}`}>{!isLoading && title}</p>
         <p className={`font-display text-3xl font-bold text-neutral-900 dark:text-white ${isLoading ? 'bg-neutral-200 dark:bg-neutral-700 rounded w-32 h-9 mt-1' : ''}`}>{!isLoading && value}</p>
         <div className={`h-4 mt-1 ${isLoading ? 'bg-neutral-200 dark:bg-neutral-700 rounded w-16' : ''}`}>
           {!isLoading && renderChange()}
         </div>
       </div>
-      <div className="flex-shrink-0">
+      <div className="flex-shrink-0 z-10">
         <div className="p-3 bg-primary/20 rounded-lg">
-          <Icon className={`h-6 w-6 text-primary-light ${isLoading ? 'opacity-0' : ''}`} />
+          {/* [THE DEFINITIVE FIX] Only render the Icon component if it exists. */}
+          {Icon && <Icon className={`h-6 w-6 text-primary-light ${isLoading ? 'opacity-0' : ''}`} />}
         </div>
       </div>
     </motion.div>
