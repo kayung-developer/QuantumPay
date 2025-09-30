@@ -103,6 +103,7 @@ const ApiDocumentationPage = () => {
     };
     
     return (
+        <>
             <div className="mx-auto max-w-7xl px-6 lg:px-8 pt-24 pb-20 sm:pt-32 sm:pb-28">
                 <div className="lg:grid lg:grid-cols-12 lg:gap-8">
                     <nav className="hidden lg:block lg:col-span-3 sticky top-24 self-start">
@@ -145,7 +146,9 @@ const ApiDocumentationPage = () => {
                     </main>
                 </div>
             </div>
+        </>
     );
 };
+
 
 export default ApiDocumentationPage;
