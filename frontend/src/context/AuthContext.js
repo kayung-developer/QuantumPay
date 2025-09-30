@@ -31,14 +31,12 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    // Setup the interceptor ONCE. It will dynamically get the token from the ref.
     setupAxiosInterceptors(() => tokenRef.current);
-
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         try {
           const token = await user.getIdToken(true);
-          tokenRef.current = token; // Set the ref for the interceptor
+          tokenRef.current = token;
           setCurrentUser(user);
           await fetchDbUser();
         } catch (error) {
@@ -55,7 +53,6 @@ export const AuthProvider = ({ children }) => {
       }
       setLoading(false);
     });
-
     return () => unsubscribe();
   }, [fetchDbUser]);
 
@@ -66,7 +63,6 @@ export const AuthProvider = ({ children }) => {
   const register = async (email, password, fullName) => {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     await updateProfile(userCredential.user, { displayName: fullName });
-    // The onAuthStateChanged listener will automatically handle JIT provisioning.
   };
 
   const logout = async () => {
@@ -83,19 +79,34 @@ export const AuthProvider = ({ children }) => {
   const switchToBusiness = () => { if (dbUser?.business_profile) setActiveProfile('business'); };
   const switchToPersonal = () => { setActiveProfile('personal'); };
 
+  // [THE DEFINITIVE FIX] - This function is now fully resilient.
   const hasActiveSubscription = useCallback((plan_id = null) => {
     if (!dbUser) return false;
-    // Admins and superusers get elevated privileges
+
+    // Admins and superusers get elevated privileges regardless of subscription
     if (dbUser.role === 'superuser') return true;
     if (dbUser.role === 'admin' && plan_id !== 'ultimate') return true;
 
     const sub = dbUser.subscription;
-    if (!sub || sub.status !== 'active') return false;
 
-    // If just checking for any active subscription
-    if (!plan_id) return true;
+    // This is the critical check. If sub is null or not active, immediately return false.
+    // This prevents the code from ever trying to access properties of a null object.
+    if (!sub || sub.status !== 'active') {
+        return false;
+    }
 
-    // If checking for a specific plan level or higher
+    // If we reach here, we know a subscription object exists and is active.
+    // If we're only checking if *any* sub is active, we can return true.
+    if (!plan_id) {
+        return true;
+    }
+
+    // Now it is safe to check the plan details for tiered access.
+    // We add an extra safeguard for `sub.plan`.
+    if (!sub.plan) {
+        return false;
+    }
+
     const planHierarchy = { free: 0, premium: 1, ultimate: 2 };
     const userPlanLevel = planHierarchy[sub.plan.id] ?? -1;
     const requiredPlanLevel = planHierarchy[plan_id] ?? -1;
@@ -122,12 +133,6 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider value={value}>
-      {/*
-        [THE DEFINITIVE FIX]
-        We DO NOT render the rest of the application until the initial authentication
-        check is complete (loading is false). This prevents components from trying
-        to make API calls before the auth state and token are definitively known.
-      */}
       {!loading && children}
     </AuthContext.Provider>
   );
