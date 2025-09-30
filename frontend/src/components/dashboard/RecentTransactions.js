@@ -1,3 +1,5 @@
+// FILE: src/components/dashboard/RecentTransactions.js
+
 import React, { useMemo } from 'react';
 import { format, parseISO } from 'date-fns';
 import { motion } from 'framer-motion';
@@ -9,6 +11,27 @@ import Button from '../common/Button';
 
 // --- Icon Imports ---
 import { ArrowDownCircleIcon, ArrowUpCircleIcon, BanknotesIcon, ArrowPathIcon } from '@heroicons/react/24/outline';
+
+// [THE DEFINITIVE FIX - PART 1] Create safe utility functions for formatting
+const safeFormatDate = (dateString) => {
+    try {
+        if (!dateString) return 'No Date';
+        return format(parseISO(dateString), 'MMM d, h:mm a');
+    } catch (error) {
+        console.error("Failed to format date:", dateString, error);
+        return 'Invalid Date';
+    }
+};
+
+const safeFormatCurrency = (amount, currencyCode) => {
+    try {
+        const code = currencyCode || 'USD'; // Default to USD if code is missing
+        return new Intl.NumberFormat('en-US', { style: 'currency', currency: code }).format(amount || 0);
+    } catch (error) {
+        console.error("Failed to format currency:", amount, currencyCode, error);
+        return `${currencyCode || '?'} ${(amount || 0).toFixed(2)}`;
+    }
+};
 
 const transactionConfig = {
   DEPOSIT: { icon: ArrowDownCircleIcon, color: 'text-green-500' },
@@ -24,8 +47,7 @@ const TransactionItem = ({ tx, currentUserId }) => {
   const { t } = useTranslation();
   const isSent = tx.sender_id === currentUserId;
 
-  // [THE DEFINITIVE FIX] - Add fallbacks to prevent crashes if fields are null/undefined.
-  let typeKey = (tx.transaction_type || '').toUpperCase();
+  let typeKey = (tx.transaction_type || 'default').toUpperCase(); 
   if (typeKey === 'P2P_TRANSFER') {
     typeKey = isSent ? 'P2P_TRANSFER_SENT' : 'P2P_TRANSFER_RECEIVED';
   }
@@ -45,25 +67,25 @@ const TransactionItem = ({ tx, currentUserId }) => {
     return t('tx_description_from', { sender: tx.sender?.email || 'External Source' });
   }, [tx, isSent, t, typeKey]);
 
-  // [THE DEFINITIVE FIX] - Provide a fallback for the status.
   const statusText = (tx.status || 'pending').toLowerCase();
 
   return (
     <li className="flex items-center justify-between py-4">
       <div className="flex items-center min-w-0">
         <div className={`p-2 rounded-full bg-neutral-100 dark:bg-neutral-800 flex-shrink-0 ${color}`}>
-            <Icon className="h-6 w-6" />
+            {Icon && <Icon className="h-6 w-6" />}
         </div>
         <div className="ml-4 min-w-0">
           <p className="text-sm font-medium text-neutral-900 dark:text-white truncate">{description}</p>
           <p className="text-xs text-neutral-500 dark:text-neutral-400">
-            {format(parseISO(tx.created_at), 'MMM d, h:mm a')}
+            {/* [THE DEFINITIVE FIX - PART 2] Use the safe formatting functions */}
+            {safeFormatDate(tx.created_at)}
           </p>
         </div>
       </div>
       <div className="text-right ml-4 flex-shrink-0">
         <p className={`text-sm font-semibold ${amountColor}`}>
-          {amountPrefix} {new Intl.NumberFormat('en-US', { style: 'currency', currency: tx.currency_code }).format(tx.amount)}
+          {amountPrefix} {safeFormatCurrency(tx.amount, tx.currency_code)}
         </p>
         <p className="text-xs text-neutral-500 dark:text-neutral-400 capitalize">{statusText}</p>
       </div>
@@ -71,7 +93,6 @@ const TransactionItem = ({ tx, currentUserId }) => {
   );
 };
 
-// --- [THEME-AWARE] Sub-component for the loading skeleton ---
 const SkeletonItem = () => (
     <li className="flex items-center justify-between py-4">
         <div className="flex items-center w-full">
@@ -90,7 +111,7 @@ const SkeletonItem = () => (
 
 const RecentTransactions = ({ transactions = [], isLoading, error, currentUserId }) => {
   const { t } = useTranslation();
-
+  
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: { opacity: 1, transition: { staggerChildren: 0.07 } }
@@ -100,7 +121,7 @@ const RecentTransactions = ({ transactions = [], isLoading, error, currentUserId
     hidden: { opacity: 0, x: -20 },
     visible: { opacity: 1, x: 0 }
   };
-
+  
   const renderContent = () => {
       if (isLoading) {
           return Array.from({ length: 5 }).map((_, i) => <SkeletonItem key={i} />);
