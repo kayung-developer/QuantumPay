@@ -106,6 +106,7 @@ const CareersPage = () => {
     }
 
     return (
+        <>
         // The main container inherits its base theme from PageWrapper
         <div className="bg-white dark:bg-neutral-950">
             {/* Hero Section */}
@@ -153,7 +154,9 @@ const CareersPage = () => {
                 </div>
             </div>
         </div>
+    </>
     );
 };
+
 
 export default CareersPage;
