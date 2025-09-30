@@ -1,3 +1,5 @@
+// FILE: src/components/dashboard/RecentTransactions.js
+
 import React, { useMemo } from 'react';
 import { format, parseISO } from 'date-fns';
 import { motion } from 'framer-motion';
@@ -10,7 +12,6 @@ import Button from '../common/Button';
 // --- Icon Imports ---
 import { ArrowDownCircleIcon, ArrowUpCircleIcon, BanknotesIcon, ArrowPathIcon } from '@heroicons/react/24/outline';
 
-// [THEME-AWARE & I18N] This configuration object is now fully internationalized and theme-aware.
 const transactionConfig = {
   DEPOSIT: { icon: ArrowDownCircleIcon, color: 'text-green-500' },
   P2P_TRANSFER_SENT: { icon: ArrowUpCircleIcon, color: 'text-red-500' },
@@ -21,12 +22,11 @@ const transactionConfig = {
   DEFAULT: { icon: BanknotesIcon, color: 'text-neutral-500 dark:text-neutral-400'}
 };
 
-// --- [ROBUST] Sub-component for a single transaction item ---
 const TransactionItem = ({ tx, currentUserId }) => {
   const { t } = useTranslation();
   const isSent = tx.sender_id === currentUserId;
 
-  let typeKey = tx.transaction_type;
+  let typeKey = tx.transaction_type.toUpperCase(); // Ensure uppercase for matching
   if (typeKey === 'P2P_TRANSFER') {
     typeKey = isSent ? 'P2P_TRANSFER_SENT' : 'P2P_TRANSFER_RECEIVED';
   }
@@ -35,13 +35,16 @@ const TransactionItem = ({ tx, currentUserId }) => {
   const amountPrefix = isSent ? '-' : '+';
   const amountColor = isSent ? 'text-red-500' : 'text-green-500';
 
-  // [ROBUST & I18N] Generate a more descriptive and translatable description
+  // [THE DEFINITIVE FIX] - Use optional chaining and fallbacks for all nested data access.
   const description = useMemo(() => {
-    if (tx.description) return tx.description; // Always prioritize the backend description
+    if (tx.description) return tx.description;
     if (isSent) {
-      return t('tx_description_to', { recipient: tx.receiver?.email || 'N/A' });
+      return t('tx_description_to', { recipient: tx.receiver?.email || 'Unknown Recipient' });
     }
-    return t('tx_description_from', { sender: tx.sender?.email || t('tx_description_deposit') });
+    if (tx.transaction_type.toUpperCase() === 'DEPOSIT') {
+        return t('tx_description_deposit');
+    }
+    return t('tx_description_from', { sender: tx.sender?.email || 'External Source' });
   }, [tx, isSent, t]);
 
   return (
@@ -67,7 +70,6 @@ const TransactionItem = ({ tx, currentUserId }) => {
   );
 };
 
-// --- [THEME-AWARE] Sub-component for the loading skeleton ---
 const SkeletonItem = () => (
     <li className="flex items-center justify-between py-4">
         <div className="flex items-center w-full">
@@ -79,12 +81,11 @@ const SkeletonItem = () => (
         </div>
         <div className="text-right space-y-2 flex-shrink-0">
              <div className="h-4 w-20 bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse" />
-             <div className="h-3 w-12 bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse ml-4" />
+             <div className="h-3 w-12 bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse ml-auto" />
         </div>
     </li>
 );
 
-// --- Main RecentTransactions Component ---
 const RecentTransactions = ({ transactions = [], isLoading, error, currentUserId }) => {
   const { t } = useTranslation();
   
@@ -105,7 +106,7 @@ const RecentTransactions = ({ transactions = [], isLoading, error, currentUserId
       if (error) {
           return <p className="text-center py-10 text-sm text-red-500">Could not load transactions.</p>;
       }
-      if (transactions.length === 0) {
+      if (!transactions || transactions.length === 0) {
           return (
               <div className="text-center py-10">
                 <p className="text-sm text-neutral-500 dark:text-neutral-400">{t('no_transactions_message')}</p>
@@ -140,4 +141,3 @@ const RecentTransactions = ({ transactions = [], isLoading, error, currentUserId
 };
 
 export default RecentTransactions;
-
