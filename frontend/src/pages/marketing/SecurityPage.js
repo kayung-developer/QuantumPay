@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 
 // --- Component Imports ---
 import Button from '../../components/common/Button';
+// [THE FIX] PageWrapper is no longer needed here.
 import { useApi } from '../../hooks/useApi';
 
 // --- Icon Imports ---
@@ -14,10 +15,7 @@ import {
   DocumentCheckIcon, FingerPrintIcon
 } from '@heroicons/react/24/outline';
 
-// =================================================================================
-// SUB-COMPONENTS FOR A CLEANER, MORE MODULAR PAGE
-// =================================================================================
-
+// Sub-components remain the same...
 const FeatureCard = ({ icon: Icon, title, description, index }) => (
   <motion.div
     initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
@@ -31,20 +29,15 @@ const FeatureCard = ({ icon: Icon, title, description, index }) => (
 );
 
 const LiveStatusIndicator = () => {
-    // Fetches the simple health check for the badge
     const { data, loading } = useApi('/utility/health/verbose');
-
     const statusMeta = {
         operational: { label: "All Systems Operational", color: "bg-green-500" },
         major_outage: { label: "Experiencing Issues", color: "bg-red-500" },
         degraded_performance: { label: "Degraded Performance", color: "bg-yellow-500" },
     };
-
     if (loading) return <div className="h-8 w-48 bg-neutral-200 dark:bg-neutral-700 rounded-full animate-pulse"></div>;
-    
     const statusKey = data?.overall_status === "All Systems Operational" ? "operational" : "major_outage";
     const meta = statusMeta[statusKey];
-
     return (
         <Link to="/status" className="inline-flex items-center space-x-2 p-2 pr-4 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-full hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors group">
             <span className={`h-3 w-3 rounded-full ${meta.color} animate-pulse`}></span>
@@ -53,9 +46,6 @@ const LiveStatusIndicator = () => {
     );
 };
 
-// =================================================================================
-// MAIN SECURITY PAGE COMPONENT
-// =================================================================================
 
 const SecurityPage = () => {
   const securityFeatures = [
@@ -68,6 +58,8 @@ const SecurityPage = () => {
   ];
 
   return (
+    // [THE FIX] The <PageWrapper> has been removed from here.
+    <>
       <div className="relative isolate overflow-hidden pt-24 pb-20 sm:pt-32 sm:pb-28 bg-neutral-50 dark:bg-neutral-900">
         <div className="mx-auto max-w-7xl px-6 lg:px-8 text-center">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
@@ -129,6 +121,7 @@ const SecurityPage = () => {
                 </motion.div>
             </div>
       </div>
+    </>
   );
 };
 
