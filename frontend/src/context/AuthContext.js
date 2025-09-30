@@ -79,30 +79,31 @@ export const AuthProvider = ({ children }) => {
   const switchToBusiness = () => { if (dbUser?.business_profile) setActiveProfile('business'); };
   const switchToPersonal = () => { setActiveProfile('personal'); };
 
-  // [THE DEFINITIVE FIX] - This function is now fully resilient.
+  // [THE DEFINITIVE FIX] - This function is now fully resilient to null subscriptions.
   const hasActiveSubscription = useCallback((plan_id = null) => {
     if (!dbUser) return false;
-
-    // Admins and superusers get elevated privileges regardless of subscription
+    
+    // Admins and superusers get elevated privileges regardless of subscription.
     if (dbUser.role === 'superuser') return true;
     if (dbUser.role === 'admin' && plan_id !== 'ultimate') return true;
-
+    
     const sub = dbUser.subscription;
 
-    // This is the critical check. If sub is null or not active, immediately return false.
-    // This prevents the code from ever trying to access properties of a null object.
+    // This is the critical check. If `sub` is null (for new users) or not 'active',
+    // immediately return false. This prevents the code from ever trying to access
+    // properties of a null object.
     if (!sub || sub.status !== 'active') {
         return false;
     }
 
-    // If we reach here, we know a subscription object exists and is active.
-    // If we're only checking if *any* sub is active, we can return true.
+    // If we reach here, we know `sub` is a valid, active subscription object.
+    // If the check is just for *any* active subscription, we can return true.
     if (!plan_id) {
         return true;
     }
 
     // Now it is safe to check the plan details for tiered access.
-    // We add an extra safeguard for `sub.plan`.
+    // We add an extra safeguard for `sub.plan` just in case.
     if (!sub.plan) {
         return false;
     }
@@ -110,7 +111,7 @@ export const AuthProvider = ({ children }) => {
     const planHierarchy = { free: 0, premium: 1, ultimate: 2 };
     const userPlanLevel = planHierarchy[sub.plan.id] ?? -1;
     const requiredPlanLevel = planHierarchy[plan_id] ?? -1;
-
+    
     return userPlanLevel >= requiredPlanLevel;
   }, [dbUser]);
 
