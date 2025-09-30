@@ -25,7 +25,7 @@ const TRANSACTIONS_PER_PAGE = 10;
 
 const TransactionsPage = () => {
   const { t } = useTranslation();
-  const { hasActiveSubscription, authToken } = useAuth(); // Get subscription info
+  const { hasActiveSubscription, authToken, dbUser } = useAuth(); // <-- Get dbUser here
   
   const [currentPage, setCurrentPage] = useState(1);
   const [filters, setFilters] = useState({
@@ -34,32 +34,27 @@ const TransactionsPage = () => {
       search: '',
   });
 
-  // Construct the API URL with query parameters based on state.
   const apiUrl = `/transactions/history?skip=${(currentPage - 1) * TRANSACTIONS_PER_PAGE}&limit=${TRANSACTIONS_PER_PAGE}&start_date=${filters.start}&end_date=${filters.end}&search=${filters.search}`;
   
-  // Fetch data manually whenever the apiUrl changes.
   const { data, loading, error, request: fetchTransactions } = useApi(apiUrl, {}, true); 
   const [isExporting, setIsExporting] = useState(false);
   
   const totalPages = data ? Math.ceil(data.total / TRANSACTIONS_PER_PAGE) : 1;
   const transactions = data ? data.transactions : [];
 
-  // Re-fetch transactions whenever the API URL changes (due to filters or page changes).
   useEffect(() => {
     fetchTransactions();
   }, [apiUrl, fetchTransactions]);
 
-  // Debounce search input to prevent API calls on every keystroke.
   const debouncedSearch = useCallback(debounce((searchValue) => {
     setFilters(prev => ({ ...prev, search: searchValue }));
-    setCurrentPage(1); // Reset to page 1 on new search
+    setCurrentPage(1);
   }, 500), []);
 
   const handleSearchChange = (e) => {
     debouncedSearch(e.target.value);
   };
   
-  // --- [THE FEATURE GATING LOGIC] ---
   const canExport = hasActiveSubscription('premium');
 
   const handleExport = async () => {
@@ -72,7 +67,7 @@ const TransactionsPage = () => {
         const response = await apiClient.get('/analytics/export-statement', {
             params: { start_date: filters.start, end_date: filters.end },
             headers: { Authorization: `Bearer ${authToken}` },
-            responseType: 'blob', // Critical for handling file downloads
+            responseType: 'blob',
         });
         
         const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -118,7 +113,8 @@ const TransactionsPage = () => {
             ) : <UpgradePrompt featureName="Export Statements" requiredPlan="Premium" />}
         </div>
         
-        <TransactionTable transactions={transactions} isLoading={loading} error={error} />
+        {/* [THE DEFINITIVE FIX] Pass the currentUserId as a prop */}
+        <TransactionTable transactions={transactions} isLoading={loading} error={error} currentUserId={dbUser?.id} />
 
         {data && data.total > 0 && (
             <div className="flex items-center justify-between pt-4">
