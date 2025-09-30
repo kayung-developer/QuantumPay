@@ -31,6 +31,7 @@ const JobApplicationPage = () => {
     }
 
     return (
+        <>
         <div className="bg-white dark:bg-neutral-950 min-h-screen">
             <div className="mx-auto max-w-4xl px-6 lg:px-8 py-20 sm:py-28">
                 <Link to="/careers" className="inline-flex items-center text-sm font-medium text-primary hover:text-primary-focus mb-8">
@@ -50,9 +51,11 @@ const JobApplicationPage = () => {
                     <ApplicationForm jobId={jobId} />
                 </div>
             </div>
-        </div>
+        </div
+        </>
     );
 };
 
 
 export default JobApplicationPage;
+
