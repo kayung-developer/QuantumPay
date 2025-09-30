@@ -7,12 +7,13 @@ import { useInView } from 'react-intersection-observer';
 
 // --- Component Imports ---
 import Button from '../../components/common/Button';
+// [THE FIX] PageWrapper is no longer needed here. App.js handles it.
 
 // --- Icon Imports ---
 import { GlobeAmericasIcon, UserGroupIcon, LightBulbIcon } from '@heroicons/react/24/outline';
 
 // =================================================================================
-// SUB-COMPONENTS FOR A CLEANER, MORE MODULAR PAGE
+// SUB-COMPONENTS (No changes needed in these)
 // =================================================================================
 
 const PageHeader = ({ title, subtitle }) => (
@@ -77,6 +78,8 @@ const AboutPage = () => {
     ];
 
     return (
+        // [THE FIX] The <PageWrapper> has been removed from here.
+        <>
             <PageHeader
                 title="About QuantumPay"
                 subtitle="We are fundamentally reshaping the global financial landscape. Our goal is to create a single, unified platform for the entire financial lifecycle, built on the principles of security, speed, and intelligence."
@@ -132,6 +135,7 @@ const AboutPage = () => {
                     </div>
                 </div>
             </div>
+        </>
     );
 };
 
