@@ -41,6 +41,7 @@ const IntegrationsPage = () => {
     }, [integrations, filter, searchQuery]);
 
     return (
+        <>
         <div className="bg-white dark:bg-neutral-950">
             {/* Hero Section */}
             <div className="relative isolate overflow-hidden pt-24 pb-20 sm:pt-32 sm:pb-28 bg-neutral-50 dark:bg-neutral-900">
@@ -128,7 +129,9 @@ const IntegrationsPage = () => {
             </div>
       </div>
     </div>
+ </>
   );
 };
+
 
 export default IntegrationsPage;
