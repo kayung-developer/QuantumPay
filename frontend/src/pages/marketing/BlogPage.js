@@ -114,6 +114,7 @@ const BlogPage = () => {
 
     return (
         // The main container inherits its base theme from PageWrapper
+        <>
         <div className="py-24 sm:py-32">
             <div className="mx-auto max-w-7xl px-6 lg:px-8">
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="mx-auto max-w-2xl text-center">
@@ -147,7 +148,9 @@ const BlogPage = () => {
                 </div>
             </div>
         </div>
+    </>
     );
 };
+
 
 export default BlogPage;
