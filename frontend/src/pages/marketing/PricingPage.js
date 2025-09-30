@@ -1,21 +1,20 @@
-import React from 'react';
+// FILE: src/pages/marketing/PricingPage.js
+
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { CheckIcon } from '@heroicons/react/24/solid';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 // --- Component Imports ---
-import { useApi, useApiPost } from '../../hooks/useApi';
+import { useApi } from '../../hooks/useApi';
 import { useAuth } from '../../context/AuthContext';
 import Button from '../../components/common/Button';
-import Spinner from '../../components/common/Spinner';
+import PageWrapper from '../../components/layout/PageWrapper';
 
-// --- [FIX] Reusable, Theme-Aware PricingCard Component ---
-// This sub-component keeps the main component clean and is fully theme-aware.
+// --- Reusable PricingCard Component (No changes needed here) ---
 const PricingCard = ({ plan, isMostPopular, onSubscribe, isLoading, currentPlanId, isLoggedIn, index }) => {
     const { t } = useTranslation();
-    
-    // Determine the correct text for the call-to-action button
     const getButtonText = () => {
         if (currentPlanId === plan.id) return t('current_plan_label');
         if (plan.id === 'free') return t('included_label');
@@ -30,7 +29,7 @@ const PricingCard = ({ plan, isMostPopular, onSubscribe, isLoading, currentPlanI
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.1 * index }}
-            className={`rounded-3xl p-8 ring-1 xl:p-10 transition-all duration-300 ${
+            className={`rounded-3xl p-8 ring-1 xl:p-10 transition-all duration-300 h-full flex flex-col ${
                 isMostPopular
                     ? 'ring-2 ring-primary bg-neutral-50 dark:bg-neutral-900 shadow-2xl'
                     : 'ring-neutral-200 dark:ring-neutral-800 bg-white dark:bg-neutral-950'
@@ -68,8 +67,8 @@ const PricingCard = ({ plan, isMostPopular, onSubscribe, isLoading, currentPlanI
             >
                 {getButtonText()}
             </Button>
-            <ul className="mt-8 space-y-3 text-sm leading-6 text-neutral-600 dark:text-neutral-300 xl:mt-10">
-                {JSON.parse(plan.features).map((feature) => (
+            <ul className="mt-8 space-y-3 text-sm leading-6 text-neutral-600 dark:text-neutral-300 xl:mt-10 flex-grow">
+                {plan.features.map((feature) => (
                     <li key={feature} className="flex gap-x-3">
                         <CheckIcon className="h-6 w-5 flex-none text-primary" aria-hidden="true" />
                         {feature}
@@ -80,7 +79,7 @@ const PricingCard = ({ plan, isMostPopular, onSubscribe, isLoading, currentPlanI
     );
 };
 
-// --- [FIX] Theme-Aware Skeleton Card for loading state ---
+// --- Theme-Aware Skeleton Card for loading state ---
 const SkeletonCard = () => (
     <div className="rounded-3xl p-8 ring-1 ring-neutral-200 dark:ring-neutral-800 xl:p-10 animate-pulse">
         <div className="h-6 w-24 bg-neutral-200 dark:bg-neutral-700 rounded-md"></div>
@@ -98,12 +97,23 @@ const SkeletonCard = () => (
 // --- Main Pricing Page Component ---
 const PricingPage = () => {
     const { t } = useTranslation();
-    const { dbUser } = useAuth();
+    const { dbUser, loading: authLoading } = useAuth(); // <-- Get authLoading state
     const navigate = useNavigate();
     const location = useLocation();
 
-    const { data: plans, loading: plansLoading, error } = useApi('/subscriptions/plans');
+    // --- [THE DEFINITIVE FIX - Step 1] ---
+    // Change the useApi call to be manual (third argument is `true`).
+    const { data: plans, loading: plansLoading, error, request: fetchPlans } = useApi('/subscriptions/plans', {}, true);
+    
     const { post: createCheckout, loading: checkoutLoading } = useApiPost('/subscriptions/create');
+
+    // --- [THE DEFINITIVE FIX - Step 2] ---
+    // Use useEffect to trigger the fetch only when the auth state is no longer loading.
+    useEffect(() => {
+        if (!authLoading) {
+            fetchPlans();
+        }
+    }, [authLoading, fetchPlans]);
 
     const handleSubscribe = async (planId) => {
         if (!dbUser) {
@@ -120,7 +130,7 @@ const PricingPage = () => {
     };
 
     const renderContent = () => {
-        if (plansLoading) {
+        if (plansLoading || authLoading) { // <-- Show skeleton while auth is loading too
             return (
                 <div className="isolate mx-auto mt-16 grid max-w-md grid-cols-1 gap-8 lg:mx-0 lg:max-w-none lg:grid-cols-3">
                     <SkeletonCard />
@@ -155,22 +165,23 @@ const PricingPage = () => {
     };
 
     return (
-        <div className="bg-white dark:bg-neutral-950">
-            <div className="mx-auto max-w-7xl px-6 lg:px-8 py-24 sm:py-32">
-                <div className="mx-auto max-w-4xl text-center">
-                    <h1 className="text-base font-semibold leading-7 text-primary">{t('pricing_page_title')}</h1>
-                    <p className="mt-2 text-4xl font-bold tracking-tight text-neutral-900 dark:text-white sm:text-5xl font-display">
-                        {t('pricing_page_header')}
+        <PageWrapper>
+            <div className="bg-white dark:bg-neutral-950">
+                <div className="mx-auto max-w-7xl px-6 lg:px-8 py-24 sm:py-32">
+                    <div className="mx-auto max-w-4xl text-center">
+                        <h1 className="text-base font-semibold leading-7 text-primary">{t('pricing_page_title')}</h1>
+                        <p className="mt-2 text-4xl font-bold tracking-tight text-neutral-900 dark:text-white sm:text-5xl font-display">
+                            {t('pricing_page_header')}
+                        </p>
+                    </div>
+                    <p className="mx-auto mt-6 max-w-2xl text-center text-lg leading-8 text-neutral-600 dark:text-neutral-300">
+                        {t('pricing_page_subtitle')}
                     </p>
+                    {renderContent()}
                 </div>
-                <p className="mx-auto mt-6 max-w-2xl text-center text-lg leading-8 text-neutral-600 dark:text-neutral-300">
-                    {t('pricing_page_subtitle')}
-                </p>
-                {renderContent()}
             </div>
-        </div>
+        </PageWrapper>
     );
 };
-
 
 export default PricingPage;
