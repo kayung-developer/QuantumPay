@@ -1,5 +1,3 @@
-// FILE: src/components/dashboard/RecentTransactions.js
-
 import React, { useMemo } from 'react';
 import { format, parseISO } from 'date-fns';
 import { motion } from 'framer-motion';
@@ -26,7 +24,8 @@ const TransactionItem = ({ tx, currentUserId }) => {
   const { t } = useTranslation();
   const isSent = tx.sender_id === currentUserId;
 
-  let typeKey = tx.transaction_type.toUpperCase(); // Ensure uppercase for matching
+  // [THE DEFINITIVE FIX] - Add fallbacks to prevent crashes if fields are null/undefined.
+  let typeKey = (tx.transaction_type || '').toUpperCase();
   if (typeKey === 'P2P_TRANSFER') {
     typeKey = isSent ? 'P2P_TRANSFER_SENT' : 'P2P_TRANSFER_RECEIVED';
   }
@@ -35,17 +34,19 @@ const TransactionItem = ({ tx, currentUserId }) => {
   const amountPrefix = isSent ? '-' : '+';
   const amountColor = isSent ? 'text-red-500' : 'text-green-500';
 
-  // [THE DEFINITIVE FIX] - Use optional chaining and fallbacks for all nested data access.
   const description = useMemo(() => {
     if (tx.description) return tx.description;
     if (isSent) {
-      return t('tx_description_to', { recipient: tx.receiver?.email || 'Unknown Recipient' });
+      return t('tx_description_to', { recipient: tx.receiver?.email || 'Unknown' });
     }
-    if (tx.transaction_type.toUpperCase() === 'DEPOSIT') {
+    if (typeKey === 'DEPOSIT') {
         return t('tx_description_deposit');
     }
     return t('tx_description_from', { sender: tx.sender?.email || 'External Source' });
-  }, [tx, isSent, t]);
+  }, [tx, isSent, t, typeKey]);
+
+  // [THE DEFINITIVE FIX] - Provide a fallback for the status.
+  const statusText = (tx.status || 'pending').toLowerCase();
 
   return (
     <li className="flex items-center justify-between py-4">
@@ -64,12 +65,13 @@ const TransactionItem = ({ tx, currentUserId }) => {
         <p className={`text-sm font-semibold ${amountColor}`}>
           {amountPrefix} {new Intl.NumberFormat('en-US', { style: 'currency', currency: tx.currency_code }).format(tx.amount)}
         </p>
-        <p className="text-xs text-neutral-500 dark:text-neutral-400 capitalize">{tx.status.toLowerCase()}</p>
+        <p className="text-xs text-neutral-500 dark:text-neutral-400 capitalize">{statusText}</p>
       </div>
     </li>
   );
 };
 
+// --- [THEME-AWARE] Sub-component for the loading skeleton ---
 const SkeletonItem = () => (
     <li className="flex items-center justify-between py-4">
         <div className="flex items-center w-full">
@@ -88,7 +90,7 @@ const SkeletonItem = () => (
 
 const RecentTransactions = ({ transactions = [], isLoading, error, currentUserId }) => {
   const { t } = useTranslation();
-  
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: { opacity: 1, transition: { staggerChildren: 0.07 } }
@@ -98,7 +100,7 @@ const RecentTransactions = ({ transactions = [], isLoading, error, currentUserId
     hidden: { opacity: 0, x: -20 },
     visible: { opacity: 1, x: 0 }
   };
-  
+
   const renderContent = () => {
       if (isLoading) {
           return Array.from({ length: 5 }).map((_, i) => <SkeletonItem key={i} />);
