@@ -35,6 +35,7 @@ const JobDetailPage = () => {
         if (!job) return null;
 
         return (
+            <>
             <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -76,7 +77,9 @@ const JobDetailPage = () => {
                {renderContent()}
             </div>
         </div>
+     </>
     );
 };
+
 
 export default JobDetailPage;
