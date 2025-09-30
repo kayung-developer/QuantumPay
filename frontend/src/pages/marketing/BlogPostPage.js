@@ -1,3 +1,5 @@
+// FILE: src/pages/marketing/BlogPostPage.js
+
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useApi } from '../../hooks/useApi';
@@ -5,6 +7,7 @@ import { motion } from 'framer-motion';
 import { format, parseISO } from 'date-fns';
 import { ArrowLeftIcon, ShareIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 import Button from '../../components/common/Button';
+import PageWrapper from '../../components/layout/PageWrapper';
 
 // --- [NEW] Skeleton Loader Component ---
 const BlogPostSkeletonLoader = () => (
@@ -66,7 +69,6 @@ const BlogPostPage = () => {
             return null;
         }
         return (
-            <>
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -82,7 +84,7 @@ const BlogPostPage = () => {
                         {post.title}
                     </h1>
                     <div className="mt-6 text-sm text-neutral-600 dark:text-neutral-400">
-                        <span>By {post.author}</span> &bull; <span>{format(parseISO(post.publication_date), 'MMMM d, yyyy')}</span> &bull; <span>{post.read_time_minutes} min read</span>
+                        <span>By {post.author.full_name}</span> &bull; <span>{format(parseISO(post.publication_date), 'MMMM d, yyyy')}</span> &bull; <span>{post.read_time_minutes} min read</span>
                     </div>
                 </div>
 
@@ -90,7 +92,6 @@ const BlogPostPage = () => {
                      <img className="w-full h-full object-cover" src={post.image_url} alt={post.title} />
                 </div>
 
-                {/* [THEME-AWARE] The prose classes are updated to be theme-aware */}
                 <div
                     className="prose dark:prose-invert prose-lg mx-auto mt-12 text-neutral-700 dark:text-neutral-300 prose-headings:text-neutral-900 dark:prose-headings:text-white prose-a:text-primary hover:prose-a:text-primary-light"
                     dangerouslySetInnerHTML={{ __html: post.content }}
@@ -101,7 +102,6 @@ const BlogPostPage = () => {
                         <ArrowLeftIcon className="h-4 w-4 mr-2"/>
                         Back to all articles
                     </Link>
-                    {/* [NEW] Add the social share component */}
                     <SocialShare title={post.title} />
                 </div>
             </motion.div>
@@ -109,15 +109,14 @@ const BlogPostPage = () => {
     }
 
     return (
-        // The main container inherits its base theme from PageWrapper
-        <div className="pt-24 pb-20 sm:pt-32 sm:pb-28">
-            <div className="mx-auto max-w-4xl px-6 lg:px-8">
-               {renderContent()}
+        <PageWrapper>
+            <div className="pt-24 pb-20 sm:pt-32 sm:pb-28">
+                <div className="mx-auto max-w-4xl px-6 lg:px-8">
+                   {renderContent()}
+                </div>
             </div>
-        </div>
-     </>
+        </PageWrapper>
     );
-};
-
+}; // <-- [THE FIX] Added the missing closing curly brace for the component function.
 
 export default BlogPostPage;
