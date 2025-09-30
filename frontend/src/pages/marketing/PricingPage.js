@@ -7,7 +7,7 @@ import { CheckIcon } from '@heroicons/react/24/solid';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 // --- Component Imports ---
-import { useApi } from '../../hooks/useApi';
+import { useApi, useApiPost } from '../../hooks/useApi';
 import { useAuth } from '../../context/AuthContext';
 import Button from '../../components/common/Button';
 import PageWrapper from '../../components/layout/PageWrapper';
@@ -104,7 +104,7 @@ const PricingPage = () => {
     // --- [THE DEFINITIVE FIX - Step 1] ---
     // Change the useApi call to be manual (third argument is `true`).
     const { data: plans, loading: plansLoading, error, request: fetchPlans } = useApi('/subscriptions/plans', {}, true);
-    
+
     const { post: createCheckout, loading: checkoutLoading } = useApiPost('/subscriptions/create');
 
     // --- [THE DEFINITIVE FIX - Step 2] ---
