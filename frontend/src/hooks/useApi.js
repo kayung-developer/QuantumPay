@@ -4,19 +4,16 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import apiClient from '../api/axiosConfig';
 import { toast } from 'react-hot-toast';
 
-// No longer need useAuth here. The hook is now fully decoupled.
-
 export const useApi = (url, options = {}, manual = false) => {
     const [data, setData] = useState(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(!manual);
-    const optionsString = useMemo(() => JSON.stringify(options), [options]);
 
     const request = useCallback(async (requestOptions) => {
         setLoading(true);
         setError(null);
         try {
-            const finalOptions = { ...JSON.parse(optionsString), ...requestOptions };
+            const finalOptions = { ...options, ...requestOptions };
             const response = await apiClient(url, { method: 'GET', ...finalOptions });
             setData(response.data);
             return { success: true, data: response.data };
@@ -24,11 +21,12 @@ export const useApi = (url, options = {}, manual = false) => {
             const errorMessage = err.response?.data?.detail || err.message || 'Could not fetch data.';
             const structuredError = { message: errorMessage, status: err.response?.status };
             setError(structuredError);
+            toast.error(errorMessage); // Ensure errors are always toasted
             return { success: false, error: structuredError };
         } finally {
             setLoading(false);
         }
-    }, [url, optionsString]);
+    }, [url, JSON.stringify(options)]); // Memoize based on url and options
 
     useEffect(() => {
         if (!manual) {
@@ -43,14 +41,12 @@ export const useApiPost = (url, config = {}) => {
     const [data, setData] = useState(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
-    const configString = useMemo(() => JSON.stringify(config), [config]);
 
     const post = useCallback(async (postData, requestConfig = {}) => {
         setLoading(true);
         setError(null);
         try {
-            const baseConfig = JSON.parse(configString);
-            const finalConfig = { ...baseConfig, ...requestConfig };
+            const finalConfig = { ...config, ...requestConfig };
             const method = finalConfig.method?.toLowerCase() || 'post';
             const finalUrl = finalConfig.url || url;
 
@@ -76,7 +72,7 @@ export const useApiPost = (url, config = {}) => {
         } finally {
             setLoading(false);
         }
-    }, [url, configString]);
+    }, [url, JSON.stringify(config)]);
 
     return { post, data, loading, error };
 };
