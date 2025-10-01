@@ -1,19 +1,20 @@
 // FILE: src/pages/dashboard/SubscriptionSettingsPage.js
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { format, parseISO } from 'date-fns';
 
 // --- Component Imports ---
-import  useApi, {useApiPost } from '../../hooks/useApi';
+import { useApi, useApiPost } from '../../hooks/useApi';
 import DashboardLayout from '../../components/layout/DashboardLayout';
 import Spinner from '../../components/common/Spinner';
 import Button from '../../components/common/Button';
-import { CheckCircleIcon, ExclamationTriangleIcon, CreditCardIcon } from '@heroicons/react/24/solid';
+import { CheckCircleIcon, ExclamationTriangleIcon, CreditCardIcon, ShieldCheckIcon } from '@heroicons/react/24/solid';
+import { useAuth } from '../../context/AuthContext'; // <-- [THE FIX - Step 1] Import useAuth
 
 const SubscriptionSettingsPage = () => {
     const { t } = useTranslation();
+    const { dbUser } = useAuth();
     const { data: subscription, loading, error, request: refetchSubscription } = useApi('/subscriptions/me');
     const { post: cancelSubscription, loading: cancelling } = useApiPost('/subscriptions/cancel');
 
@@ -39,6 +40,22 @@ const SubscriptionSettingsPage = () => {
         if (loading) {
             return <div className="p-12 text-center"><Spinner /></div>;
         }
+         if (dbUser?.role === 'superuser' || dbUser?.role === 'admin') {
+            const planName = dbUser.role === 'superuser' ? 'Ultimate' : 'Premium';
+            return (
+                <div className="bg-white dark:bg-neutral-900 rounded-lg shadow border border-primary/50">
+                    <div className="p-6 text-center">
+                        <ShieldCheckIcon className="h-12 w-12 mx-auto text-primary" />
+                        <h2 className="mt-4 text-2xl font-bold font-display text-neutral-900 dark:text-white">
+                            Administrator Access
+                        </h2>
+                        <p className="mt-2 text-neutral-600 dark:text-neutral-400">
+                            As a <span className="font-bold capitalize">{dbUser.role}</span>, you have been granted automatic access equivalent to the <span className="font-bold">{planName}</span> plan.
+                        </p>
+                    </div>
+                </div>
+            );
+        }
         if (error) {
             return <p className="text-center text-red-500">Could not load your subscription details.</p>;
         }
@@ -55,6 +72,7 @@ const SubscriptionSettingsPage = () => {
         }
 
         return (
+
             <div className="bg-white dark:bg-neutral-900 rounded-lg shadow border border-neutral-200 dark:border-neutral-800">
                 <div className="p-6">
                     <div className="flex items-center justify-between">
