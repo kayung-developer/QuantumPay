@@ -39,11 +39,15 @@ const AccountVerificationEffect = () => {
             });
             if (result.success && result.data.account_name) {
                 setFieldValue('verified_account_name', result.data.account_name);
+                // Clear any previous errors on success
+                setFieldError('account_number', undefined);
             } else {
                 setFieldValue('verified_account_name', '');
+                // Use the error from the hook to display a message
+                setFieldError('account_number', result.error?.message || 'Could not verify account.');
             }
-        }, 800), // 800ms delay
-        []
+        }, 800), // 800ms delay after the user stops typing
+        [] // Empty dependency array means this debounced function is created only once
     );
 
     useEffect(() => {
