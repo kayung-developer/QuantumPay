@@ -65,6 +65,7 @@ const BusinessSettingsPage = lazy(() => import('./pages/business/BusinessSetting
 const PaymentLinksPage = lazy(() => import('./pages/business/PaymentLinksPage'));
 const BatchPayoutsPage = lazy(() => import('./pages/business/BatchPayoutsPage'));
 const AccountingSyncPage = lazy(() => import('./pages/business/AccountingSyncPage'));
+const TreasuryPage = lazy(() => import('./pages/business/TreasuryPage'));
 
 // --- Admin Pages (Admin Protected) ---
 const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
@@ -143,6 +144,7 @@ function App() {
           <Route path="/business/payment-links" element={<ProtectedRoute><PaymentLinksPage /></ProtectedRoute>} />
           <Route path="/business/batch-payouts" element={<ProtectedRoute><BatchPayoutsPage /></ProtectedRoute>} />
           <Route path="/business/accounting-sync" element={<ProtectedRoute><AccountingSyncPage /></ProtectedRoute>} />
+          <Route path="/business/treasury" element={<ProtectedRoute><TreasuryPage /></ProtectedRoute>} />
 
           {/* --- Protected Admin Routes (Multi-layered Protection) --- */}
           <Route path="/admin/*" element={<ProtectedRoute><AdminRoute><AdminRoutes /></AdminRoute></ProtectedRoute>} />
@@ -169,3 +171,4 @@ const AdminRoutes = () => (
 
 
 export default App;
+
