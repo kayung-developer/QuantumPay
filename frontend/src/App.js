@@ -31,6 +31,8 @@ const PressPage = lazy(() => import('./pages/marketing/PressPage'));
 const SupportPage = lazy(() => import('./pages/marketing/SupportPage'));
 const SystemStatusPage = lazy(() => import('./pages/marketing/SystemStatusPage'));
 const ApiDocumentationPage = lazy(() => import('./pages/marketing/ApiDocumentationPage'));
+const PayLinkPage = lazy(() => import('./pages/public/PayLinkPage'));
+
 
 // --- Authentication Pages ---
 const LoginPage = lazy(() => import('./pages/auth/LoginPage'));
@@ -112,6 +114,7 @@ function App() {
           <Route path="/privacy-policy" element={<PageWrapper><PrivacyPolicyPage /></PageWrapper>} />
           <Route path="/terms-of-service" element={<PageWrapper><TermsOfServicePage /></PageWrapper>} />
           <Route path="/cookie-policy" element={<PageWrapper><CookiePolicyPage /></PageWrapper>} />
+          <Route path="/pay/:linkId" element={<PayLinkPage />} />
 
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
@@ -171,4 +174,5 @@ const AdminRoutes = () => (
 
 
 export default App;
+
 
