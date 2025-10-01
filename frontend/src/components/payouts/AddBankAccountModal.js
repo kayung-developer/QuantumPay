@@ -24,7 +24,7 @@ const AddAccountSchema = Yup.object().shape({
 // A dedicated "effect" component that lives inside Formik's context.
 // This is the clean, modern way to handle side effects based on form state changes.
 const AccountVerificationEffect = () => {
-    const { values, setFieldValue } = useFormikContext();
+    const { values, setFieldValue, setFieldError } = useFormikContext();
     const { post: verifyAccount, loading: verifying, error: verificationError } = useApiPost('/payouts/verify-account');
 
     const debouncedVerify = useCallback(
@@ -161,3 +161,4 @@ const AddBankAccountModal = ({ isOpen, onClose, onSuccess, currency }) => {
 };
 
 export default AddBankAccountModal;
+
