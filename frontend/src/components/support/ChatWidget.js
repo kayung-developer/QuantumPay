@@ -6,8 +6,20 @@ import { useApi, useApiPost } from '../../hooks/useApi';
 import Spinner from '../common/Spinner';
 import Button from '../common/Button';
 import { useTranslation } from 'react-i18next';
-import { formatDistanceToNow } from 'date-fns';
+import { formatDistanceToNow, parseISO } from 'date-fns';
 import { v4 as uuidv4 } from 'uuid'; // Ensure you have installed uuid: npm install uuid
+
+const safeFormatDistanceToNow = (dateString) => {
+    try {
+        if (!dateString) return 'just now'; // Fallback for optimistic messages
+        const date = parseISO(dateString);
+        if (isNaN(date.getTime())) return 'invalid date';
+        return formatDistanceToNow(date, { addSuffix: true });
+    } catch (error) {
+        return 'a moment ago';
+    }
+};
+
 
 const ChatWidget = () => {
     const { dbUser, authToken, hasActiveSubscription } = useAuth();
@@ -156,7 +168,7 @@ const ChatWidget = () => {
                              >
                                 <p className="text-sm whitespace-pre-wrap break-words">{msg.content}</p>
                                 <p className={`text-xs mt-1 opacity-70 ${msg.sender_id === dbUser.id ? 'text-right' : 'text-left'}`}>
-                                    {msg.id ? formatDistanceToNow(new Date(msg.timestamp), { addSuffix: true }) : t('chat_sending_status')}
+                                    {msg.id ? safeFormatDistanceToNow(msg.timestamp) : t('chat_sending_status')}
                                 </p>
                             </motion.div>
                         </div>
@@ -224,5 +236,3 @@ const ChatWidget = () => {
 
 
 export default ChatWidget;
-
-
