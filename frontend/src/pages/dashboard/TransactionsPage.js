@@ -157,7 +157,6 @@ const TransactionsPage = () => {
         </div>
       </div>
     );
-  };
 
   return (
     <DashboardLayout pageTitleKey="transactions_title">
