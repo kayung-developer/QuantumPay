@@ -95,6 +95,12 @@ const IncomeExpenseChart = ({ data: chartData, isLoading, error }) => {
 
     const data = useMemo(() => {
         const chart = chartRef.current;
+        if (!chartData || !chartData.labels) {
+            return {
+                labels: [],
+                datasets: [],
+            };
+        }
         let incomeGradient = 'rgba(22, 163, 74, 0.2)';
         let expenseGradient = 'rgba(239, 68, 68, 0.2)';
 
