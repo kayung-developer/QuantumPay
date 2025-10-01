@@ -55,6 +55,9 @@ const resources = {
       "sidebar_logout": "Logout",
       "sidebar_business_tools": "Business Tools",
       "sidebar_admin_panel": "Admin Panel",
+      "sidebar_payment_links": "Payment Links",
+      "sidebar_batch_payouts": "Batch Payouts",
+      "sidebar_accounting_sync": "Accounting Sync",
 
       // General UI Text
       "welcome_back": "Welcome back, {{name}}!",
@@ -637,7 +640,6 @@ const resources = {
 
 
 
-
     }
   },
   es: {
@@ -670,6 +672,9 @@ const resources = {
       "currency_label": "Moneda",
       "dashboard_header_subtitle": "Aquí tiene un resumen de su actividad financiera.",
        "sidebar_business_dashboard": "Panel de Negocios", "sidebar_team_management": "Gestión de Equipo", "sidebar_invoicing": "Facturación", "sidebar_payroll": "Nómina", "sidebar_corporate_cards": "Tarjetas Corporativas", "sidebar_expense_approvals": "Aprobaciones de Gastos", "sidebar_business_settings": "Configuración del Negocio", "sidebar_admin_overview": "Resumen de Admin", "sidebar_manage_users": "Gestionar Usuarios", "sidebar_kyc_approvals": "Aprobaciones KYC", "sidebar_live_support": "Soporte en Vivo", "sidebar_job_listings": "Ofertas de Empleo", "sidebar_blog_posts": "Publicaciones del Blog",
+       "sidebar_payment_links": "Liens de Paiement",
+       "sidebar_batch_payouts": "Paiements par Lot",
+       "sidebar_accounting_sync": "Synchro Comptable",
        "setup_business_title": "Configure su Perfil de Empresa",
       "setup_business_subtitle": "Proporcione los detalles de su empresa y de cumplimiento para crear cuentas reservadas para recibir pagos.",
       "business_name_label": "Nombre Comercial Registrado",
@@ -963,6 +968,9 @@ const resources = {
       "currency_label": "Moeda",
       "dashboard_header_subtitle": "Aqui está um resumo da sua atividade financeira.",
       "sidebar_business_dashboard": "Painel Empresarial", "sidebar_team_management": "Gestão da Equipe", "sidebar_invoicing": "Faturamento", "sidebar_payroll": "Folha de Pagamento", "sidebar_corporate_cards": "Cartões Corporativos", "sidebar_expense_approvals": "Aprovações de Despesas", "sidebar_business_settings": "Configurações da Empresa", "sidebar_admin_overview": "Visão Geral do Admin", "sidebar_manage_users": "Gerenciar Usuários", "sidebar_kyc_approvals": "Aprovações KYC", "sidebar_live_support": "Suporte ao Vivo", "sidebar_job_listings": "Vagas de Emprego", "sidebar_blog_posts": "Postagens do Blog",
+      "sidebar_payment_links": "Links de Pagamento",
+      "sidebar_batch_payouts": "Pagamentos em Lote",
+      "sidebar_accounting_sync": "Sincronização Contábil",
       "setup_business_title": "Configure seu Perfil de Empresa",
       "setup_business_subtitle": "Forneça os detalhes da sua empresa e de conformidade para criar contas reservadas para receber pagamentos.",
       "business_name_label": "Nome Comercial Registado",
@@ -1258,6 +1266,9 @@ const resources = {
       "currency_label": "Sarafu",
       "dashboard_header_subtitle": "Huu ni muhtasari wa shughuli zako za kifedha.",
       "sidebar_business_dashboard": "Dashibodi ya Biashara", "sidebar_team_management": "Usimamizi wa Timu", "sidebar_invoicing": "Ankara", "sidebar_payroll": "Mishahara", "sidebar_corporate_cards": "Kadi za Kampuni", "sidebar_expense_approvals": "Idhini za Gharama", "sidebar_business_settings": "Mipangilio ya Biashara", "sidebar_admin_overview": "Muhtasari wa Msimamizi", "sidebar_manage_users": "Dhibiti Watumiaji", "sidebar_kyc_approvals": "Idhini za KYC", "sidebar_live_support": "Msaada wa Moja kwa Moja", "sidebar_job_listings": "Nafasi za Kazi", "sidebar_blog_posts": "Machapisho ya Blogu",
+      "sidebar_payment_links": "Viungo vya Malipo",
+      "sidebar_batch_payouts": "Malipo ya Kundi",
+      "sidebar_accounting_sync": "Usawazishaji wa Uhasibu",
       "setup_business_title": "Sanidi Wasifu Wako wa Biashara",
       "setup_business_subtitle": "Toa maelezo ya biashara na kufuata sheria ili kuunda akaunti zilizohifadhiwa kwa ajili ya kupokea malipo.",
       "business_name_label": "Jina la Biashara Lililosajiliwa",
@@ -1514,7 +1525,7 @@ const resources = {
       "faq.a14": "Ndio. Kipengele chetu cha Mishahara ya Kimataifa (kinachopatikana kwenye mipango ya Premium na Ultimate) kinakuwezesha kuongeza wafanyikazi kutoka nchi tofauti, kuweka mishahara yao katika sarafu zao za ndani, na kuwalipa wote kwa kubofya mara moja kutoka kwa moja ya pochi zako. QuantumPay hushughulikia ubadilishaji wote wa sarafu kiotomatiki.",
       "faq.q15": "Ninawezaje kupata funguo za API ili kuunganisha na programu yangu?",
       "faq.a15": "Mara tu unapoingia, nenda kwenye sehemu ya 'Msanidi Programu' kutoka kwenye upau wa kando. Hapa, unaweza kutengeneza funguo za API za moja kwa moja na za majaribio, kusanidi ncha za webhook ili kupokea arifa za wakati halisi kuhusu miamala, na kupata viungo vya nyaraka zetu kamili za API."
-      
+
 
 
 
