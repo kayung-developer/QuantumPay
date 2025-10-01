@@ -88,6 +88,20 @@ const PricingCard = ({ plan, isMostPopular, onSubscribe, isLoading, currentPlanI
     );
 };
 
+const SkeletonCard = () => (
+    <div className="rounded-3xl p-8 ring-1 ring-neutral-200 dark:ring-neutral-800 xl:p-10 animate-pulse">
+        <div className="h-6 w-24 bg-neutral-200 dark:bg-neutral-700 rounded-md"></div>
+        <div className="mt-4 h-4 w-48 bg-neutral-200 dark:bg-neutral-700 rounded-md"></div>
+        <div className="mt-6 h-10 w-32 bg-neutral-200 dark:bg-neutral-700 rounded-md"></div>
+        <div className="mt-6 h-12 w-full bg-neutral-200 dark:bg-neutral-700 rounded-md"></div>
+        <div className="mt-8 space-y-3">
+            <div className="h-5 w-full bg-neutral-200 dark:bg-neutral-700 rounded-md"></div>
+            <div className="h-5 w-5/6 bg-neutral-200 dark:bg-neutral-700 rounded-md"></div>
+            <div className="h-5 w-4/6 bg-neutral-200 dark:bg-neutral-700 rounded-md"></div>
+        </div>
+    </div>
+);
+
 // --- Main Pricing Page Component ---
 const PricingPage = () => {
     const { t } = useTranslation();
