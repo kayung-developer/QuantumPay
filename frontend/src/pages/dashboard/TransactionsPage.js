@@ -1,61 +1,113 @@
 // FILE: src/pages/dashboard/TransactionsPage.js
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { format, subDays } from 'date-fns';
-import debounce from 'lodash.debounce';
+import { format, parseISO, subDays } from 'date-fns';
+import { motion } from 'framer-motion';
 
 // --- Component Imports ---
 import DashboardLayout from '../../components/layout/DashboardLayout';
-import TransactionTable from '../../components/dashboard/TransactionTable';
 import Button from '../../components/common/Button';
-import UpgradePrompt from '../../components/common/UpgradePrompt'; 
+import Spinner from '../../components/common/Spinner';
+import UpgradePrompt from '../../components/common/UpgradePrompt';
 
 // --- Hook Imports ---
 import { useAuth } from '../../context/AuthContext';
-import { useApi } from '../../hooks/useApi';
+import { useApi, useApiPost } from '../../hooks/useApi';
 import apiClient from '../../api/axiosConfig';
 import { toast } from 'react-hot-toast';
 
 // --- Icon Imports ---
-import { DocumentArrowDownIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
+import { DocumentArrowDownIcon, ArrowDownCircleIcon, ArrowUpCircleIcon, BanknotesIcon, ArrowPathIcon } from '@heroicons/react/24/outline';
 
-const TRANSACTIONS_PER_PAGE = 10;
+// --- [THE DEFINITIVE FIX - PART 2] ---
+
+// --- Sub-Components for the new design ---
+
+const StatBox = ({ title, value, currency, color = 'text-white' }) => (
+    <div className="bg-neutral-800 p-4 rounded-lg">
+        <p className="text-sm text-neutral-400">{title}</p>
+        <p className={`text-2xl font-semibold ${color}`}>
+            {new Intl.NumberFormat('en-US', { style: 'currency', currency: currency }).format(value)}
+        </p>
+    </div>
+);
+
+const TransactionRow = ({ tx, currentUserId, currency }) => {
+    const isDebit = tx.sender_id === currentUserId;
+    const amountPrefix = isDebit ? '-' : '+';
+    const amountColor = isDebit ? 'text-red-400' : 'text-green-400';
+
+    const config = {
+      DEPOSIT: { icon: ArrowDownCircleIcon, color: 'text-green-500' },
+      P2P_TRANSFER: { icon: isDebit ? ArrowUpCircleIcon : ArrowDownCircleIcon, color: isDebit ? 'text-red-500' : 'text-green-500'},
+      PAYMENT: { icon: BanknotesIcon, color: 'text-blue-500' },
+      WITHDRAWAL: { icon: ArrowUpCircleIcon, color: 'text-red-500' },
+      CURRENCY_EXCHANGE: { icon: ArrowPathIcon, color: 'text-indigo-500' },
+    };
+    const { icon: Icon, color: iconColor } = config[tx.transaction_type] || config.P2P_TRANSFER;
+
+    return (
+        <li className="flex items-center justify-between py-4">
+            <div className="flex items-center min-w-0">
+                <div className={`p-2 rounded-full bg-neutral-800 ${iconColor}`}><Icon className="h-6 w-6" /></div>
+                <div className="ml-4 min-w-0">
+                    <p className="text-sm font-medium text-white truncate">{tx.description}</p>
+                    <p className="text-xs text-neutral-400">{format(parseISO(tx.created_at), 'h:mm a')}</p>
+                </div>
+            </div>
+            <div className="text-right ml-4 flex-shrink-0">
+                <p className={`text-sm font-semibold ${amountColor}`}>{amountPrefix} {new Intl.NumberFormat('en-US', { style: 'currency', currency: currency }).format(tx.amount)}</p>
+                <p className="text-xs text-neutral-500 font-mono">{new Intl.NumberFormat('en-US', { style: 'currency', currency: currency }).format(tx.running_balance)}</p>
+            </div>
+        </li>
+    );
+};
+
+
 
 const TransactionsPage = () => {
   const { t } = useTranslation();
-  const { hasActiveSubscription, authToken, dbUser } = useAuth(); // <-- Get dbUser here
-  
-  const [currentPage, setCurrentPage] = useState(1);
+  const { hasActiveSubscription, dbUser } = useAuth();
+  const { data: wallets, loading: walletsLoading } = useApi('/wallets/me');
+
   const [filters, setFilters] = useState({
       start: format(subDays(new Date(), 30), 'yyyy-MM-dd'),
       end: format(new Date(), 'yyyy-MM-dd'),
-      search: '',
+      currency: 'USD',
   });
 
-  const apiUrl = `/transactions/history?skip=${(currentPage - 1) * TRANSACTIONS_PER_PAGE}&limit=${TRANSACTIONS_PER_PAGE}&start_date=${filters.start}&end_date=${filters.end}&search=${filters.search}`;
-  
-  const { data, loading, error, request: fetchTransactions } = useApi(apiUrl, {}, true); 
-  const [isExporting, setIsExporting] = useState(false);
-  
-  const totalPages = data ? Math.ceil(data.total / TRANSACTIONS_PER_PAGE) : 1;
-  const transactions = data ? data.transactions : [];
-
-  useEffect(() => {
-    fetchTransactions();
-  }, [apiUrl, fetchTransactions]);
-
-  const debouncedSearch = useCallback(debounce((searchValue) => {
-    setFilters(prev => ({ ...prev, search: searchValue }));
-    setCurrentPage(1);
-  }, 500), []);
-
-  const handleSearchChange = (e) => {
-    debouncedSearch(e.target.value);
-  };
-  
   const canExport = hasActiveSubscription('premium');
+
+  // Conditionally fetch data only when a currency is selected
+  const { data, loading, error, request: fetchTransactions } = useApi(
+      filters.currency ? `/transactions/advanced-history?start_date=${filters.start}&end_date=${filters.end}&currency=${filters.currency}` : null,
+      {}, true // manual fetch
+  );
+
+  // Set default currency once wallets are loaded
+  useEffect(() => {
+    if (wallets && wallets.length > 0 && !wallets.some(w => w.currency_code === filters.currency)) {
+      setFilters(prev => ({ ...prev, currency: wallets[0].currency_code }));
+    }
+  }, [wallets, filters.currency]);
+
+  // Fetch transactions when filters change
+  useEffect(() => {
+    if(filters.currency) {
+      fetchTransactions();
+    }
+  }, [filters.currency, filters.start, filters.end, fetchTransactions]);
+
+  const groupedTransactions = useMemo(() => {
+    if (!data?.transactions) return {};
+    return data.transactions.reduce((acc, tx) => {
+      const date = format(parseISO(tx.created_at), 'MMMM d, yyyy');
+      if (!acc[date]) acc[date] = [];
+      acc[date].push(tx);
+      return acc;
+    }, {});
+  }, [data]);
 
   const handleExport = async () => {
     if (!canExport) {
@@ -69,7 +121,7 @@ const TransactionsPage = () => {
             headers: { Authorization: `Bearer ${authToken}` },
             responseType: 'blob',
         });
-        
+
         const url = window.URL.createObjectURL(new Blob([response.data]));
         const link = document.createElement('a');
         link.href = url;
@@ -87,48 +139,41 @@ const TransactionsPage = () => {
   };
 
   return (
+      <div className="space-y-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <StatBox title="Total Inflow" value={data.total_inflow} currency={filters.currency} color="text-green-400" />
+          <StatBox title="Total Outflow" value={data.total_outflow} currency={filters.currency} color="text-red-400" />
+          <StatBox title="Net Change" value={data.net_change} currency={filters.currency} color={data.net_change >= 0 ? 'text-green-400' : 'text-red-400'}/>
+        </div>
+        <div>
+          {Object.entries(groupedTransactions).map(([date, txs]) => (
+            <div key={date} className="mb-6">
+              <h3 className="text-sm font-semibold text-neutral-400 py-2 border-b border-neutral-800">{date}</h3>
+              <ul className="divide-y divide-neutral-800">
+                {txs.map(tx => <TransactionRow key={tx.id} tx={tx} currentUserId={dbUser?.id} currency={filters.currency} />)}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
+  return (
     <DashboardLayout pageTitleKey="transactions_title">
       <div className="space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold font-display text-neutral-900 dark:text-white">Transaction History</h1>
-          <p className="mt-1 text-neutral-600 dark:text-neutral-400">View, search, and export your complete transaction record.</p>
-        </div>
-
-        <div className="p-4 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-lg">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="relative lg:col-span-2">
-                    <MagnifyingGlassIcon className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-neutral-400" />
-                    <input type="search" placeholder="Search by description or email..." onChange={handleSearchChange} className="block w-full rounded-md border-0 py-2 pl-10 bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 ring-1 ring-inset ring-neutral-300 dark:ring-neutral-700 placeholder:text-neutral-400 focus:ring-2 focus:ring-inset focus:ring-primary" />
-                </div>
-                <div><input type="date" value={filters.start} onChange={e => setFilters(prev => ({...prev, start: e.target.value}))} className="block w-full rounded-md border-0 py-2 px-3 bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 ring-1 ring-inset ring-neutral-300 dark:ring-neutral-700 focus:ring-2 focus:ring-inset focus:ring-primary" /></div>
-                <div><input type="date" value={filters.end} onChange={e => setFilters(prev => ({...prev, end: e.target.value}))} className="block w-full rounded-md border-0 py-2 px-3 bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 ring-1 ring-inset ring-neutral-300 dark:ring-neutral-700 focus:ring-2 focus:ring-inset focus:ring-primary" /></div>
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <h1 className="text-3xl font-bold font-display text-white">Statements</h1>
+            <div className="flex items-center gap-4">
+                {wallets && <select value={filters.currency} onChange={e => setFilters(prev => ({...prev, currency: e.target.value}))} className="bg-neutral-800 rounded-md border-neutral-700">
+                    {wallets.map(w => <option key={w.currency_code} value={w.currency_code}>{w.currency_code}</option>)}
+                </select>}
+                <input type="date" value={filters.start} onChange={e => setFilters(prev => ({...prev, start: e.target.value}))} className="bg-neutral-800 rounded-md border-neutral-700"/>
+                <input type="date" value={filters.end} onChange={e => setFilters(prev => ({...prev, end: e.target.value}))} className="bg-neutral-800 rounded-md border-neutral-700"/>
+                {canExport ? <Button onClick={()=>{}} variant="secondary"><DocumentArrowDownIcon className="h-5 w-5"/></Button> : <div className="w-10"><UpgradePrompt featureName="" requiredPlan="Premium" /></div>}
             </div>
         </div>
-        
-        <div className="flex justify-end">
-            {canExport ? (
-                <Button onClick={handleExport} isLoading={isExporting} variant="secondary">
-                    <DocumentArrowDownIcon className="h-5 w-5 mr-2" /> Export PDF
-                </Button>
-            ) : <UpgradePrompt featureName="Export Statements" requiredPlan="Premium" />}
-        </div>
-        
-        {/* [THE DEFINITIVE FIX] Pass the currentUserId as a prop */}
-        <TransactionTable transactions={transactions} isLoading={loading} error={error} currentUserId={dbUser?.id} />
-
-        {data && data.total > 0 && (
-            <div className="flex items-center justify-between pt-4">
-                <Button onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1 || loading} variant="secondary">
-                    <ChevronLeftIcon className="h-5 w-5 mr-2"/> Previous
-                </Button>
-                <span className="text-sm text-neutral-600 dark:text-neutral-400">
-                    Page <span className="font-bold text-neutral-900 dark:text-white">{currentPage}</span> of <span className="font-bold text-neutral-900 dark:text-white">{totalPages}</span>
-                </span>
-                <Button onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages || loading} variant="secondary">
-                    Next <ChevronRightIcon className="h-5 w-5 ml-2"/>
-                </Button>
-            </div>
-        )}
+        {renderContent()}
       </div>
     </DashboardLayout>
   );
