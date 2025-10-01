@@ -79,7 +79,6 @@ const Sidebar = ({ onLinkClick }) => {
     { name: t('sidebar_exchange'), href: '/dashboard/exchange', icon: ScaleIcon },
     { name: t('sidebar_transactions'), href: '/dashboard/transactions', icon: ArrowsRightLeftIcon },
     { name: t('sidebar_pay_bills'), href: '/dashboard/pay-bills', icon: ReceiptPercentIcon },
-    { name: t('sidebar_shared_vaults'), href: '/dashboard/vaults', icon: UsersIcon },
     { name: t('sidebar_smart_ussd'), href: '/dashboard/smart-ussd', icon: SignalIcon },
     { name: t('sidebar_savings_vaults'), href: '/dashboard/savings-vaults', icon: BanknotesIcon },
     { name: t('sidebar_my_expenses'), href: '/dashboard/my-expenses', icon: DocumentTextIcon },
@@ -218,3 +217,4 @@ const Sidebar = ({ onLinkClick }) => {
 
 
 export default Sidebar;
+
