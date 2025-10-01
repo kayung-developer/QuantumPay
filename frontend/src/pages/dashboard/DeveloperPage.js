@@ -204,7 +204,7 @@ const DeveloperPage = () => {
     const [copied, setCopied] = useState(false);
 
     // --- [FEATURE GATING LOGIC] ---
-    const apiLimits = useMemo(() => {
+     const apiLimits = useMemo(() => {
         const planId = dbUser?.subscription?.plan?.id || 'free';
         if (planId === 'ultimate') return { name: 'Ultimate', rate_limit: 240, max_webhooks: 10 };
         if (planId === 'premium') return { name: 'Premium', rate_limit: 120, max_webhooks: 3 };
@@ -290,4 +290,3 @@ const DeveloperPage = () => {
 
 
 export default DeveloperPage;
-
