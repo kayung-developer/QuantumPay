@@ -1,8 +1,27 @@
 import React from 'react';
 import { useApi } from '../../hooks/useApi';
 import Spinner from '../common/Spinner';
-import { formatDistanceToNow } from 'date-fns';
+import { formatDistanceToNow, parseISO } from 'date-fns'; // Keep parseISO
 import { ArrowDownCircleIcon, ArrowUpCircleIcon, CheckBadgeIcon } from '@heroicons/react/24/solid';
+
+
+
+const safeFormatDistanceToNow = (dateString) => {
+    try {
+        // If the date string is null, undefined, or empty, return a fallback.
+        if (!dateString) return 'a while ago';
+        // Attempt to parse the date. parseISO is stricter and safer than new Date().
+        const date = parseISO(dateString);
+        // Check if the parsed date is valid before formatting.
+        if (isNaN(date.getTime())) {
+            return 'Invalid date';
+        }
+        return formatDistanceToNow(date, { addSuffix: true });
+    } catch (error) {
+        console.error("Failed to format date string:", dateString, error);
+        return 'Invalid date';
+    }
+};
 
 // A map to associate event types with icons and colors for a rich UI
 const eventMeta = {
@@ -30,7 +49,7 @@ const ActivityItem = ({ item }) => {
                     {new Intl.NumberFormat('en-US', { style: 'currency', currency: item.currency }).format(Math.abs(item.amount))}
                 </p>
                 <p className="text-xs text-neutral-600 dark:text-neutral-400 dark:text-neutral-500">
-                    {formatDistanceToNow(new Date(item.timestamp), { addSuffix: true })}
+                    {safeFormatDistanceToNow(item.timestamp)}
                 </p>
             </div>
         </li>
