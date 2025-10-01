@@ -6,26 +6,28 @@ import { useTranslation } from 'react-i18next';
 import { format, parseISO } from 'date-fns';
 
 // --- Component Imports ---
-import  useApi, { useApiPost } from '../../hooks/useApi';
-import Spinner from '../../components/common/Spinner';
-import Button from '../../components/common/Button';
-import SettingsCard from './SettingsCard'; // <-- The new reusable card
-import { CreditCardIcon } from '@heroicons/react/24/solid';
+import useApi, { useApiPost } from '../../hooks/useApi';
+import Spinner from '../common/Spinner';
+import Button from '../common/Button';
+import SettingsCard from './SettingsCard';
+import { CreditCardIcon, ShieldCheckIcon } from '@heroicons/react/24/solid'; // <-- Import ShieldCheckIcon
+import { useAuth } from '../../context/AuthContext'; // <-- [THE FIX - Step 1] Import useAuth
 
 const SubscriptionSettings = () => {
     const { t } = useTranslation();
+    const { dbUser } = useAuth(); // <-- [THE FIX - Step 2] Get the authenticated user's data
     const { data: subscription, loading, error, request: refetchSubscription } = useApi('/subscriptions/me');
     const { post: cancelSubscription, loading: cancelling } = useApiPost('/subscriptions/cancel');
 
     const handleCancel = async () => {
-        if (window.confirm("Are you sure you want to cancel your subscription? Your benefits will continue until the end of the current billing period.")) {
+        if (window.confirm("Are you sure you want to cancel your subscription?")) {
             const result = await cancelSubscription();
             if (result.success) {
-                // The useApiPost hook shows the success toast automatically.
-                refetchSubscription(); // Refresh the UI to show the 'cancelled' status.
+                refetchSubscription();
             }
         }
     };
+
 
     const renderStatusBadge = (status) => {
         const statusMap = {
@@ -38,6 +40,26 @@ const SubscriptionSettings = () => {
     };
 
     const renderContent = () => {
+         if (dbUser?.role === 'superuser' || dbUser?.role === 'admin') {
+            const planName = dbUser.role === 'superuser' ? 'Ultimate' : 'Premium';
+            return (
+                <SettingsCard
+                    title="Administrator Access"
+                    description={`Your account has elevated privileges.`}
+                >
+                    <div className="text-center p-8">
+                        <ShieldCheckIcon className="h-16 w-16 mx-auto text-primary"/>
+                        <h3 className="mt-4 text-lg font-semibold text-neutral-900 dark:text-white">
+                            Full Access Granted
+                        </h3>
+                        <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">
+                            As a <span className="font-bold capitalize">{dbUser.role}</span>, you have automatic access equivalent to the <span className="font-bold">{planName}</span> plan. All features are unlocked.
+                        </p>
+                    </div>
+                </SettingsCard>
+            );
+        }
+
         if (loading) {
             return (
                 <div className="py-24 flex justify-center items-center">
