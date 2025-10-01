@@ -12,20 +12,6 @@ const IssueCardSchema = Yup.object().shape({
   card_type: Yup.string().oneOf(['virtual', 'physical']).required('Card type is required'),
 });
 
-const IssueCardModal = ({ isOpen, onClose, onSuccess }) => {
-  const { post: issueCard, loading } = useApiPost('/business/cards');
-
-  const handleSubmit = async (values, { resetForm }) => {
-    const payload = {
-      ...values,
-      monthly_limit: parseFloat(values.monthly_limit),
-    };
-    const result = await issueCard(payload);
-    if (result.success) {
-      onSuccess(result.data);
-      resetForm();
-    }
-  };
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Issue New Corporate Card">
@@ -76,5 +62,6 @@ const IssueCardModal = ({ isOpen, onClose, onSuccess }) => {
     </Modal>
   );
 };
+
 
 export default IssueCardModal;
