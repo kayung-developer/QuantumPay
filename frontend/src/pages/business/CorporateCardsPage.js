@@ -36,14 +36,7 @@ const IssueCardModal = ({ isOpen, onClose, onSuccess }) => {
     });
 
     const handleSubmit = async (values) => {
-        // [THE DEFINITIVE FIX]
-        // 1. Convert monthly_limit from a string to a number.
-        // 2. Use the correct 'card_type' from the form values (which is already lowercase 'virtual').
-        const payload = {
-            ...values,
-            monthly_limit: parseFloat(values.monthly_limit),
-            card_type: values.card_type || 'virtual' // Ensure it sends the correct lowercase value
-        };
+        const payload = { ...values, card_type: 'VIRTUAL' }; 
         const result = await issueCard(payload);
         if (result.success) onSuccess();
     };
