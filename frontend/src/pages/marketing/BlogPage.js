@@ -7,8 +7,12 @@ import { format, parseISO } from 'date-fns';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
 
 // --- Reusable, Theme-Aware BlogPostCard Component ---
-const BlogPostCard = ({ post, featured = false }) => (
-    <Link to={`/blog/${post.id}`} className="block h-full">
+const BlogPostCard = ({ post, featured = false }) => {
+ const tagsArray = Array.isArray(post.tags)
+        ? post.tags
+        : (typeof post.tags === 'string' ? post.tags.split(',').map(tag => tag.trim()) : []);
+   return (
+     <Link to={`/blog/${post.id}`} className="block h-full">
         <motion.div
             whileHover={{ y: -5 }}
             className={`bg-white dark:bg-neutral-900 rounded-lg overflow-hidden border border-neutral-200 dark:border-neutral-800 transition-all duration-300 h-full flex flex-col group ${featured ? 'lg:flex-row' : ''}`}
@@ -34,9 +38,9 @@ const BlogPostCard = ({ post, featured = false }) => (
                 </div>
             </div>
         </motion.div>
-    </Link>
-);
-
+        </Link>
+    );
+};
 // --- [NEW] Skeleton Loader Component ---
 const BlogSkeletonLoader = () => (
     <div className="space-y-12 animate-pulse">
@@ -114,7 +118,6 @@ const BlogPage = () => {
 
     return (
         // The main container inherits its base theme from PageWrapper
-        <>
         <div className="py-24 sm:py-32">
             <div className="mx-auto max-w-7xl px-6 lg:px-8">
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="mx-auto max-w-2xl text-center">
@@ -148,9 +151,7 @@ const BlogPage = () => {
                 </div>
             </div>
         </div>
-    </>
     );
 };
-
 
 export default BlogPage;
