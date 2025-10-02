@@ -20,9 +20,11 @@ import { KeyIcon, GlobeAltIcon, PlusIcon, ClipboardDocumentIcon, TrashIcon, Chec
 // =================================================================================
 
 // --- [THEME-AWARE] API Usage & Limits Card ---
-const ApiUsageCard = ({ limits }) => {
+const ApiUsageCard = ({ limits, userRole }) => {
     const { t } = useTranslation();
-    const isUltimateSubscriber = limits.name === 'Ultimate';
+
+    // Determine if the user has top-tier access, either by role or by plan.
+    const hasUltimateAccess = userRole === 'superuser' || userRole === 'admin' || limits.name === 'Ultimate';
 
     return (
         <div className="bg-white dark:bg-neutral-900 shadow border border-neutral-200 dark:border-neutral-800 rounded-lg">
@@ -31,7 +33,14 @@ const ApiUsageCard = ({ limits }) => {
                 <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div>
                         <p className="text-sm font-medium text-neutral-500 dark:text-neutral-400">{t('dev_current_plan')}</p>
-                        <p className="text-xl font-semibold text-neutral-900 dark:text-white mt-1">{limits.name}</p>
+                        {/* If superuser, show a special badge */}
+                        <p className="text-xl font-semibold text-neutral-900 dark:text-white mt-1">
+                            {userRole === 'superuser' || userRole === 'admin' ? (
+                                <span className="capitalize">{userRole} Access</span>
+                            ) : (
+                                limits.name
+                            )}
+                        </p>
                     </div>
                     <div>
                         <p className="text-sm font-medium text-neutral-500 dark:text-neutral-400">{t('dev_rate_limit')}</p>
@@ -42,12 +51,12 @@ const ApiUsageCard = ({ limits }) => {
                     <div>
                         <p className="text-sm font-medium text-neutral-500 dark:text-neutral-400">{t('dev_webhooks')}</p>
                         <p className="text-xl font-semibold text-neutral-900 dark:text-white mt-1">
-                            {/* This would be dynamic in a full component */}
                             {`0 / ${limits.max_webhooks} used`}
                         </p>
                     </div>
                 </div>
-                {!isUltimateSubscriber && (
+                {/* [THE FIX] Only show the upgrade prompt if the user does NOT have ultimate access. */}
+                {!hasUltimateAccess && (
                      <div className="mt-6 p-4 bg-primary/10 dark:bg-primary/20 rounded-lg flex items-center justify-between">
                          <div className="flex items-center">
                              <SparklesIcon className="h-6 w-6 text-primary mr-3 flex-shrink-0"/>
@@ -62,6 +71,7 @@ const ApiUsageCard = ({ limits }) => {
         </div>
     );
 };
+
 
 // --- [THEME-AWARE] API Keys Manager ---
 const ApiKeysManager = ({ keys, loading, onRevoke, onGenerate }) => {
