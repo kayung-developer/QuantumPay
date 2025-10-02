@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import FormInput from '../../common/FormInput';
@@ -9,11 +9,17 @@ import { motion } from 'framer-motion';
 
 const BillerPaymentForm = ({ biller, onPaymentSuccess }) => {
     const [customerDetails, setCustomerDetails] = useState(null);
-    // The form is considered validated if the biller doesn't require it, or if validation succeeds.
-    const [isValidated, setIsValidated] = useState(!biller.requires_validation);
+    const [isValidated, setIsValidated] = useState(!biller.provider_mappings[0]?.requires_validation);
 
     const { post: validateCustomer, loading: validating } = useApiPost('/bills/validate-customer');
     const { post: payBill, loading: paying } = useApiPost('/bills/pay');
+
+    const providerDetails = useMemo(() => {
+        if (!biller || !biller.provider_mappings || biller.provider_mappings.length === 0) {
+            return { provider_name: 'unknown', fee: 0.0 };
+        }
+        return biller.provider_mappings[0];
+    }, [biller]);
 
     const paymentSchema = Yup.object().shape({
         customer_identifier: Yup.string().required('This field is required'),
@@ -22,16 +28,16 @@ const BillerPaymentForm = ({ biller, onPaymentSuccess }) => {
           .required('Amount is required'),
     });
 
-    const handleValidation = async (values) => {
+   const handleValidation = async (values) => {
         const payload = {
             biller_id: biller.id,
-            provider_name: biller.provider,
+            provider_name: providerDetails.provider_name, // Use safe value
             customer_id: values.customer_identifier,
         };
         const result = await validateCustomer(payload);
-
         if (result.success && result.data.status === 'success') {
             setCustomerDetails(result.data);
+
             setIsValidated(true);
             toast.success(`Validated: ${result.data.name}`);
         } else {
@@ -43,8 +49,8 @@ const BillerPaymentForm = ({ biller, onPaymentSuccess }) => {
     const handleSubmitPayment = async (values) => {
         const payload = {
             biller_id: biller.id,
-            provider_name: biller.provider,
-            biller_category: biller.category,
+            provider_name: providerDetails.provider_name, // Use safe value
+            biller_category: biller.category.id, // Use the category ID
             customer_identifier: values.customer_identifier,
             amount: parseFloat(values.amount),
         };
@@ -108,7 +114,7 @@ const BillerPaymentForm = ({ biller, onPaymentSuccess }) => {
                                 </Button>
                             )}
                              <p className="text-xs text-neutral-500 mt-2">
-                                A service fee of {(biller.fee).toFixed(2)} may apply.
+                                A service fee of {(providerDetails.fee || 0).toFixed(2)} may apply.
                              </p>
                         </div>
                     </Form>
