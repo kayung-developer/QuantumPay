@@ -1,3 +1,5 @@
+// FILE: frontend/src/pages/marketing/BlogPage.js
+
 import React, { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { useApi } from '../../hooks/useApi';
@@ -5,39 +7,54 @@ import Spinner from '../../components/common/Spinner';
 import { Link } from 'react-router-dom';
 import { format, parseISO } from 'date-fns';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
+import PageWrapper from '../../components/layout/PageWrapper'; // Import PageWrapper
 
 // --- Reusable, Theme-Aware BlogPostCard Component ---
 const BlogPostCard = ({ post, featured = false }) => {
- const tagsArray = Array.isArray(post.tags)
-        ? post.tags
-        : (typeof post.tags === 'string' ? post.tags.split(',').map(tag => tag.trim()) : []);
-   return (
-     <Link to={`/blog/${post.id}`} className="block h-full">
-        <motion.div
-            whileHover={{ y: -5 }}
-            className={`bg-white dark:bg-neutral-900 rounded-lg overflow-hidden border border-neutral-200 dark:border-neutral-800 transition-all duration-300 h-full flex flex-col group ${featured ? 'lg:flex-row' : ''}`}
-        >
-            <div className={`flex-shrink-0 overflow-hidden ${featured ? 'lg:w-1/2' : ''}`}>
-                <img className="h-48 w-full object-cover group-hover:scale-105 transition-transform duration-300" src={post.image_url} alt={post.title} />
-            </div>
-            <div className="p-6 flex flex-col justify-between flex-grow">
-                <div>
-                    <div className="flex items-center space-x-2">
-                        {post.tags.map(tag => (
-                            <span key={tag} className="px-2 py-1 text-xs font-medium text-primary bg-primary/10 dark:bg-primary/20 rounded-full capitalize">{tag}</span>
-                        ))}
+
+    // [THE DEFINITIVE, FINAL FIX]
+    // This safeguard ensures `tagsArray` is ALWAYS an array, preventing the .map() crash.
+    const tagsArray = useMemo(() => {
+        // If post.tags is already an array, use it directly.
+        if (Array.isArray(post.tags)) {
+            return post.tags;
+        }
+        // If it's a string, split it by the comma and trim whitespace from each tag.
+        if (typeof post.tags === 'string') {
+            return post.tags.split(',').map(tag => tag.trim()).filter(Boolean); // filter(Boolean) removes any empty strings
+        }
+        // If it's anything else (null, undefined, etc.), return an empty array.
+        return [];
+    }, [post.tags]);
+
+    return (
+        <Link to={`/blog/${post.id}`} className="block h-full">
+            <motion.div
+                whileHover={{ y: -5 }}
+                className={`bg-white dark:bg-neutral-900 rounded-lg overflow-hidden border border-neutral-200 dark:border-neutral-800 transition-all duration-300 h-full flex flex-col group ${featured ? 'lg:flex-row' : ''}`}
+            >
+                <div className={`flex-shrink-0 overflow-hidden ${featured ? 'lg:w-1/2' : ''}`}>
+                    <img className="h-48 w-full object-cover group-hover:scale-105 transition-transform duration-300" src={post.image_url} alt={post.title} />
+                </div>
+                <div className="p-6 flex flex-col justify-between flex-grow">
+                    <div>
+                        <div className="flex items-center space-x-2 flex-wrap gap-y-2">
+                            {/* This now safely maps over the guaranteed 'tagsArray' */}
+                            {tagsArray.map(tag => (
+                                <span key={tag} className="px-2 py-1 text-xs font-medium text-primary bg-primary/10 dark:bg-primary/20 rounded-full capitalize">{tag}</span>
+                            ))}
+                        </div>
+                        <h3 className="mt-4 text-xl font-semibold text-neutral-900 dark:text-white font-display group-hover:text-primary transition-colors">{post.title}</h3>
+                        <p className="mt-2 text-neutral-600 dark:text-neutral-400 text-sm line-clamp-3">{post.summary}</p>
                     </div>
-                    <h3 className="mt-4 text-xl font-semibold text-neutral-900 dark:text-white font-display group-hover:text-primary transition-colors">{post.title}</h3>
-                    <p className="mt-2 text-neutral-600 dark:text-neutral-400 text-sm line-clamp-3">{post.summary}</p>
+                    <div className="mt-4 flex items-center justify-between text-xs text-neutral-500 dark:text-neutral-500">
+                        <span>{post.author?.full_name || 'QuantumPay Staff'} &bull; {format(parseISO(post.publication_date), 'MMM d, yyyy')}</span>
+                        <span className="flex items-center font-semibold text-primary opacity-0 group-hover:opacity-100 transition-opacity">
+                            Read More <ArrowRightIcon className="h-4 w-4 ml-1"/>
+                        </span>
+                    </div>
                 </div>
-                <div className="mt-4 flex items-center justify-between text-xs text-neutral-500 dark:text-neutral-500">
-                    <span>{post.author} &bull; {format(parseISO(post.publication_date), 'MMM d, yyyy')}</span>
-                    <span className="flex items-center font-semibold text-primary opacity-0 group-hover:opacity-100 transition-opacity">
-                        Read More <ArrowRightIcon className="h-4 w-4 ml-1"/>
-                    </span>
-                </div>
-            </div>
-        </motion.div>
+            </motion.div>
         </Link>
     );
 };
