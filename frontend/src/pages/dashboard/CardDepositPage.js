@@ -28,11 +28,18 @@ const luhnCheck = (val) => {
 const CardDepositSchema = Yup.object().shape({
   amount: Yup.number().min(100, 'Minimum deposit is NGN 100').required('Amount is required'),
   number: Yup.string()
-    .matches(/^[0-9]{15,19}$/, 'Enter a valid card number')
-    .test('luhn-check', 'Invalid card number', value => value ? luhnCheck(value) : false)
-    .required('Card number is required'),
+    .required('Card number is required')
+    // [THE DEFINITIVE FIX]
+    // Perform the Luhn check on the transformed value by chaining the test AFTER the transform.
+    // This ensures we are always checking a clean string of digits.
+    .transform(value => value.replace(/\s/g, ''))
+    .test('luhn-check', 'Invalid card number checksum', value => {
+        if (!value) return false;
+        return luhnCheck(value);
+    })
+    .matches(/^[0-9]{15,19}$/, 'Enter a valid card number'), // This check now also runs on the clean number
   expiry_month: Yup.string().matches(/^(0[1-9]|1[0-2])$/, 'MM').required('Required'),
-  expiry_year: Yup.string().matches(/^(20)\d{2}$/, 'YYYY').required('Required'),
+  expiry_year: Yup.string().matches(/^20\d{2}$/, 'YYYY').required('Required'),
   cvc: Yup.string().matches(/^[0-9]{3,4}$/, 'CVC').required('Required'),
 });
 
