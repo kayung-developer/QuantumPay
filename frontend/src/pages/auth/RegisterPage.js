@@ -32,9 +32,23 @@ const RegisterPage = () => {
     const { t } = useTranslation();
 
     const RegisterSchema = Yup.object().shape({
-        full_name: Yup.string().min(2, t('validation.too_short')).required(t('validation.required')),
-        email: Yup.string().email(t('validation.email_invalid')).required(t('validation.required')),
-        password: Yup.string().min(8, t('validation.password_too_short', { min: 8 })).required(t('validation.required')),
+        full_name: Yup.string()
+            .min(2, t('validation.too_short'))
+            .required(t('validation.required')),
+        email: Yup.string()
+            .email(t('validation.email_invalid'))
+            .matches(
+          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+          "Please enter a valid email address."
+            )
+            .required(t('validation.required')),
+        password: Yup.string()
+            .min(8, 'Password must be at least 8 characters long.')
+            .matches(
+                /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])/,
+                "Must contain at least one uppercase letter, one lowercase letter, one number, and one special character."
+            )
+            .required(t('validation.required')),
     });
 
     return (
@@ -85,7 +99,7 @@ const RegisterPage = () => {
                             <Form className="space-y-4">
                                 <FormInput label={t('full_name_label')} name="full_name" />
                                 <FormInput label={t('email_address_label')} name="email" type="email" />
-                                <FormInput label={t('password_label')} name="password" type="password" />
+                                <FormInput label={t('password_label')} name="password" type="password" helpText="Min. 8 characters, with uppercase, lowercase, number, and special character."/>
                                 <div>
                                     <Button type="submit" isLoading={isSubmitting} fullWidth size="lg">{t('create_account_button')}</Button>
                                 </div>
