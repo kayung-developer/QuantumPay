@@ -176,9 +176,9 @@ const SupportPage = () => {
                         </div>
                     </div>
                 </div>
-            </div>
-        </PageWrapper>
+            </PageWrapper>
     );
 };
 
 export default SupportPage;
+
