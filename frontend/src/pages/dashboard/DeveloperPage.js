@@ -214,10 +214,25 @@ const DeveloperPage = () => {
     const [copied, setCopied] = useState(false);
 
     // --- [FEATURE GATING LOGIC] ---
-     const apiLimits = useMemo(() => {
-        const planId = dbUser?.subscription?.plan?.id || 'free';
-        if (planId === 'ultimate') return { name: 'Ultimate', rate_limit: 240, max_webhooks: 10 };
-        if (planId === 'premium') return { name: 'Premium', rate_limit: 120, max_webhooks: 3 };
+    const apiLimits = useMemo(() => {
+        // 1. Check for role-based overrides first.
+        if (dbUser?.role === 'superuser') {
+            return { name: 'Ultimate', rate_limit: 240, max_webhooks: 10 };
+        }
+        if (dbUser?.role === 'admin') {
+            return { name: 'Premium', rate_limit: 120, max_webhooks: 3 };
+        }
+
+        // 2. If not an admin, check for an active subscription.
+        const planId = dbUser?.subscription?.plan?.id;
+        if (planId === 'ultimate') {
+            return { name: 'Ultimate', rate_limit: 240, max_webhooks: 10 };
+        }
+        if (planId === 'premium') {
+            return { name: 'Premium', rate_limit: 120, max_webhooks: 3 };
+        }
+
+        // 3. If no role override and no active subscription, default to Free.
         return { name: 'Free', rate_limit: 60, max_webhooks: 1 };
     }, [dbUser]);
 
@@ -300,3 +315,4 @@ const DeveloperPage = () => {
 
 
 export default DeveloperPage;
+
