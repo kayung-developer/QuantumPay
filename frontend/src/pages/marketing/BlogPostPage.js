@@ -8,6 +8,7 @@ import { format, parseISO } from 'date-fns';
 import { ArrowLeftIcon, ShareIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 import Button from '../../components/common/Button';
 import PageWrapper from '../../components/layout/PageWrapper';
+import Spinner from '../../components/common/Spinner';
 
 // --- [NEW] Skeleton Loader Component ---
 const BlogPostSkeletonLoader = () => (
@@ -53,7 +54,8 @@ const BlogPostPage = () => {
 
     const renderContent = () => {
         if (loading) {
-            return <BlogPostSkeletonLoader />;
+            // Use a simpler spinner for the detail page
+            return <div className="flex justify-center py-20"><Spinner size="lg" /></div>;
         }
         if (error) {
             return (
@@ -68,6 +70,13 @@ const BlogPostPage = () => {
         if (!post) {
             return null;
         }
+
+        // [THE DEFINITIVE, FINAL FIX]
+        // Create a guaranteed safe array from the 'tags' data, just like in the previous fix.
+        const tagsArray = Array.isArray(post.tags)
+            ? post.tags
+            : (typeof post.tags === 'string' ? post.tags.split(',').map(tag => tag.trim()).filter(Boolean) : []);
+
         return (
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -75,8 +84,9 @@ const BlogPostPage = () => {
                 transition={{ duration: 0.8 }}
             >
                 <div className="text-center mb-12">
-                    <div className="flex items-center justify-center space-x-2">
-                        {post.tags.map(tag => (
+                    <div className="flex items-center justify-center space-x-2 flex-wrap gap-y-2">
+                        {/* This now safely maps over the guaranteed 'tagsArray' */}
+                        {tagsArray.map(tag => (
                             <span key={tag} className="px-2 py-1 text-xs font-medium text-primary bg-primary/10 dark:bg-primary/20 rounded-full capitalize">{tag}</span>
                         ))}
                     </div>
