@@ -6,7 +6,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
 import { Disclosure } from '@headlessui/react';
-import { MinusSmallIcon, PlusSmallIcon, LifebuoyIcon, EnvelopeIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
+import { MinusSmallIcon, PlusSmallIcon, LifebuoyIcon, EnvelopeIcon, CheckCircleIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 
 // --- Component Imports ---
 import FormInput from '../../components/common/FormInput';
@@ -181,4 +181,5 @@ const SupportPage = () => {
 };
 
 export default SupportPage;
+
 
