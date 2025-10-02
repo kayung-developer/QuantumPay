@@ -77,21 +77,20 @@ const LoginPage = () => {
           </div>
 
           <Formik
-            initialValues={{ email: '', password: '' }}
-            validationSchema={LoginSchema}
-            onSubmit={async (values, { setSubmitting, setFieldError }) => {
-              try {
-                await login(values.email, values.password);
-                navigate(from, { replace: true });
-              } catch (error) {
-                // The error toast is handled automatically in AuthContext.
-                // We can also show a specific error message under the password field.
-                setFieldError('password', t('invalid_credentials_error'));
-              } finally {
-                setSubmitting(false);
-              }
-            }}
-          >
+                    initialValues={{ email: '', password: '' }}
+                    validationSchema={LoginSchema}
+                    onSubmit={async (values, { setSubmitting, setFieldError }) => {
+                        try {
+                            // The values are already trimmed and lowercased by the schema
+                            await login(values.email, values.password);
+                            navigate(from, { replace: true });
+                        } catch (error) {
+                            setFieldError('password', t('invalid_credentials_error'));
+                        } finally {
+                            setSubmitting(false);
+                        }
+                    }}
+                >
             {({ isSubmitting }) => (
               <Form className="space-y-6">
                 {/* [THEME-AWARE & I18N] The FormInput component is already theme-aware. */}
@@ -134,3 +133,4 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
+
