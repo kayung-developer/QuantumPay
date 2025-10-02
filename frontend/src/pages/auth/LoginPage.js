@@ -33,12 +33,24 @@ const LoginPage = () => {
   // [I18N] Use translation keys for validation messages.
   const LoginSchema = Yup.object().shape({
     email: Yup.string()
+      .trim() // Remove leading/trailing whitespace
+      .lowercase() // Convert to lowercase
       .email(t('validation.email_invalid'))
+      // A stricter regex for email validation
+      .matches(
+          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+          "Please enter a valid email address."
+      )
       .required(t('validation.required')),
     password: Yup.string()
-      .min(6, t('validation.password_too_short', { min: 6 })) // Ensure you have this key in i18n.js
+      .matches(
+                /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])/,
+                "Must contain at least one uppercase letter, one lowercase letter, one number, and one special character."
+      )
+      // No need for a complex password check on login, only on registration.
       .required(t('validation.required')),
   });
+
 
   return (
     // [THEME-AWARE] The background colors and glow effect are correctly applied for both themes.
