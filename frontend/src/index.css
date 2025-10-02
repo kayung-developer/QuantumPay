@@ -1,29 +1,31 @@
 /*
  * This file injects Tailwind's base, components, and utilities styles.
  */
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-  /*
-   * [THE DEFINITIVE FIX]
-   * The <body> tag should NOT have hardcoded background or text colors.
-   * This allows our theme-aware layout components (like PageWrapper and DashboardLayout)
-   * to take full control of the theme.
-   * We only keep the essential font and anti-aliasing styles here.
-  */
   body {
     @apply font-sans antialiased;
   }
 
-  /*
-   * We can apply theme-aware text color to headings globally.
-   * This is a good practice.
-  */
   h1, h2, h3, h4, h5, h6 {
     @apply font-display text-neutral-900 dark:text-white;
+  }
+
+  /* --- [THE DEFINITIVE FIX - PART 1] --- */
+  /* Define the theme-aware colors for the logo. */
+  :root {
+    /* For Light Mode */
+    --logo-gradient-start: #5E54F3; /* primary */
+    --logo-gradient-end: #2DD4BF;   /* secondary-light, like teal */
+  }
+
+  html.dark {
+    /* For Dark Mode */
+    --logo-gradient-start: #A5B4FC; /* A lighter, more vibrant purple (indigo-300) */
+    --logo-gradient-end: #5EEAD4;   /* A lighter, brighter teal (teal-300) */
   }
 }
 
