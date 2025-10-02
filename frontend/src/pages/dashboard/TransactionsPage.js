@@ -1,6 +1,6 @@
 // FILE: src/pages/dashboard/TransactionsPage.js
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react'; // <-- Import useCallback
 import { useTranslation } from 'react-i18next';
 import { format, parseISO, subDays } from 'date-fns';
 import { motion } from 'framer-motion';
@@ -13,16 +13,14 @@ import UpgradePrompt from '../../components/common/UpgradePrompt';
 
 // --- Hook Imports ---
 import { useAuth } from '../../context/AuthContext';
-import { useApi, useApiPost } from '../../hooks/useApi';
+import { useApi } from '../../hooks/useApi'; // useApiPost is not needed here
 import apiClient from '../../api/axiosConfig';
 import { toast } from 'react-hot-toast';
 
 // --- Icon Imports ---
 import { DocumentArrowDownIcon, ArrowDownCircleIcon, ArrowUpCircleIcon, BanknotesIcon, ArrowPathIcon } from '@heroicons/react/24/outline';
 
-// --- [THE DEFINITIVE FIX - PART 2] ---
-
-// --- Sub-Components for the new design ---
+// --- Sub-Components (These are correct) ---
 
 const StatBox = ({ title, value, currency, color = 'text-white' }) => (
     <div className="bg-neutral-800 p-4 rounded-lg">
@@ -68,7 +66,7 @@ const TransactionRow = ({ tx, currentUserId, currency }) => {
 
 const TransactionsPage = () => {
   const { t } = useTranslation();
-  const { hasActiveSubscription, dbUser } = useAuth();
+  const { hasActiveSubscription, dbUser, authToken } = useAuth(); // <-- [THE FIX] Get authToken
   const { data: wallets, loading: walletsLoading } = useApi('/wallets/me');
 
   const [filters, setFilters] = useState({
@@ -77,13 +75,13 @@ const TransactionsPage = () => {
       currency: 'USD',
   });
 
+  // [THE FIX] Define the isExporting state and its setter
+  const [isExporting, setIsExporting] = useState(false);
+
   const canExport = hasActiveSubscription('premium');
 
-  // Conditionally fetch data only when a currency is selected
-  const { data, loading, error, request: fetchTransactions } = useApi(
-      filters.currency ? `/transactions/advanced-history?start_date=${filters.start}&end_date=${filters.end}&currency=${filters.currency}` : null,
-      {}, true // manual fetch
-  );
+  const apiUrl = filters.currency ? `/transactions/advanced-history?start_date=${filters.start}&end_date=${filters.end}&currency=${filters.currency}` : null;
+  const { data, loading, error, request: fetchTransactions } = useApi(apiUrl, {}, true);
 
   // Set default currency once wallets are loaded
   useEffect(() => {
@@ -93,11 +91,15 @@ const TransactionsPage = () => {
   }, [wallets, filters.currency]);
 
   // Fetch transactions when filters change
-  useEffect(() => {
+  const fetchCallback = useCallback(() => {
     if(filters.currency) {
       fetchTransactions();
     }
   }, [filters.currency, filters.start, filters.end, fetchTransactions]);
+
+  useEffect(() => {
+    fetchCallback();
+  }, [fetchCallback]);
 
   const groupedTransactions = useMemo(() => {
     if (!data?.transactions) return {};
@@ -114,11 +116,11 @@ const TransactionsPage = () => {
         toast.error("Please upgrade to a Premium plan to export statements.");
         return;
     }
-    setIsExporting(true);
+    setIsExporting(true); // <-- [THE FIX] Use the state setter
     try {
         const response = await apiClient.get('/analytics/export-statement', {
             params: { start_date: filters.start, end_date: filters.end },
-            headers: { Authorization: `Bearer ${authToken}` },
+            headers: { Authorization: `Bearer ${authToken}` }, // <-- [THE FIX] Use the authToken
             responseType: 'blob',
         });
 
@@ -130,16 +132,25 @@ const TransactionsPage = () => {
         link.click();
         link.remove();
         toast.success("Your statement has been downloaded.");
+
     } catch (err) {
         const errorMessage = err.response?.data?.detail || "Could not generate your statement.";
         toast.error(errorMessage);
     } finally {
-        setIsExporting(false);
+        setIsExporting(false); // <-- [THE FIX] Use the state setter
     }
   };
 
-  return (
-      <div className="space-y-8">
+  // [THE DEFINITIVE FIX] Wrap the main JSX in a renderContent function.
+  const renderContent = () => {
+    if (walletsLoading) return <div className="flex justify-center p-8"><Spinner /></div>;
+    if (wallets && wallets.length === 0) return <p className="text-center text-neutral-400 py-10">You need a wallet to view transactions.</p>;
+    if (loading) return <div className="flex justify-center p-8"><Spinner /></div>;
+    if (error) return <p className="text-center text-red-400 py-10">Could not load transaction history for {filters.currency}.</p>;
+    if (!data || data.transactions.length === 0) return <p className="text-center text-neutral-400 py-10">No transactions found for the selected period.</p>;
+
+    return (
+      <div className="space-y-8 mt-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <StatBox title="Total Inflow" value={data.total_inflow} currency={filters.currency} color="text-green-400" />
           <StatBox title="Total Outflow" value={data.total_outflow} currency={filters.currency} color="text-red-400" />
@@ -157,22 +168,31 @@ const TransactionsPage = () => {
         </div>
       </div>
     );
+  };
 
   return (
     <DashboardLayout pageTitleKey="transactions_title">
       <div className="space-y-6">
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <h1 className="text-3xl font-bold font-display text-white">Statements</h1>
-            <div className="flex items-center gap-4">
-                {wallets && <select value={filters.currency} onChange={e => setFilters(prev => ({...prev, currency: e.target.value}))} className="bg-neutral-800 rounded-md border-neutral-700">
+            <div className="flex items-center gap-4 bg-neutral-900 p-2 rounded-lg">
+                {wallets && <select value={filters.currency} onChange={e => setFilters(prev => ({...prev, currency: e.target.value}))} className="bg-neutral-800 rounded-md border-neutral-700 text-white focus:ring-primary">
                     {wallets.map(w => <option key={w.currency_code} value={w.currency_code}>{w.currency_code}</option>)}
                 </select>}
-                <input type="date" value={filters.start} onChange={e => setFilters(prev => ({...prev, start: e.target.value}))} className="bg-neutral-800 rounded-md border-neutral-700"/>
-                <input type="date" value={filters.end} onChange={e => setFilters(prev => ({...prev, end: e.target.value}))} className="bg-neutral-800 rounded-md border-neutral-700"/>
-                {canExport ? <Button onClick={()=>{}} variant="secondary"><DocumentArrowDownIcon className="h-5 w-5"/></Button> : <div className="w-10"><UpgradePrompt featureName="" requiredPlan="Premium" /></div>}
+                <input type="date" value={filters.start} onChange={e => setFilters(prev => ({...prev, start: e.target.value}))} className="bg-neutral-800 rounded-md border-neutral-700 text-white focus:ring-primary"/>
+                <input type="date" value={filters.end} onChange={e => setFilters(prev => ({...prev, end: e.target.value}))} className="bg-neutral-800 rounded-md border-neutral-700 text-white focus:ring-primary"/>
+                {canExport ? (
+                    <Button onClick={handleExport} isLoading={isExporting} variant="secondary" className="!py-2">
+                        <DocumentArrowDownIcon className="h-5 w-5"/>
+                    </Button>
+                ) : (
+                    <div className="w-10 h-10 flex items-center justify-center">
+                        <UpgradePrompt featureName="" requiredPlan="Premium" />
+                    </div>
+                )}
             </div>
         </div>
-        {renderContent()}
+        {renderContent()} {/* <-- [THE FIX] Call the render function */}
       </div>
     </DashboardLayout>
   );
