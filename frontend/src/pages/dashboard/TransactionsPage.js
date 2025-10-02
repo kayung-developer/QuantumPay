@@ -174,7 +174,7 @@ const TransactionsPage = () => {
     <DashboardLayout pageTitleKey="transactions_title">
       <div className="space-y-6">
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <h1 className="text-3xl font-bold font-display text-white">Statements</h1>
+            <h1 className="text-3xl font-bold font-display text-neutral-900 dark:text-white">Statements</h1>
             <div className="flex items-center gap-4 bg-neutral-900 p-2 rounded-lg">
                 {wallets && <select value={filters.currency} onChange={e => setFilters(prev => ({...prev, currency: e.target.value}))} className="bg-neutral-800 rounded-md border-neutral-700 text-white focus:ring-primary">
                     {wallets.map(w => <option key={w.currency_code} value={w.currency_code}>{w.currency_code}</option>)}
@@ -199,3 +199,4 @@ const TransactionsPage = () => {
 };
 
 export default TransactionsPage;
+
