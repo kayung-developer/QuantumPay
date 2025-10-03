@@ -359,7 +359,7 @@ const DeveloperPage = () => {
           <CreateWebhookModal
                 isOpen={modal.type === 'createWebhook'}
                 onClose={() => setModal({ type: null, data: null })}
-                onSuccess={() => {handleWebhookCreated}}
+                onSuccess={handleWebhookCreated}
           />
         </DashboardLayout>
     );
@@ -367,5 +367,6 @@ const DeveloperPage = () => {
 
 
 export default DeveloperPage;
+
 
 
