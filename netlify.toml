@@ -1,17 +1,31 @@
-# FILE: netlify.toml (at the VERY ROOT of your repository)
+# FILE: frontend/netlify.toml
 
+# This is the main build command for your React app.
 [build]
-  # Base directory: Where your frontend code lives.
+  command = "npm run build"
+  publish = "build" # Or "dist" depending on your framework
   base = "frontend"
 
-  # Build command: To be run inside the 'base' directory.
-  command = "npm run build"
-
-  # Publish directory: The folder to deploy, relative to the 'base' directory.
-  # Since the `build` folder is created inside `frontend`, this is the correct path.
-  publish = "build"
-
+# This rule handles redirects for a Single-Page Application (SPA)
+# It ensures that refreshing on any page (e.g., /dashboard/developer) still works.
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+
+# [THE DEFINITIVE FIX FOR CHUNKLOADERROR]
+# This section sets the caching headers to prevent stale deployments.
+
+# Rule 1: For your main index.html file (and any non-static paths)
+# Tell browsers to cache it, but ALWAYS re-check with the server for a new version.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    !/static/* = "public, max-age=0, must-revalidate"
+
+# Rule 2: For all your static assets (JS, CSS chunks)
+# Because their filenames have a unique hash, they can be cached "forever".
+[[headers]]
+  for = "/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
