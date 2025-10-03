@@ -125,7 +125,7 @@ const BillerHubPage = () => {
                 </div>
             );
         }
-
+    };
         return (
         <DashboardLayout pageTitleKey="pay_bills_title">
              <div className="max-w-4xl mx-auto">
@@ -155,3 +155,4 @@ const BillerHubPage = () => {
 };
 
 export default BillerHubPage;
+
