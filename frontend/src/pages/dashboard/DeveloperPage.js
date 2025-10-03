@@ -27,7 +27,7 @@ const ApiUsageCard = ({ limits, userRole }) => {
     const hasUltimateAccess = userRole === 'superuser' || userRole === 'admin' || limits.name === 'Ultimate';
 
     return (
-        <div className="bg-white dark:bg-neutral-900 shadow border border-neutral-200 dark:border-neutral-800 rounded-lg">
+        <div className="bg-white dark:bg-neutral-900 shadow dark:shadow-2xl border border-neutral-200 dark:border-neutral-800 rounded-lg">
             <div className="p-6">
                 <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">{t('dev_usage_title')}</h2>
                 <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -159,23 +159,28 @@ const WebhooksManager = ({ webhooks, loading, maxWebhooks, onGenerate }) => {
             <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
                     <GlobeAltIcon className="h-6 w-6 text-primary"/>
-                    <h2 className="text-2xl font-semibold font-display text-white">Webhook Endpoints</h2>
+                    <h2 className="text-2xl font-semibold font-display text-neutral-600 dark:text-white">Webhook Endpoints</h2>
                 </div>
                 <Button onClick={onGenerate} disabled={!canCreate}>
                     <PlusIcon className="h-5 w-5 mr-2"/>Create Webhook
                 </Button>
             </div>
              {!canCreate && <p className="text-sm text-amber-400">You have reached the maximum of {maxWebhooks} webhooks for your plan. Upgrade to create more.</p>}
-            <div className="bg-neutral-900 border border-neutral-800 rounded-lg shadow overflow-hidden">
+            <<div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-lg shadow overflow-hidden">
                 {loading ? <div className="p-8 text-center"><Spinner/></div> : (
-                    <table className="min-w-full divide-y divide-neutral-800">
-                        {/* ... table headers ... */}
-                        <tbody>
+                     <table className="min-w-full divide-y divide-neutral-200 dark:divide-neutral-800">
+                        <thead className="bg-neutral-50 dark:bg-neutral-800/50">
+                             <tr>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase">Endpoint URL</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase">Mode</th>
+                                <th className="px-6 py-3 text-right text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-neutral-200 dark:divide-neutral-800">
                             {webhooks?.map(hook => (
-                                <tr key={hook.id}>
-                                    <td className="px-6 py-4 font-mono text-neutral-300">{hook.url}</td>
-                                    <td className="px-6 py-4 text-neutral-400">{hook.is_live_mode ? 'Live' : 'Test'}</td>
-                                    <td className="px-6 py-4 text-right">
+                                <tr key={hook.id} className="hover:bg-neutral-50 dark:hover:bg-neutral-800/50">
+                                    <td className="px-6 py-4 font-mono text-neutral-700 dark:text-neutral-300 truncate">{hook.url}</td>
+                                    <td className="px-6 py-4 text-neutral-600 dark:text-neutral-400">{hook.is_live_mode ? 'Live' : 'Test'}</td>
                                         <Button variant="ghost" size="sm"><TrashIcon className="h-5 w-5 text-red-500"/></Button>
                                     </td>
                                 </tr>
@@ -183,7 +188,7 @@ const WebhooksManager = ({ webhooks, loading, maxWebhooks, onGenerate }) => {
                         </tbody>
                     </table>
                 )}
-                {webhooks?.length === 0 && !loading && <p className="p-8 text-center text-neutral-500">No webhook endpoints created yet.</p>}
+                {webhooks?.length === 0 && !loading && <p className="p-8 text-center text-neutral-500 dark:text-neutral-400">No webhook endpoints created yet.</p>}
             </div>
         </div>
     );
@@ -367,6 +372,3 @@ const DeveloperPage = () => {
 
 
 export default DeveloperPage;
-
-
-
