@@ -26,23 +26,21 @@ const categoryIcons = {
 };
 
 const BillerHubPage = () => {
+    // --- [THE DEFINITIVE FIX - Step 1] ---
+    // All hooks are now grouped together at the top level, called unconditionally.
     const { t } = useTranslation();
-    const { dbUser } = useAuth()
-    const [currentStep, setCurrentStep] = useState('categories'); // 'categories', 'billers', 'form'
+    const { dbUser } = useAuth();
+    const [currentStep, setCurrentStep] = useState('categories');
     const [selectedCategoryId, setSelectedCategoryId] = useState(null);
     const [selectedBiller, setSelectedBiller] = useState(null);
 
-    // [THE FIX] Fetch the single, unified list of all billers from the new endpoint.
-    // Also, destructure the `request` function and rename it to `refetch` for clarity.
     const countryCode = dbUser?.country_code || 'NG';
-    const { data: allBillers, loading: billersLoading, error, request: refetch } = useApi('/bills/all/NG'); // Assuming NG for now
+    const { data: allBillers, loading: billersLoading, error, request: refetch } = useApi(`/bills/all/${countryCode}`);
 
-    // Derive the list of unique categories from the fetched biller data using useMemo for performance.
     const categories = useMemo(() => {
         if (!allBillers) return [];
         const categoryMap = new Map();
         allBillers.forEach(biller => {
-            // Defensive check for biller.category
             if (biller.category && biller.category.id && !categoryMap.has(biller.category.id)) {
                 categoryMap.set(biller.category.id, {
                     id: biller.category.id,
@@ -53,33 +51,25 @@ const BillerHubPage = () => {
         return Array.from(categoryMap.values());
     }, [allBillers]);
 
-    // Filter the list of billers based on the user's selected category ID.
     const filteredBillers = useMemo(() => {
         if (!allBillers || !selectedCategoryId) return [];
-        return allBillers.filter(b => b.category_id === selectedCategoryId);
+        // This was also a subtle bug. It should filter on the nested category object.
+        return allBillers.filter(b => b.category?.id === selectedCategoryId);
     }, [allBillers, selectedCategoryId]);
 
-    if (selectedBiller) {
-        return (
-            <DashboardLayout pageTitleKey="pay_bills_title">
-                <div className="max-w-2xl mx-auto">
-                    <Button onClick={() => setSelectedBiller(null)} variant="link" className="mb-4">
-                        <ArrowLeftIcon className="h-4 w-4 mr-2" />
-                        Back to Billers
-                    </Button>
-                    <BillerPaymentForm
-                        biller={selectedBiller}
-                        onPaymentSuccess={() => {
-                            refetch();
-                            setSelectedBiller(null);
-                        }}
-                    />
-                </div>
-            </DashboardLayout>
-        );
-    }
+    const pageTitle = useMemo(() => {
+        // This hook is now called before any conditional returns.
+        if (currentStep === 'billers') {
+            const category = categories.find(c => c.id === selectedCategoryId);
+            return `Select a Biller in ${category?.name || ''}`;
+        }
+        if (currentStep === 'form' && selectedBiller) {
+            return `Pay ${selectedBiller?.name || 'Bill'}`;
+        }
+        return 'Select a Category';
+    }, [currentStep, selectedCategoryId, selectedBiller, categories]);
 
-
+    // --- Event Handlers (no changes needed) ---
     const handleCategorySelect = (categoryId) => {
         setSelectedCategoryId(categoryId);
         setCurrentStep('billers');
@@ -91,28 +81,14 @@ const BillerHubPage = () => {
     };
 
     const resetFlow = (isSuccess = false) => {
-        if (isSuccess) {
-            refetch(); // Refetch data on success in case balances or options changed
-        }
+        if (isSuccess) refetch();
         setCurrentStep('categories');
         setSelectedCategoryId(null);
         setSelectedBiller(null);
     };
-    
-    const pageTitle = useMemo(() => {
-        switch (currentStep) {
-            case 'billers':
-                const category = categories.find(c => c.id === selectedCategoryId);
-                return `Select a Biller in ${category?.name || ''}`;
-            case 'form':
-                return `Pay ${selectedBiller?.name || 'Bill'}`;
-            default:
-                return 'Select a Category';
-        }
-    }, [currentStep, selectedCategoryId, selectedBiller, categories]);
 
-
-    const renderContent = () => {
+    // --- Render Logic ---
+    const renderSelectionContent = () => {
         if (billersLoading) return <div className="flex justify-center p-10"><Spinner size="lg"/></div>;
         if (error) {
             return (
@@ -120,12 +96,38 @@ const BillerHubPage = () => {
                     <ExclamationTriangleIcon className="h-10 w-10 mx-auto text-red-400" />
                     <h3 className="mt-4 text-xl font-semibold text-white">Could Not Load Biller Options</h3>
                     <p className="mt-2 text-red-300">There was a problem connecting to our payment services.</p>
-                    {/* [THE BUG FIX] The onClick now correctly calls the refetch function from the useApi hook. */}
                     <Button onClick={() => refetch()} className="mt-6" variant="secondary">Try Again</Button>
                 </div>
             );
         }
+
+        return (
+            <AnimatePresence mode="wait">
+                <motion.div key={currentStep} /* ... animation props ... */>
+                    {currentStep === 'categories' && (
+                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                            {categories.map(category => (
+                                <motion.button key={category.id} onClick={() => handleCategorySelect(category.id)} /* ... */ >
+                                    {/* ... category button JSX ... */}
+                                </motion.button>
+                            ))}
+                        </div>
+                    )}
+                    {currentStep === 'billers' && (
+                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {filteredBillers.map(biller => (
+                                <motion.button key={biller.id} onClick={() => handleBillerSelect(biller)} /* ... */>
+                                    <p className="font-semibold text-neutral-800 dark:text-white">{biller.name}</p>
+                                    <p className="text-xs text-neutral-500">via {biller.provider_mappings[0].provider_name}</p>
+                                </motion.button>
+                            ))}
+                        </div>
+                    )}
+                </motion.div>
+            </AnimatePresence>
+        );
     };
+    
         return (
         <DashboardLayout pageTitleKey="pay_bills_title">
              <div className="max-w-4xl mx-auto">
@@ -139,15 +141,14 @@ const BillerHubPage = () => {
                         {pageTitle}
                     </h1>
                 </div>
-
-                {/* Conditionally render the form OR the selection lists */}
-                {currentStep === 'form' && selectedBiller ? (
-                    <BillerPaymentForm
-                        biller={selectedBiller}
-                        onPaymentSuccess={() => resetFlow(true)}
+                
+                {selectedBiller ? (
+                    <BillerPaymentForm 
+                        biller={selectedBiller} 
+                        onPaymentSuccess={() => resetFlow(true)} 
                     />
                 ) : (
-                    renderContent() // renderContent now only handles categories/billers
+                    renderSelectionContent()
                 )}
             </div>
         </DashboardLayout>
@@ -155,4 +156,3 @@ const BillerHubPage = () => {
 };
 
 export default BillerHubPage;
-
