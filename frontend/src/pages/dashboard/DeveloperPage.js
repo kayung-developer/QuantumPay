@@ -85,38 +85,41 @@ const ApiKeysManager = ({ keys, loading, onRevoke, onGenerate }) => {
                 </div>
                 <Button onClick={onGenerate}><PlusIcon className="h-5 w-5 mr-2"/>Generate Key</Button>
             </div>
-            <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-lg shadow overflow-hidden">
+           <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-lg shadow overflow-hidden">
                 {loading ? <div className="p-8 text-center"><Spinner/></div> : (
                     <table className="min-w-full divide-y divide-neutral-200 dark:divide-neutral-800">
                         <thead className="bg-neutral-50 dark:bg-neutral-800/50">
-                            <tr>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase">Label</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase">Key Prefix</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase">Created</th>
+                             <tr>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase">Endpoint URL</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase">Mode</th>
                                 <th className="px-6 py-3 text-right text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-neutral-200 dark:divide-neutral-800">
-                            {keys?.map(key => (
-                                <tr key={key.id}>
-                                    <td className="px-6 py-4 font-medium text-neutral-900 dark:text-white">{key.label}</td>
-                                    <td className="px-6 py-4 font-mono text-neutral-500 dark:text-neutral-400">{key.key_prefix}...</td>
-                                    <td className="px-6 py-4 text-neutral-500 dark:text-neutral-400">{format(new Date(key.created_at), 'MMM d, yyyy')}</td>
+                            {webhooks?.map(hook => (
+                                <tr key={hook.id} className="hover:bg-neutral-50 dark:hover:bg-neutral-800/50">
+                                    <td className="px-6 py-4 font-mono text-neutral-700 dark:text-neutral-300 truncate">{hook.url}</td>
+                                    <td className="px-6 py-4 text-neutral-600 dark:text-neutral-400">{hook.is_live_mode ? 'Live' : 'Test'}</td>
+                                    
+                                    {/* [THE DEFINITIVE FIX IS HERE] */}
+                                    {/* The Button must be inside its own <td> element. */}
                                     <td className="px-6 py-4 text-right">
-                                        <Button variant="ghost" size="sm" onClick={() => onRevoke(key)}>
+                                        <Button variant="ghost" size="sm">
                                             <TrashIcon className="h-5 w-5 text-red-500"/>
                                         </Button>
                                     </td>
+                                    
                                 </tr>
                             ))}
                         </tbody>
                     </table>
                 )}
-                {keys?.length === 0 && !loading && <p className="p-8 text-center text-neutral-500">No API keys generated yet.</p>}
+                {webhooks?.length === 0 && !loading && <p className="p-8 text-center text-neutral-500 dark:text-neutral-400">No webhook endpoints created yet.</p>}
             </div>
         </div>
     );
 };
+
 
 
 
@@ -372,4 +375,3 @@ const DeveloperPage = () => {
 
 
 export default DeveloperPage;
-
