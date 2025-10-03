@@ -185,16 +185,18 @@ const Sidebar = ({ onLinkClick }) => {
             <Link
                 to="/dashboard/settings"
                 onClick={onLinkClick}
-                className="flex items-center group w-full p-2 rounded-lg transition-colors hover:bg-neutral-200 dark:hover:bg-neutral-800"
-            >
+                className="flex items-center group w-full p-2 rounded-lg transition-colors hover:bg-neutral-200 dark:hover:bg-neutral-800">
                 <div className="flex-shrink-0">
-                    <div className="h-10 w-10 rounded-full bg-primary flex items-center justify-center font-bold text-white">
-                        {dbUser?.full_name ? dbUser.full_name.charAt(0) : 'U'}
-                    </div>
+                    {/* [THE DEFINITIVE FIX] Use an <img> tag for the profile picture */}
+                    <img
+                        className="h-10 w-10 rounded-full object-cover bg-neutral-700"
+                        src={dbUser?.profile_picture_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(dbUser?.full_name || 'U')}&background=random`}
+                        alt="User profile"
+                    />
                 </div>
                 <div className="ml-3 flex-1 min-w-0">
                     <p className="text-sm font-medium text-neutral-900 dark:text-white truncate">{dbUser?.full_name || 'User'}</p>
-                    <p className="text-xs text-neutral-500 dark:text-neutral-600 dark:text-neutral-400 truncate group-hover:text-neutral-600 dark:group-hover:text-neutral-700 dark:text-neutral-300">{dbUser?.email}</p>
+                    <p className="text-xs text-neutral-500 dark:text-neutral-400 truncate">{dbUser?.email}</p>
                 </div>
             </Link>
             <SidebarNavLink to="/dashboard/kyc" icon={DocumentCheckIcon} onClick={onLinkClick}>
@@ -217,4 +219,3 @@ const Sidebar = ({ onLinkClick }) => {
 
 
 export default Sidebar;
-
