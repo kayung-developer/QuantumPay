@@ -166,7 +166,7 @@ const WebhooksManager = ({ webhooks, loading, maxWebhooks, onGenerate }) => {
                 </Button>
             </div>
              {!canCreate && <p className="text-sm text-amber-400">You have reached the maximum of {maxWebhooks} webhooks for your plan. Upgrade to create more.</p>}
-            <<div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-lg shadow overflow-hidden">
+            <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-lg shadow overflow-hidden">
                 {loading ? <div className="p-8 text-center"><Spinner/></div> : (
                      <table className="min-w-full divide-y divide-neutral-200 dark:divide-neutral-800">
                         <thead className="bg-neutral-50 dark:bg-neutral-800/50">
@@ -372,3 +372,4 @@ const DeveloperPage = () => {
 
 
 export default DeveloperPage;
+
