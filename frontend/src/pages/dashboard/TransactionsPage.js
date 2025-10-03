@@ -116,31 +116,43 @@ const TransactionsPage = () => {
         toast.error("Please upgrade to a Premium plan to export statements.");
         return;
     }
-    setIsExporting(true); // <-- [THE FIX] Use the state setter
+    setIsExporting(true);
     try {
+        // [THE DEFINITIVE, FINAL FIX IS HERE]
+        // We must tell Axios to expect a binary 'blob' as the response type.
         const response = await apiClient.get('/analytics/export-statement', {
             params: { start_date: filters.start, end_date: filters.end },
-            headers: { Authorization: `Bearer ${authToken}` }, // <-- [THE FIX] Use the authToken
-            responseType: 'blob',
+            headers: { Authorization: `Bearer ${authToken}` },
+            responseType: 'blob', // <-- THIS LINE SOLVES THE CORRUPTION ISSUE
         });
 
-        const url = window.URL.createObjectURL(new Blob([response.data]));
+        // The 'response.data' will now be a Blob object, not garbled text.
+        const url = window.URL.createObjectURL(new Blob([response.data], { type: 'application/pdf' }));
         const link = document.createElement('a');
         link.href = url;
         link.setAttribute('download', `QuantumPay_Statement_${filters.start}_to_${filters.end}.pdf`);
         document.body.appendChild(link);
         link.click();
+
+        // Clean up the object URL after the download is initiated
+        window.URL.revokeObjectURL(url);
         link.remove();
+
         toast.success("Your statement has been downloaded.");
 
     } catch (err) {
-        const errorMessage = err.response?.data?.detail || "Could not generate your statement.";
-        toast.error(errorMessage);
+        // This is a failsafe in case the blob itself contains an error message from the server
+        try {
+            const errorText = await err.response.data.text();
+            const errorJson = JSON.parse(errorText);
+            toast.error(errorJson.detail || "Could not generate your statement.");
+        } catch {
+            toast.error("An unknown error occurred while generating your statement.");
+        }
     } finally {
-        setIsExporting(false); // <-- [THE FIX] Use the state setter
+        setIsExporting(false);
     }
   };
-
   // [THE DEFINITIVE FIX] Wrap the main JSX in a renderContent function.
   const renderContent = () => {
     if (walletsLoading) return <div className="flex justify-center p-8"><Spinner /></div>;
@@ -199,4 +211,3 @@ const TransactionsPage = () => {
 };
 
 export default TransactionsPage;
-
