@@ -155,7 +155,7 @@ const CreateKeyModal = ({ isOpen, onClose, onSuccess }) => {
 
 const WebhooksManager = ({ webhooks, loading, maxWebhooks, onGenerate }) => {
     const { t } = useTranslation();
-    const canCreate = webhooks?.length < maxWebhooks;
+    const canCreate = webhooks && webhooks.length < maxWebhooks;
 
     return (
         <div className="space-y-4">
@@ -375,3 +375,4 @@ const DeveloperPage = () => {
 
 
 export default DeveloperPage;
+
