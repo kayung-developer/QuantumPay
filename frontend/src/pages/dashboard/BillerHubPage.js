@@ -56,7 +56,7 @@ const BillerHubPage = () => {
         // This was also a subtle bug. It should filter on the nested category object.
         return allBillers.filter(b => b.category?.id === selectedCategoryId);
     }, [allBillers, selectedCategoryId]);
-
+    
     const pageTitle = useMemo(() => {
         // This hook is now called before any conditional returns.
         if (currentStep === 'billers') {
@@ -127,8 +127,11 @@ const BillerHubPage = () => {
             </AnimatePresence>
         );
     };
-    
-        return (
+
+    // --- [THE DEFINITIVE FIX - Step 2] ---
+    // The component now has only ONE return statement.
+    // It conditionally renders the correct component inside the layout.
+    return (
         <DashboardLayout pageTitleKey="pay_bills_title">
              <div className="max-w-4xl mx-auto">
                  <div className="flex items-center mb-6">
@@ -156,3 +159,4 @@ const BillerHubPage = () => {
 };
 
 export default BillerHubPage;
+
