@@ -81,8 +81,8 @@ const CorporateCardsPage = () => {
         if (!cards || cards.length === 0) {
             return (
                 <div className="text-center py-20 border-2 border-dashed border-neutral-700 rounded-lg">
-                    <p className="font-semibold text-white">{t('cards_none_issued')}</p>
-                    <p className="text-sm text-neutral-400 mt-1">{t('cards_get_started')}</p>
+                    <p className="font-semibold text-neutral-600 dark:text-neutral-400">{t('cards_none_issued')}</p>
+                    <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1">{t('cards_get_started')}</p>
                 </div>
             );
         }
@@ -105,8 +105,8 @@ const CorporateCardsPage = () => {
         <DashboardLayout pageTitleKey="corporate_cards_title">
             <div className="flex items-center justify-between mb-8">
                 <div>
-                    <h1 className="text-3xl font-bold font-display text-white">{t('corporate_cards_title')}</h1>
-                    <p className="mt-1 text-neutral-400">{t('cards_header_subtitle')}</p>
+                    <h1 className="text-3xl font-bold font-display text-neutral-900 dark:text-white">{t('corporate_cards_title')}</h1>
+                    <p className="mt-1 text-neutral-600 dark:text-neutral-400">{t('cards_header_subtitle')}</p>
                 </div>
                 <Button onClick={() => setIssueModalOpen(true)}>
                     <PlusIcon className="h-5 w-5 mr-2" />
