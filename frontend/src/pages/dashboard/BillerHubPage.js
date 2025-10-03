@@ -26,12 +26,14 @@ const categoryIcons = {
 
 const BillerHubPage = () => {
     const { t } = useTranslation();
+    const { dbUser } = useAuth()
     const [currentStep, setCurrentStep] = useState('categories'); // 'categories', 'billers', 'form'
     const [selectedCategoryId, setSelectedCategoryId] = useState(null);
     const [selectedBiller, setSelectedBiller] = useState(null);
 
     // [THE FIX] Fetch the single, unified list of all billers from the new endpoint.
     // Also, destructure the `request` function and rename it to `refetch` for clarity.
+    const countryCode = dbUser?.country_code || 'NG';
     const { data: allBillers, loading: billersLoading, error, request: refetch } = useApi('/bills/all/NG'); // Assuming NG for now
 
     // Derive the list of unique categories from the fetched biller data using useMemo for performance.
@@ -55,6 +57,27 @@ const BillerHubPage = () => {
         if (!allBillers || !selectedCategoryId) return [];
         return allBillers.filter(b => b.category_id === selectedCategoryId);
     }, [allBillers, selectedCategoryId]);
+
+    if (selectedBiller) {
+        return (
+            <DashboardLayout pageTitleKey="pay_bills_title">
+                <div className="max-w-2xl mx-auto">
+                    <Button onClick={() => setSelectedBiller(null)} variant="link" className="mb-4">
+                        <ArrowLeftIcon className="h-4 w-4 mr-2" />
+                        Back to Billers
+                    </Button>
+                    <BillerPaymentForm
+                        biller={selectedBiller}
+                        onPaymentSuccess={() => {
+                            refetch();
+                            setSelectedBiller(null);
+                        }}
+                    />
+                </div>
+            </DashboardLayout>
+        );
+    }
+
 
     const handleCategorySelect = (categoryId) => {
         setSelectedCategoryId(categoryId);
