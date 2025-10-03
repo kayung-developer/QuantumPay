@@ -10,6 +10,7 @@ import { useApi } from '../../hooks/useApi';
 import Spinner from '../../components/common/Spinner';
 import BillerPaymentForm from '../../components/dashboard/biller/BillerPaymentForm';
 import Button from '../../components/common/Button';
+import { useAuth } from '../../context/AuthContext';
 
 // --- Icon Imports ---
 import { ArrowLeftIcon, BoltIcon, TvIcon, WifiIcon, PhoneIcon, BanknotesIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline';
@@ -176,3 +177,4 @@ const BillerHubPage = () => {
 };
 
 export default BillerHubPage;
+
