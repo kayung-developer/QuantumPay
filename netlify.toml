@@ -3,15 +3,16 @@
 # [build] context tells Netlify how to build your site.
 [build]
   # base: The directory to change to before starting the build.
-  # This is the key to fixing your error.
+  # This tells Netlify to run 'npm run build' from inside the /frontend directory.
   base = "frontend"
   
   # command: The command to run to build your site.
   command = "npm run build"
   
   # publish: The directory that contains the deploy-ready HTML files and assets.
-  # After the build, Netlify will deploy the contents of this directory.
-  publish = "frontend/build"
+  # This path is RELATIVE to the 'base' directory.
+  # The output of 'npm run build' is a 'build' folder.
+  publish = "build" # <-- [THE DEFINITIVE FIX IS HERE]
 
 # This redirect rule is crucial for Single-Page Applications (SPA) like React.
 # It ensures that direct visits or refreshes on pages like /dashboard work correctly.
@@ -23,14 +24,12 @@
 # [Caching Headers to prevent future ChunkLoadError issues]
 
 # Rule 1: For all your static assets (JS, CSS chunks).
-# These can be cached "forever" because their filenames change with every build.
 [[headers]]
   for = "/static/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
 # Rule 2: For all other paths, especially the main index.html file.
-# This tells the browser to always check for a new version.
 [[headers]]
   for = "/*"
   [headers.values]
