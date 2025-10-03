@@ -1,122 +1,128 @@
+// FILE: frontend/src/components/dashboard/biller/BillerPaymentForm.js
+
 import React, { useState, useMemo } from 'react';
-import { Formik, Form } from 'formik';
+import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
+import { toast } from 'react-hot-toast';
+import { motion } from 'framer-motion';
+
 import FormInput from '../../common/FormInput';
 import Button from '../../common/Button';
 import { useApiPost } from '../../../hooks/useApi';
-import { Toaster, toast, resolveValue } from 'react-hot-toast';
-import { motion } from 'framer-motion';
 
 const BillerPaymentForm = ({ biller, onPaymentSuccess }) => {
-    const [customerDetails, setCustomerDetails] = useState(null);
-    const [isValidated, setIsValidated] = useState(!biller.provider_mappings[0]?.requires_validation);
+    const [step, setStep] = useState(1); // 1: Enter ID, 2: Select Product/Confirm, 3: Final Payment
+    const [validationData, setValidationData] = useState(null);
 
     const { post: validateCustomer, loading: validating } = useApiPost('/bills/validate-customer');
     const { post: payBill, loading: paying } = useApiPost('/bills/pay');
 
-    const providerDetails = useMemo(() => {
-        if (!biller || !biller.provider_mappings || biller.provider_mappings.length === 0) {
-            return { provider_name: 'unknown', fee: 0.0 };
-        }
-        return biller.provider_mappings[0];
-    }, [biller]);
+    const providerDetails = useMemo(() => biller.provider_mappings[0], [biller]);
 
-    const paymentSchema = Yup.object().shape({
+    const getIdentifierLabel = () => {
+        const category = biller.category.id.toLowerCase();
+        if (category.includes('tv')) return 'Smartcard Number';
+        if (category.includes('mobile')) return 'Phone Number';
+        if (category.includes('electricity')) return 'Meter Number';
+        return 'Customer ID / RRR';
+    };
+
+    const initialSchema = Yup.object().shape({
         customer_identifier: Yup.string().required('This field is required'),
-        amount: Yup.number()
-          .min(50, `Minimum is ${biller.currency || 'NGN'} 50`)
-          .required('Amount is required'),
     });
 
-   const handleValidation = async (values) => {
+    const finalSchema = Yup.object().shape({
+        customer_identifier: Yup.string().required(),
+        amount: Yup.number().positive().required('Amount is required'),
+        product_code: Yup.string().optional(),
+    });
+
+    const handleValidation = async (values, { setFieldError }) => {
         const payload = {
             biller_id: biller.id,
-            provider_name: providerDetails.provider_name, // Use safe value
+            provider_name: providerDetails.provider_name,
             customer_id: values.customer_identifier,
         };
         const result = await validateCustomer(payload);
-        if (result.success && result.data.status === 'success') {
-            setCustomerDetails(result.data);
 
-            setIsValidated(true);
-            toast.success(`Validated: ${result.data.name}`);
+        if (result.success && result.data.status === 'success') {
+            setValidationData(result.data);
+            setStep(2); // Move to the next step
         } else {
-            // The useApiPost hook will show the generic error, but we can be more specific.
-            toast.error(result.data?.message || 'Validation failed.');
+            setFieldError('customer_identifier', result.error?.message || 'Validation failed.');
         }
     };
 
     const handleSubmitPayment = async (values) => {
         const payload = {
             biller_id: biller.id,
-            provider_name: providerDetails.provider_name, // Use safe value
-            biller_category: biller.category.id, // Use the category ID
+            provider_name: providerDetails.provider_name,
+            biller_category: biller.category.id,
             customer_identifier: values.customer_identifier,
             amount: parseFloat(values.amount),
+            product_code: values.product_code,
         };
         const result = await payBill(payload);
-
         if (result.success) {
             toast.success("Bill payment successful!");
             onPaymentSuccess();
         }
-        // Error toast is handled by the useApiPost hook.
     };
 
     return (
         <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-lg p-8">
+            <h2 className="text-xl font-bold text-white mb-4">{biller.name}</h2>
+
             <Formik
-                initialValues={{
-                    customer_identifier: '',
-                    amount: customerDetails?.details?.amount || '' // Pre-fill amount if validation returns it (e.g., Remita)
-                }}
-                validationSchema={paymentSchema}
-                onSubmit={isValidated ? handleSubmitPayment : handleValidation}
-                enableReinitialize // Allows the form to update when customerDetails changes
+                initialValues={{ customer_identifier: '', amount: '', product_code: '' }}
+                validationSchema={step === 1 ? initialSchema : finalSchema}
+                onSubmit={step === 1 ? handleValidation : handleSubmitPayment}
+                enableReinitialize
             >
-                {({ values, errors, touched }) => (
+                {({ values, setFieldValue }) => (
                     <Form className="space-y-4">
-                        <FormInput
-                            label={biller.category === 'tv' ? 'Smartcard Number' : biller.category === 'airtime' ? 'Phone Number' : 'Customer ID / RRR'}
-                            name="customer_identifier"
-                            disabled={isValidated}
-                        />
+                        {/* STEP 1: Enter Customer ID */}
+                        <motion.div key="step1" hidden={step !== 1}>
+                            <FormInput
+                                name="customer_identifier"
+                                label={getIdentifierLabel()}
+                                disabled={validating}
+                            />
+                            <Button type="submit" isLoading={validating} fullWidth className="mt-4">
+                                Continue
+                            </Button>
+                        </motion.div>
 
-                        {isValidated && customerDetails?.name && customerDetails.name !== "N/A" && (
-                            <motion.div
-                                initial={{ opacity: 0, y: -10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                className="p-3 bg-green-900/50 border border-green-700 rounded-md text-sm text-green-300"
-                            >
-                                Customer Name: <span className="font-bold">{customerDetails.name}</span>
-                            </motion.div>
-                        )}
-
-                        {isValidated && (
-                             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                                <FormInput
-                                    label={`Amount (${biller.currency || 'NGN'})`}
-                                    name="amount"
-                                    type="number"
-                                    disabled={!!customerDetails?.details?.amount} // Disable if amount is fixed by validation
-                                />
-                             </motion.div>
-                        )}
-
-                        <div className="pt-4 border-t border-neutral-300 dark:border-neutral-700 flex flex-col items-center">
-                            {!isValidated ? (
-                                <Button type="submit" isLoading={validating} fullWidth>
-                                    Validate Details
-                                </Button>
+                        {/* STEP 2: Select Product or Confirm Details */}
+                        <motion.div key="step2" hidden={step !== 2}>
+                            {validationData?.available_products ? (
+                                // Case 1: Service has multiple products (e.g., Data Bundles)
+                                <div>
+                                    <label className="block text-sm font-medium text-neutral-300 mb-1">Select a Plan</label>
+                                    <Field as="select" name="product_code" className="w-full bg-neutral-800 p-2 rounded-md"
+                                        onChange={(e) => {
+                                            const selectedProduct = validationData.available_products.find(p => p.code === e.target.value);
+                                            setFieldValue('product_code', selectedProduct.code);
+                                            setFieldValue('amount', selectedProduct.price);
+                                        }}
+                                    >
+                                        <option value="">-- Choose a data plan --</option>
+                                        {validationData.available_products.map(p => (
+                                            <option key={p.code} value={p.code}>{p.name} - {p.price} {biller.currency}</option>
+                                        ))}
+                                    </Field>
+                                </div>
                             ) : (
-                                <Button type="submit" isLoading={paying} fullWidth>
-                                    Pay {biller.currency || 'NGN'} {values.amount || '0.00'}
-                                </Button>
+                                // Case 2: Service requires a variable amount
+                                <div>
+                                    <p className="text-sm text-green-400">Validated: {validationData?.name}</p>
+                                    <FormInput name="amount" label={`Amount (${biller.currency})`} type="number" />
+                                </div>
                             )}
-                             <p className="text-xs text-neutral-500 mt-2">
-                                A service fee of {(providerDetails.fee || 0).toFixed(2)} may apply.
-                             </p>
-                        </div>
+                            <Button type="submit" isLoading={paying} fullWidth className="mt-4" disabled={!values.amount}>
+                                Pay {values.amount ? `${values.amount} ${biller.currency}` : ''}
+                            </Button>
+                        </motion.div>
                     </Form>
                 )}
             </Formik>
