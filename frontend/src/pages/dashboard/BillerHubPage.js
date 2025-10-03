@@ -12,18 +12,53 @@ import BillerPaymentForm from '../../components/dashboard/biller/BillerPaymentFo
 import Button from '../../components/common/Button';
 import { useAuth } from '../../context/AuthContext';
 
-// --- Icon Imports ---
-import { ArrowLeftIcon, BoltIcon, TvIcon, WifiIcon, PhoneIcon, BanknotesIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline';
+
+// --- [THE DEFINITIVE FIX - PART 1: Import All Required Icons] ---
+import {
+    ArrowLeftIcon,
+    BoltIcon,       // Electricity
+    TvIcon,         // TV
+    WifiIcon,       // Internet
+    DevicePhoneMobileIcon, // Mobile (replaces PhoneIcon for better representation)
+    BanknotesIcon,  // Government & Financial
+    AcademicCapIcon, // Education
+    ShieldCheckIcon, // Insurance
+    TicketIcon,     // Events
+    GlobeAltIcon,   // Travel
+    BuildingStorefrontIcon, // Shopping
+    HeartIcon,      // Donations
+    TruckIcon,      // Transport & Tolls
+    TrashIcon,      // Waste & Utilities
+    ExclamationTriangleIcon
+} from '@heroicons/react/24/outline';
 
 // Mapping categories to icons for a professional UI
 const categoryIcons = {
-    airtime: PhoneIcon,
-    tv: TvIcon,
-    electricity: BoltIcon,
-    internet: WifiIcon,
-    government: BanknotesIcon,
-    // Add more mappings as your backend catalog grows
+    // Core Utilities
+    "mobile": DevicePhoneMobileIcon,
+    "tv": TvIcon,
+    "internet": WifiIcon,
+    "electricity": BoltIcon,
+    "utilities": TrashIcon, // For Water, Waste & Tolls
+
+    // Financial
+    "financial": BanknotesIcon,
+    "insurance": ShieldCheckIcon,
+
+    // Government & Education
+    "govt": BanknotesIcon,
+    "education": AcademicCapIcon,
+
+    // Lifestyle & Commerce
+    "travel": GlobeAltIcon,
+    "shopping": BuildingStorefrontIcon,
+    "donation": HeartIcon,
+    "events": TicketIcon,
+
+    // A fallback icon in case a category is not mapped
+    "default": BoltIcon
 };
+
 
 const BillerHubPage = () => {
     // --- [THE DEFINITIVE FIX - Step 1] ---
@@ -107,7 +142,7 @@ const BillerHubPage = () => {
                     {currentStep === 'categories' && (
                         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                             {categories.map(category => {
-                                const Icon = categoryIcons[category.id.toLowerCase()] || BoltIcon;
+                                const Icon = categoryIcons[category.id.toLowerCase()] || categoryIcons["default"];
                                 return (
                                 <motion.button key={category.id} onClick={() => handleCategorySelect(category.id)} className="p-6 bg-neutral-900 border border-neutral-800 rounded-lg text-center transition-all duration-200 hover:border-primary hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-primary" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                                     <Icon className="h-10 w-10 mx-auto text-primary"/>
