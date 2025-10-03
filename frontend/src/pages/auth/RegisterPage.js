@@ -30,6 +30,7 @@ const Logo = () => {
 const RegisterPage = () => {
     const { register } = useAuth();
     const { t } = useTranslation();
+    const navigate = useNavigate();
 
     const RegisterSchema = Yup.object().shape({
         full_name: Yup.string()
@@ -69,16 +70,15 @@ const RegisterPage = () => {
                     </div>
 
                     <Formik
-                        initialValues={{ full_name: '', email: '', password: '' }}
+                        initialValues={{ full_name: '', email: '', password: '', country_code: '', phone_number: '' }}
                         validationSchema={RegisterSchema}
                         onSubmit={async (values, { setSubmitting, setFieldError }) => {
                             const toastId = toast.loading('Creating your account...');
                             try {
-                                // [THE DEFINITIVE FIX] Call the simplified register function.
-                                // We no longer call login() or navigate() from here.
-                                await register(values.email, values.password, values.full_name);
-                                
+                                // The register function needs to be updated to accept these new fields
+                                await register(values.email, values.password, values.full_name, values.phone_number, values.country_code);
                                 toast.success('Registration successful! Welcome.', { id: toastId });
+                                navigate('/dashboard'); // Redirect to dashboard on success
                                 // The onAuthStateChanged listener in AuthContext and the ProtectedRoute
                                 // component will now handle the redirection to the dashboard automatically
                                 // once the user state is fully resolved. This is the most robust pattern.
@@ -94,11 +94,19 @@ const RegisterPage = () => {
                                 setSubmitting(false);
                             }
                         }}
-                    >
+                        >
                         {({ isSubmitting }) => (
                             <Form className="space-y-4">
                                 <FormInput label={t('full_name_label')} name="full_name" />
                                 <FormInput label={t('email_address_label')} name="email" type="email" />
+                                <div>
+                                    <label htmlFor="country_code" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">{t('country_label')}</label>
+                                    <Field as="select" name="country_code" id="country_code" className="w-full bg-neutral-100 dark:bg-neutral-800 p-2 rounded-md border border-neutral-300 dark:border-neutral-700 text-neutral-900 dark:text-white">
+                                        <option value="">Select a country...</option>
+                                        {allCountries.map(country => <option key={country.code} value={country.code}>{country.name}</option>)}
+                                    </Field>
+                                </div>
+                                <FormInput label={t('phone_number_label')} name="phone_number" type="tel" />
                                 <FormInput label={t('password_label')} name="password" type="password" helpText="Min. 8 characters, with uppercase, lowercase, number, and special character."/>
                                 <div>
                                     <Button type="submit" isLoading={isSubmitting} fullWidth size="lg">{t('create_account_button')}</Button>
