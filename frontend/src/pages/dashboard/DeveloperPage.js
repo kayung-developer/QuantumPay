@@ -150,6 +150,46 @@ const CreateKeyModal = ({ isOpen, onClose, onSuccess }) => {
     );
 }
 
+const WebhooksManager = ({ webhooks, loading, maxWebhooks, onGenerate }) => {
+    const { t } = useTranslation();
+    const canCreate = webhooks?.length < maxWebhooks;
+
+    return (
+        <div className="space-y-4">
+            <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                    <GlobeAltIcon className="h-6 w-6 text-primary"/>
+                    <h2 className="text-2xl font-semibold font-display text-white">Webhook Endpoints</h2>
+                </div>
+                <Button onClick={onGenerate} disabled={!canCreate}>
+                    <PlusIcon className="h-5 w-5 mr-2"/>Create Webhook
+                </Button>
+            </div>
+             {!canCreate && <p className="text-sm text-amber-400">You have reached the maximum of {maxWebhooks} webhooks for your plan. Upgrade to create more.</p>}
+            <div className="bg-neutral-900 border border-neutral-800 rounded-lg shadow overflow-hidden">
+                {loading ? <div className="p-8 text-center"><Spinner/></div> : (
+                    <table className="min-w-full divide-y divide-neutral-800">
+                        {/* ... table headers ... */}
+                        <tbody>
+                            {webhooks?.map(hook => (
+                                <tr key={hook.id}>
+                                    <td className="px-6 py-4 font-mono text-neutral-300">{hook.url}</td>
+                                    <td className="px-6 py-4 text-neutral-400">{hook.is_live_mode ? 'Live' : 'Test'}</td>
+                                    <td className="px-6 py-4 text-right">
+                                        <Button variant="ghost" size="sm"><TrashIcon className="h-5 w-5 text-red-500"/></Button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                )}
+                {webhooks?.length === 0 && !loading && <p className="p-8 text-center text-neutral-500">No webhook endpoints created yet.</p>}
+            </div>
+        </div>
+    );
+};
+
+
 // --- Webhook Creation Modal (Copied from previous implementation for completeness) ---
 const CreateWebhookModal = ({ isOpen, onClose, onSuccess }) => {
     const { post: createWebhook, loading } = useApiPost('/developer/webhooks');
@@ -199,6 +239,8 @@ const CreateWebhookModal = ({ isOpen, onClose, onSuccess }) => {
 }
 
 
+
+
 const DeveloperPage = () => {
     const { t } = useTranslation();
     const { dbUser } = useAuth();
@@ -214,7 +256,7 @@ const DeveloperPage = () => {
     const [copied, setCopied] = useState(false);
 
     // --- [FEATURE GATING LOGIC] ---
-    const apiLimits = useMemo(() => {
+     const apiLimits = useMemo(() => {
         // 1. Check for role-based overrides first.
         if (dbUser?.role === 'superuser') {
             return { name: 'Ultimate', rate_limit: 240, max_webhooks: 10 };
@@ -300,15 +342,25 @@ const DeveloperPage = () => {
                 <ApiUsageCard limits={apiLimits} />
                 <ApiKeysManager keys={apiKeys} loading={keysLoading} onRevoke={(key) => setModal({type: 'revokeKey', data: key})} onGenerate={() => setModal({type: 'createKey', data: true})} />
                 {/* Webhooks Manager would be its own component similar to ApiKeysManager */}
-                {/* <WebhooksManager webhooks={webhooks} loading={webhooksLoading} maxWebhooks={apiLimits.max_webhooks} /> */}
+                <WebhooksManager
+                    webhooks={webhooks}
+                    loading={webhooksLoading}
+                    maxWebhooks={apiLimits.max_webhooks}
+                    onGenerate={() => setModal({ type: 'createWebhook', data: true })}
+                />
             </div>
             
             {/* We can keep modals here or move them into their respective manager components */}
-             <CreateKeyModal 
-    isOpen={modal.type === 'createKey'} 
-    onClose={() => setModal({ type: null, data: null })} 
-    onSuccess={handleKeyCreated} 
-/>
+         <CreateKeyModal
+            isOpen={modal.type === 'createKey'}
+            onClose={() => setModal({ type: null, data: null })}
+            onSuccess={handleKeyCreated}
+         />
+          <CreateWebhookModal
+                isOpen={modal.type === 'createWebhook'}
+                onClose={() => setModal({ type: null, data: null })}
+                onSuccess={() => {handleWebhookCreated}
+          />
         </DashboardLayout>
     );
 };
