@@ -56,7 +56,7 @@ const BillerHubPage = () => {
         // This was also a subtle bug. It should filter on the nested category object.
         return allBillers.filter(b => b.category?.id === selectedCategoryId);
     }, [allBillers, selectedCategoryId]);
-    
+
     const pageTitle = useMemo(() => {
         // This hook is now called before any conditional returns.
         if (currentStep === 'billers') {
@@ -88,7 +88,7 @@ const BillerHubPage = () => {
     };
 
     // --- Render Logic ---
-    const renderSelectionContent = () => {
+    const renderContent = () => {
         if (billersLoading) return <div className="flex justify-center p-10"><Spinner size="lg"/></div>;
         if (error) {
             return (
@@ -103,21 +103,24 @@ const BillerHubPage = () => {
 
         return (
             <AnimatePresence mode="wait">
-                <motion.div key={currentStep} /* ... animation props ... */>
+                <motion.div key={currentStep} initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30 }} transition={{ type: 'spring', stiffness: 300, damping: 30 }}>
                     {currentStep === 'categories' && (
                         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                            {categories.map(category => (
-                                <motion.button key={category.id} onClick={() => handleCategorySelect(category.id)} /* ... */ >
-                                    {/* ... category button JSX ... */}
+                            {categories.map(category => {
+                                const Icon = categoryIcons[category.id.toLowerCase()] || BoltIcon;
+                                return (
+                                <motion.button key={category.id} onClick={() => handleCategorySelect(category.id)} className="p-6 bg-neutral-900 border border-neutral-800 rounded-lg text-center transition-all duration-200 hover:border-primary hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-primary" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                                    <Icon className="h-10 w-10 mx-auto text-primary"/>
+                                    <p className="mt-4 font-semibold text-white capitalize">{category.name}</p>
                                 </motion.button>
-                            ))}
+                            )})}
                         </div>
                     )}
                     {currentStep === 'billers' && (
                          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                             {filteredBillers.map(biller => (
-                                <motion.button key={biller.id} onClick={() => handleBillerSelect(biller)} /* ... */>
-                                    <p className="font-semibold text-neutral-800 dark:text-white">{biller.name}</p>
+                                <motion.button key={biller.id} onClick={() => handleBillerSelect(biller)} className="p-4 bg-neutral-900 border border-neutral-800 rounded-lg text-left transition-all duration-200 hover:border-primary hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-primary" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                                    <p className="font-semibold text-white">{biller.name}</p>
                                     <p className="text-xs text-neutral-500">via {biller.provider_mappings[0].provider_name}</p>
                                 </motion.button>
                             ))}
@@ -128,10 +131,7 @@ const BillerHubPage = () => {
         );
     };
 
-    // --- [THE DEFINITIVE FIX - Step 2] ---
-    // The component now has only ONE return statement.
-    // It conditionally renders the correct component inside the layout.
-    return (
+        return (
         <DashboardLayout pageTitleKey="pay_bills_title">
              <div className="max-w-4xl mx-auto">
                  <div className="flex items-center mb-6">
@@ -144,14 +144,14 @@ const BillerHubPage = () => {
                         {pageTitle}
                     </h1>
                 </div>
-                
-                {selectedBiller ? (
-                    <BillerPaymentForm 
-                        biller={selectedBiller} 
-                        onPaymentSuccess={() => resetFlow(true)} 
+
+                {currentStep === 'form' && selectedBiller ? (
+                    <BillerPaymentForm
+                        biller={selectedBiller}
+                        onPaymentSuccess={() => resetFlow(true)}
                     />
                 ) : (
-                    renderSelectionContent()
+                    renderContent()
                 )}
             </div>
         </DashboardLayout>
@@ -159,4 +159,3 @@ const BillerHubPage = () => {
 };
 
 export default BillerHubPage;
-
