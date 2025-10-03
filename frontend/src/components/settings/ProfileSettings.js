@@ -37,7 +37,7 @@ const ProfileSettings = () => {
                 changedValues[key] = values[key];
             }
         }
-        
+
         // Ensure email is not part of the payload
         delete changedValues.email;
 
@@ -58,7 +58,7 @@ const ProfileSettings = () => {
         <SettingsCard
             title="Personal Information"
             description="Update your personal details. Your email is used for login and cannot be changed."
-        >
+            >
             <Formik
                 initialValues={{
                     email: dbUser?.email || '',
@@ -79,12 +79,12 @@ const ProfileSettings = () => {
                 {({ values, dirty }) => (
                     <Form className="space-y-6">
                         {/* [THE DEFINITIVE FIX - Step 3] A complete and well-designed form layout. */}
-                        
+
                         <fieldset>
                             <legend className="text-base font-semibold text-neutral-900 dark:text-white">Profile</legend>
                             <div className="mt-4 flex items-center space-x-4">
-                                <img 
-                                    src={values.profile_picture_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(values.full_name || 'U')}&background=random`} 
+                                <img
+                                    src={values.profile_picture_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(values.full_name || 'U')}&background=random`}
                                     alt="Profile"
                                     className="h-20 w-20 rounded-full object-cover bg-neutral-800"
                                 />
@@ -98,7 +98,7 @@ const ProfileSettings = () => {
                             <FormInput label="Email Address" name="email" disabled />
                             <FormInput label="Full Name" name="full_name" />
                         </div>
-                        
+
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <FormInput label="Phone Number" name="phone_number" />
                             <FormInput label="Date of Birth" name="date_of_birth" type="date" />
@@ -129,7 +129,6 @@ const ProfileSettings = () => {
                             </div>
                         )}
                     </Form>
-                </SettingsCard>
                 )}
             </Formik>
         </SettingsCard>
