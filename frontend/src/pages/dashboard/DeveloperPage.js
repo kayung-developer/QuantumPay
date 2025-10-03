@@ -185,7 +185,6 @@ const WebhooksManager = ({ webhooks, loading, maxWebhooks, onGenerate }) => {
                                     <td className="px-6 py-4 font-mono text-neutral-700 dark:text-neutral-300 truncate">{hook.url}</td>
                                     <td className="px-6 py-4 text-neutral-600 dark:text-neutral-400">{hook.is_live_mode ? 'Live' : 'Test'}</td>
                                         <Button variant="ghost" size="sm"><TrashIcon className="h-5 w-5 text-red-500"/></Button>
-                                    </td>
                                 </tr>
                             ))}
                         </tbody>
@@ -375,4 +374,5 @@ const DeveloperPage = () => {
 
 
 export default DeveloperPage;
+
 
