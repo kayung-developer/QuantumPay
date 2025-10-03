@@ -69,8 +69,8 @@ const BillerHubPage = () => {
     const [selectedCategoryId, setSelectedCategoryId] = useState(null);
     const [selectedBiller, setSelectedBiller] = useState(null);
 
-    const countryCode = dbUser?.country_code || 'NG';
-    const { data: allBillers, loading: billersLoading, error, request: refetch } = useApi(`/bills/all/${countryCode}`);
+    const userCountryCode = dbUser?.country_code || 'NG';
+    const { data: allBillers, loading: billersLoading, error, request: refetch } = useApi(`/bills/all/${userCountryCode}`);
 
     const categories = useMemo(() => {
         if (!allBillers) return [];
