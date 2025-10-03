@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Bars3Icon } from '@heroicons/react/24/outline';
 import { BellIcon } from '@heroicons/react/24/solid';
 import LanguageMenu from '../common/LanguageMenu';
+import NotificationCenter from '../common/NotificationCenter';
 
 const Header = ({ onMenuClick, pageTitleKey }) => {
   const { t } = useTranslation();
@@ -25,10 +26,8 @@ const Header = ({ onMenuClick, pageTitleKey }) => {
         <h1 className="text-xl font-semibold text-neutral-900 dark:text-white font-display">{t(pageTitleKey)}</h1>
 
         <div className="flex items-center gap-x-4 lg:gap-x-6">
-          <button type="button" className="-m-2.5 p-2.5 text-neutral-500 dark:text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white">
-            <span className="sr-only">View notifications</span>
-            <BellIcon className="h-6 w-6" aria-hidden="true" />
-          </button>
+          <NotificationCenter />
+
 
           <div className="hidden lg:block lg:h-6 lg:w-px lg:bg-neutral-300 dark:bg-neutral-700" aria-hidden="true" />
 
