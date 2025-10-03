@@ -129,7 +129,7 @@ const BillerHubPage = () => {
             return (
                 <div className="text-center p-8 bg-red-900/50 border border-red-700 rounded-lg">
                     <ExclamationTriangleIcon className="h-10 w-10 mx-auto text-red-400" />
-                    <h3 className="mt-4 text-xl font-semibold text-white">Could Not Load Biller Options</h3>
+                    <h3 className="mt-4 text-xl font-semibold text-neutral-900 dark:text-white">Could Not Load Biller Options</h3>
                     <p className="mt-2 text-red-300">There was a problem connecting to our payment services.</p>
                     <Button onClick={() => refetch()} className="mt-6" variant="secondary">Try Again</Button>
                 </div>
@@ -175,7 +175,7 @@ const BillerHubPage = () => {
                             <ArrowLeftIcon className="h-6 w-6 text-neutral-300"/>
                         </motion.button>
                     )}
-                    <h1 className="text-2xl font-bold font-display text-white">
+                    <h1 className="text-2xl font-bold font-display text-neutral-900 dark:text-white">
                         {pageTitle}
                     </h1>
                 </div>
