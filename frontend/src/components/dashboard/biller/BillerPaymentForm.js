@@ -20,11 +20,26 @@ const BillerPaymentForm = ({ biller, onPaymentSuccess }) => {
     const providerDetails = useMemo(() => biller.provider_mappings[0], [biller]);
 
     const getIdentifierLabel = () => {
-        const category = biller.category.id.toLowerCase();
-        if (category.includes('tv')) return 'Smartcard Number';
-        if (category.includes('mobile')) return 'Phone Number';
-        if (category.includes('electricity')) return 'Meter Number';
-        return 'Customer ID / RRR';
+        // Use a mapping object for a clean, scalable, and complete solution.
+        const labelMap = {
+            "mobile": "Phone Number",
+            "tv": "Smartcard / IUC Number",
+            "internet": "Customer / Account ID",
+            "electricity": "Meter Number",
+            "utilities": "Account / Customer Number",
+            "financial": "Loan / Account Number",
+            "insurance": "Policy Number",
+            "govt": "Remita (RRR) / Invoice Number",
+            "education": "Student ID / Form Number",
+            "travel": "Booking Reference",
+            "shopping": "Order ID / Customer ID",
+            "donation": "Reference (Optional)",
+            "events": "Ticket Reference",
+        };
+
+        // Safely get the category ID and return the specific label, or a generic fallback.
+        const categoryId = biller?.category?.id?.toLowerCase();
+        return labelMap[categoryId] || 'Customer Identifier';
     };
 
     const initialSchema = Yup.object().shape({
@@ -71,7 +86,7 @@ const BillerPaymentForm = ({ biller, onPaymentSuccess }) => {
 
     return (
         <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-lg p-8">
-            <h2 className="text-xl font-bold text-white mb-4">{biller.name}</h2>
+            <h2 className="text-xl font-bold text-neutral-900 dark:text-white mb-4">{biller.name}</h2>
 
             <Formik
                 initialValues={{ customer_identifier: '', amount: '', product_code: '' }}
@@ -85,7 +100,7 @@ const BillerPaymentForm = ({ biller, onPaymentSuccess }) => {
                         <motion.div key="step1" hidden={step !== 1}>
                             <FormInput
                                 name="customer_identifier"
-                                label={getIdentifierLabel()}
+                                label={getIdentifierLabel()} // <-- This now returns the correct label
                                 disabled={validating}
                             />
                             <Button type="submit" isLoading={validating} fullWidth className="mt-4">
@@ -98,7 +113,7 @@ const BillerPaymentForm = ({ biller, onPaymentSuccess }) => {
                             {validationData?.available_products ? (
                                 // Case 1: Service has multiple products (e.g., Data Bundles)
                                 <div>
-                                    <label className="block text-sm font-medium text-neutral-300 mb-1">Select a Plan</label>
+                                    <label className="block text-sm font-medium text-neutral-300 dark:text-white mb-1">Select a Plan</label>
                                     <Field as="select" name="product_code" className="w-full bg-neutral-800 p-2 rounded-md"
                                         onChange={(e) => {
                                             const selectedProduct = validationData.available_products.find(p => p.code === e.target.value);
