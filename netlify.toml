@@ -1,34 +1,37 @@
-# FILE: frontend/netlify.toml
+# FILE: /netlify.toml (at the root of your project)
 
-# This sets the build command and the directory where the final site is located.
-# The `base` directory tells Netlify to run the build command from within the 'frontend' folder.
+# [build] context tells Netlify how to build your site.
 [build]
+  # base: The directory to change to before starting the build.
+  # This is the key to fixing your error.
+  base = "frontend"
+  
+  # command: The command to run to build your site.
   command = "npm run build"
-  publish = "frontend/build" # Correct path to the output directory
-  base = "" # Run npm install and build from the root of the repo
+  
+  # publish: The directory that contains the deploy-ready HTML files and assets.
+  # After the build, Netlify will deploy the contents of this directory.
+  publish = "frontend/build"
 
-# [THE DEFINITIVE, FINAL FIX FOR CHUNKLOADERROR & SYNTAX]
+# This redirect rule is crucial for Single-Page Applications (SPA) like React.
+# It ensures that direct visits or refreshes on pages like /dashboard work correctly.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
 
-# Rule 1: For all static assets (JS, CSS chunks) inside the /static directory.
-# Because their filenames have a unique hash, they can be cached "forever" by the browser.
+# [Caching Headers to prevent future ChunkLoadError issues]
+
+# Rule 1: For all your static assets (JS, CSS chunks).
+# These can be cached "forever" because their filenames change with every build.
 [[headers]]
   for = "/static/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
-# Rule 2: For all other paths, specifically the main index.html file.
-# This is the catch-all for your React Router paths.
-# It tells the browser it can cache the file, but it MUST re-check with the
-# server on every visit to see if there's a new version. This prevents stale deployments.
+# Rule 2: For all other paths, especially the main index.html file.
+# This tells the browser to always check for a new version.
 [[headers]]
   for = "/*"
   [headers.values]
     Cache-Control = "public, max-age=0, must-revalidate"
-
-# This redirect rule is crucial for Single-Page Applications (SPA) like React.
-# It ensures that if a user directly visits or refreshes a page like /dashboard/developer,
-# Netlify serves the main index.html file, allowing React Router to handle the routing.
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
