@@ -100,7 +100,7 @@ const ApiKeysManager = ({ keys, loading, onRevoke, onGenerate }) => {
                                 <tr key={hook.id} className="hover:bg-neutral-50 dark:hover:bg-neutral-800/50">
                                     <td className="px-6 py-4 font-mono text-neutral-700 dark:text-neutral-300 truncate">{hook.url}</td>
                                     <td className="px-6 py-4 text-neutral-600 dark:text-neutral-400">{hook.is_live_mode ? 'Live' : 'Test'}</td>
-                                    
+
                                     {/* [THE DEFINITIVE FIX IS HERE] */}
                                     {/* The Button must be inside its own <td> element. */}
                                     <td className="px-6 py-4 text-right">
@@ -108,7 +108,7 @@ const ApiKeysManager = ({ keys, loading, onRevoke, onGenerate }) => {
                                             <TrashIcon className="h-5 w-5 text-red-500"/>
                                         </Button>
                                     </td>
-                                    
+
                                 </tr>
                             ))}
                         </tbody>
@@ -374,5 +374,3 @@ const DeveloperPage = () => {
 
 
 export default DeveloperPage;
-
-
