@@ -6,15 +6,11 @@ import Button from '../../common/Button';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LockClosedIcon, WifiIcon, EyeIcon, EyeSlashIcon, ArrowPathIcon, CpuChipIcon, StarIcon } from '@heroicons/react/24/solid';
 
-// --- QuantumPay Logo SVG for the card ---
-const QuantumPayLogo = ({ className }) => (
-    <svg className={className} viewBox="0 0 120 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-         <text x="0" y="22" fontFamily="Arial, sans-serif" fontSize="24" fontWeight="bold" fill="currentColor">
-            QuantumPay
-        </text>
-    </svg>
+// --- QuantumPay Logo for the card ---
+const QuantumPayLogo = () => (
+    <IconLogo24 className="h-6 w-auto" />
+      <span className="font-display text-3xl font-bold text-neutral-900 dark:text-white">QuantumPay</span>
 );
-
 
 const CardDetailsModal = ({ isOpen, onClose, card }) => {
   const [isFlipped, setIsFlipped] = useState(false);
@@ -182,3 +178,4 @@ const CardDetailsModal = ({ isOpen, onClose, card }) => {
 };
 
 export default CardDetailsModal;
+
