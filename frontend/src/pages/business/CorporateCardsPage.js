@@ -16,16 +16,16 @@ import Spinner from '../../components/common/Spinner';
 import CardDetailsModal from '../../components/dashboard/business/CardDetailsModal';
 import IssueCardModal from '../../components/dashboard/business/IssueCardModal';
 
-// --- QuantumPay Logo ---
+import IconLogo24 from '../../components/icons/IconLogo24';
+// --- QuantumPay Logo SVG for the card ---
 const QuantumPayLogo = () => (
-     <div className="flex items-center space-x-2">
-        <IconLogo24 className="h-8 w-auto text-primary" /> {/* Example styling */}
+ <div className="flex items-center space-x-2">
+     <IconLogo24 className="h-6 w-auto" /> {/* Example styling */}
         <span className="font-display text-3xl font-bold text-neutral-900 dark:text-white">
             QuantumPay
         </span>
     </div>
 );
-
 
 // --- The New, Awesome Card Component ---
 const CardDisplay = ({ card, onClick }) => {
@@ -147,5 +147,6 @@ const CorporateCardsPage = () => {
 };
 
 export default CorporateCardsPage;
+
 
 
