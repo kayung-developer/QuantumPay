@@ -5,17 +5,17 @@ import Modal from '../../common/Modal';
 import Button from '../../common/Button';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LockClosedIcon, WifiIcon, EyeIcon, EyeSlashIcon, ArrowPathIcon, CpuChipIcon, StarIcon } from '@heroicons/react/24/solid';
-
-import IconLogo24 from '../../icons/IconLogo24';
+import IconLogo24 from '../../components/icons/IconLogo24';
 // --- QuantumPay Logo SVG for the card ---
 const QuantumPayLogo = () => (
  <div className="flex items-center space-x-2">
      <IconLogo24 className="h-6 w-auto" /> {/* Example styling */}
-       <text x="0" y="22" fontFamily="Arial, sans-serif" fontSize="24" fontWeight="bold" fill="currentColor">
+        <text x="0" y="22" fontFamily="Arial, sans-serif" fontSize="24" fontWeight="bold" fill="currentColor">
             QuantumPay
         </text>
     </div>
 );
+
 
 const CardDetailsModal = ({ isOpen, onClose, card }) => {
   const [isFlipped, setIsFlipped] = useState(false);
@@ -137,11 +137,11 @@ const CardDetailsModal = ({ isOpen, onClose, card }) => {
         <div className="grid grid-cols-3 gap-4 text-sm">
             <div className="bg-neutral-50 dark:bg-neutral-800/50 p-3 rounded-lg text-center">
                 <p className="text-neutral-600 dark:text-neutral-400">Card Type</p>
-                <p className="font-semibold text-white capitalize">{card.card_type}</p>
+                <p className="font-semibold text-neutral-500 dark:text-neutral-300 capitalize">{card.card_type}</p>
             </div>
              <div className="bg-neutral-50 dark:bg-neutral-800/50 p-3 rounded-lg text-center">
                 <p className="text-neutral-600 dark:text-neutral-400">Tier</p>
-                <p className="font-semibold text-white capitalize">{card.card_tier}</p>
+                <p className="font-semibold text-neutral-500 dark:text-neutral-300 capitalize">{card.card_tier}</p>
             </div>
             <div className="bg-neutral-50 dark:bg-neutral-800/50 p-3 rounded-lg text-center">
                 <p className="text-neutral-600 dark:text-neutral-400">Status</p>
@@ -183,8 +183,3 @@ const CardDetailsModal = ({ isOpen, onClose, card }) => {
 };
 
 export default CardDetailsModal;
-
-
-
-
-
