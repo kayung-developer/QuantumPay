@@ -25,10 +25,16 @@ const IssueCardModal = ({ isOpen, onClose, onSuccess }) => {
         { name: t('card_tier_premium'), description: t('card_premium_desc'), tier: 'premium', available: isUltimateSubscriber },
     ];
 
+    const cardTypes = [
+        { name: 'Virtual', description: 'For online and digital wallet use.', type: 'virtual' },
+        { name: 'Physical', description: 'A tangible card shipped to the user.', type: 'physical' },
+    ];
+
     const validationSchema = Yup.object().shape({
         assigned_user_email: Yup.string().email(t('validation.email_invalid')).required(t('validation.required')),
         monthly_limit: Yup.number().min(10, 'Limit must be at least $10').required(t('validation.required')),
         card_tier: Yup.string().required(),
+        card_type: Yup.string().required(),
     });
 
     const handleSubmit = async (values, { resetForm }) => {
@@ -46,7 +52,7 @@ const IssueCardModal = ({ isOpen, onClose, onSuccess }) => {
     return (
         <Modal isOpen={isOpen} onClose={onClose} title={t('issue_card_modal_title')} size="lg">
             <Formik
-                initialValues={{ assigned_user_email: '', monthly_limit: '', card_tier: 'standard' }}
+                initialValues={{ assigned_user_email: '', monthly_limit: '', card_tier: 'standard', card_type: 'virtual' }}
                 validationSchema={validationSchema}
                 onSubmit={handleSubmit}
             >
@@ -55,6 +61,27 @@ const IssueCardModal = ({ isOpen, onClose, onSuccess }) => {
                         <FormInput name="assigned_user_email" label="Assign to (Employee Email)" type="email" />
                         <FormInput name="monthly_limit" label="Monthly Spending Limit (USD)" type="number" />
 
+                        {/* Card Type Selection */}
+                        <div>
+                            <label className="text-sm font-medium text-neutral-900 dark:text-white">Card Type</label>
+                            <RadioGroup value={values.card_type} onChange={(value) => setFieldValue('card_type', value)} className="mt-2">
+                                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                                    {cardTypes.map((card) => (
+                                        <RadioGroup.Option key={card.name} value={card.type} className={({ active, checked }) => `relative flex cursor-pointer rounded-lg border p-4 focus:outline-none bg-white dark:bg-neutral-900 ${checked ? 'border-transparent ring-2 ring-primary' : 'border-neutral-300 dark:border-neutral-700'} ${active ? 'ring-2 ring-primary' : ''}`}>
+                                            {({ checked }) => (
+                                                <>
+                                                    <div className="flex flex-1"><div className="flex flex-col"><RadioGroup.Label as="span" className="block text-sm font-medium text-neutral-900 dark:text-white">{card.name}</RadioGroup.Label><RadioGroup.Description as="span" className="mt-1 flex items-center text-sm text-neutral-500 dark:text-neutral-400">{card.description}</RadioGroup.Description></div></div>
+                                                    {checked && <CheckCircleIcon className="h-5 w-5 text-primary" aria-hidden="true" />}
+                                                </>
+                                            )}
+                                        </RadioGroup.Option>
+                                    ))}
+                                </div>
+                            </RadioGroup>
+                        </div>
+
+
+                        {/* Card Tier Selection */}
                         <div>
                             <label className="text-sm font-medium text-neutral-900 dark:text-white">{t('card_tier_label')}</label>
                             <RadioGroup value={values.card_tier} onChange={(value) => setFieldValue('card_tier', value)} className="mt-2">
