@@ -3,8 +3,10 @@ import { Link } from 'react-router-dom';
 import IconLogo24 from '../icons/IconLogo24';
 const Logo = () => (
     <Link to="/" className="flex items-center space-x-2">
-        <IconLogo24 />
-      <span className="font-display text-3xl font-bold text-neutral-900 dark:text-white">QuantumPay</span>
+         <IconLogo24 className="h-6 w-auto" /> {/* Example styling */}
+        <span className="font-display text-3xl font-bold text-neutral-900 dark:text-white">
+            QuantumPay
+        </span>
     </Link>
 );
 
@@ -130,5 +132,6 @@ const Footer = () => {
         </footer>
     );
 };
+
 
 export default Footer;
