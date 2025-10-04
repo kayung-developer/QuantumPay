@@ -5,7 +5,7 @@ import Modal from '../../common/Modal';
 import Button from '../../common/Button';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LockClosedIcon, WifiIcon, EyeIcon, EyeSlashIcon, ArrowPathIcon, CpuChipIcon, StarIcon } from '@heroicons/react/24/solid';
-import IconLogo24 from '../../components/icons/IconLogo24';
+import IconLogo24 from '../../icons/IconLogo24';
 // --- QuantumPay Logo SVG for the card ---
 const QuantumPayLogo = () => (
  <div className="flex items-center space-x-2">
@@ -183,3 +183,4 @@ const CardDetailsModal = ({ isOpen, onClose, card }) => {
 };
 
 export default CardDetailsModal;
+
