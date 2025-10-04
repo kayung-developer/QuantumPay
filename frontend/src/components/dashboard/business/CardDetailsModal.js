@@ -8,8 +8,12 @@ import { LockClosedIcon, WifiIcon, EyeIcon, EyeSlashIcon, ArrowPathIcon, CpuChip
 
 // --- QuantumPay Logo for the card ---
 const QuantumPayLogo = () => (
-    <IconLogo24 className="h-6 w-auto" />
-      <span className="font-display text-3xl font-bold text-neutral-900 dark:text-white">QuantumPay</span>
+    <div className="flex items-center space-x-2">
+        <IconLogo24 className="h-8 w-auto text-primary" /> {/* Example styling */}
+        <span className="font-display text-3xl font-bold text-neutral-900 dark:text-white">
+            QuantumPay
+        </span>
+    </div>
 );
 
 const CardDetailsModal = ({ isOpen, onClose, card }) => {
@@ -178,4 +182,5 @@ const CardDetailsModal = ({ isOpen, onClose, card }) => {
 };
 
 export default CardDetailsModal;
+
 
