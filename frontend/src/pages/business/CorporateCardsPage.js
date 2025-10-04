@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import { toast } from 'react-hot-toast';
 
 // --- Icon Imports ---
-import { PlusIcon, WifiIcon, StarIcon } from '@heroicons/react/24/solid';
+import { PlusIcon, WifiIcon, StarIcon, CpuChipIcon } from '@heroicons/react/24/solid';
 
 // --- Component Imports ---
 import DashboardLayout from '../../components/layout/DashboardLayout';
@@ -14,43 +14,66 @@ import { useApi } from '../../hooks/useApi';
 import Button from '../../components/common/Button';
 import Spinner from '../../components/common/Spinner';
 import CardDetailsModal from '../../components/dashboard/business/CardDetailsModal';
-import IssueCardModal from '../../components/dashboard/business/IssueCardModal'; // <-- Use the new, clean modal
+import IssueCardModal from '../../components/dashboard/business/IssueCardModal';
+
+// --- QuantumPay Logo SVG ---
+const QuantumPayLogo = () => (
+    <svg width="80" height="24" viewBox="0 0 120 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <text x="0" y="22" fontFamily="Arial, sans-serif" fontSize="24" fontWeight="bold" fill="white">
+            QuantumPay
+        </text>
+    </svg>
+);
+
 
 // --- The New, Awesome Card Component ---
 const CardDisplay = ({ card, onClick }) => {
     const isPremium = card.card_tier === 'premium';
     const cardVariants = {
-        hidden: { opacity: 0, y: 20 },
-        visible: { opacity: 1, y: 0 }
+        hidden: { opacity: 0, y: 20, scale: 0.95 },
+        visible: { opacity: 1, y: 0, scale: 1 }
     };
+
+    const cardBg = isPremium
+        ? 'from-neutral-800 to-black bg-gradient-to-br'
+        : 'from-primary to-blue-600 bg-gradient-to-br';
+
+    const typeBg = card.card_type === 'virtual' ? 'bg-blue-500/80' : 'bg-neutral-500/80';
 
     return (
         <motion.div
             variants={cardVariants}
-            whileHover={{ scale: 1.03, y: -5 }}
-            transition={{ type: 'spring', stiffness: 300 }}
+            whileHover={{ scale: 1.03, y: -5, shadow: '2xl' }}
+            transition={{ type: 'spring', stiffness: 300, damping: 15 }}
             onClick={() => onClick(card)}
-            className={`w-full max-w-sm mx-auto p-6 rounded-2xl text-white shadow-2xl cursor-pointer ${isPremium ? 'from-neutral-800 to-black bg-gradient-to-br' : 'from-primary to-blue-600 bg-gradient-to-br'}`}
+            className={`relative w-full max-w-sm mx-auto p-6 rounded-2xl text-white shadow-lg cursor-pointer overflow-hidden ${cardBg}`}
         >
-            <div className="flex justify-between items-start">
-                <span className="font-display font-bold text-xl">QuantumPay</span>
-                <div className="flex items-center space-x-2">
-                    {isPremium && <StarIcon className="h-6 w-6 text-amber-400" />}
-                    <WifiIcon className="h-6 w-6" />
+            <div className="absolute -top-10 -right-10 w-32 h-32 bg-white/10 rounded-full blur-xl"></div>
+            <div className="relative z-10">
+                <div className="flex justify-between items-start">
+                    <QuantumPayLogo />
+                     <div className="flex items-center space-x-2">
+                        {isPremium && <StarIcon className="h-6 w-6 text-amber-400" title="Premium Tier" />}
+                        <WifiIcon className="h-6 w-6" />
+                    </div>
                 </div>
-            </div>
-            <div className="mt-8">
-                <p className="font-mono text-xl tracking-widest">{card.card_number}</p>
-            </div>
-            <div className="mt-6 flex justify-between items-end">
-                <div>
-                    <p className="text-xs opacity-70">Card Holder</p>
-                    <p className="font-medium truncate">{card.assigned_user.full_name}</p>
+                 <div className="mt-6 flex items-center space-x-4">
+                    <CpuChipIcon className="h-10 w-10 text-neutral-300/70" />
+                    <p className="font-mono text-xl tracking-widest">{card.card_number.slice(-9)}</p>
                 </div>
-                <div>
-                    <p className="text-xs opacity-70">Expires</p>
-                    <p className="font-medium">{card.expiry_date}</p>
+                <div className="mt-5 flex justify-between items-end">
+                    <div>
+                        <p className="text-xs opacity-70">Card Holder</p>
+                        <p className="font-medium truncate">{card.assigned_user.full_name}</p>
+                    </div>
+                    <div>
+                        <p className="text-xs opacity-70">Expires</p>
+                        <p className="font-medium">{card.expiry_date}</p>
+                    </div>
                 </div>
+                <span className={`absolute top-4 right-4 text-xs font-bold uppercase px-2 py-1 rounded-full ${typeBg} backdrop-blur-sm`}>
+                    {card.card_type}
+                </span>
             </div>
         </motion.div>
     );
@@ -67,7 +90,7 @@ const CorporateCardsPage = () => {
     const handleSuccess = (newCard) => {
         setIssueModalOpen(false);
         refetchCards();
-        toast.success(`New card issued to ${newCard.assigned_user.full_name}!`);
+        toast.success(`New ${newCard.card_type} card issued to ${newCard.assigned_user.full_name}!`);
     };
 
     const containerVariants = {
