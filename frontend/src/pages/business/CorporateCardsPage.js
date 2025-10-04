@@ -16,13 +16,10 @@ import Spinner from '../../components/common/Spinner';
 import CardDetailsModal from '../../components/dashboard/business/CardDetailsModal';
 import IssueCardModal from '../../components/dashboard/business/IssueCardModal';
 
-// --- QuantumPay Logo SVG ---
+// --- QuantumPay Logo ---
 const QuantumPayLogo = () => (
-    <svg width="80" height="24" viewBox="0 0 120 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <text x="0" y="22" fontFamily="Arial, sans-serif" fontSize="24" fontWeight="bold" fill="white">
-            QuantumPay
-        </text>
-    </svg>
+    <IconLogo24 className="h-6 w-auto" />
+      <span className="font-display text-3xl font-bold text-neutral-900 dark:text-white">QuantumPay</span>
 );
 
 
@@ -146,3 +143,4 @@ const CorporateCardsPage = () => {
 };
 
 export default CorporateCardsPage;
+
