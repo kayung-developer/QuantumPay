@@ -8,7 +8,7 @@ import React from 'react';
  * It uses CSS variables for its gradient, allowing it to adapt to light/dark themes automatically.
  * @param {object} props - Standard React component props. Accepts `className` for additional styling.
  */
- import logoSrc from '../../components/icon/logo.png';
+ import logoSrc from '../assets/logo.png';
 const IconLogo24 = ({ className, width, height }) => {
   return (
         <img
