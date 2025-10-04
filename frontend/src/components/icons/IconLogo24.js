@@ -8,11 +8,10 @@ import React from 'react';
  * It uses CSS variables for its gradient, allowing it to adapt to light/dark themes automatically.
  * @param {object} props - Standard React component props. Accepts `className` for additional styling.
  */
- import logoSrc from '../assets/logo.png';
 const IconLogo24 = ({ className, width, height }) => {
   return (
         <img
-            src={logoSrc}
+            src="/logo.png"
             alt="QuantumPay Logo"
             className={className} // Allows passing Tailwind CSS classes like "h-6 w-auto"
             width={width}         // Allows setting a specific width
@@ -23,4 +22,3 @@ const IconLogo24 = ({ className, width, height }) => {
 };
 
 export default IconLogo24;
-
