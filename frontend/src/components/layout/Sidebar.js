@@ -37,10 +37,10 @@ import IconLogo24 from '../icons/IconLogo24';
 const Logo = () => (
   <Link to="/dashboard" className="flex items-center space-x-2 px-4">
     {/* Assuming you have a favicon.svg in your public folder */}
-    <IconLogo24 />
-    <span className="font-display text-2xl font-bold text-neutral-600 dark:text-white">
-        QuantumPay
-    </span>
+     <IconLogo24 className="h-6 w-auto" /> {/* Example styling */}
+        <span className="font-display text-3xl font-bold text-neutral-900 dark:text-white">
+            QuantumPay
+        </span>
   </Link>
 );
 
@@ -219,3 +219,4 @@ const Sidebar = ({ onLinkClick }) => {
 
 
 export default Sidebar;
+
