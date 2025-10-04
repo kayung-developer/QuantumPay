@@ -15,10 +15,10 @@ import IconLogo24 from '../../components/icons/IconLogo24';
 const Logo = () => {
   return (
     <Link to="/" className="flex items-center justify-center space-x-3 mb-8 group">
-      <IconLogo24 className="h-8 w-auto text-primary" />
-      <span className="font-display text-3xl font-bold text-neutral-900 dark:text-white group-hover:text-primary transition-colors">
-        QuantumPay
-      </span>
+      <IconLogo24 className="h-6 w-auto" /> {/* Example styling */}
+        <span className="font-display text-3xl font-bold text-neutral-900 dark:text-white">
+            QuantumPay
+        </span>
     </Link>
   );
 };
@@ -133,4 +133,5 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
+
 
