@@ -10,8 +10,10 @@ import IconLogo24 from '../icons/IconLogo24';
 const Logo = () => (
   <Link to="/" className="flex items-center space-x-2">
     {/* You can use an SVG or an Image here */}
-    <IconLogo24 />
-    <span className="font-display text-2xl font-bold text-neutral-900 dark:text-white">QuantumPay</span>
+     <IconLogo24 className="h-6 w-auto" /> {/* Example styling */}
+        <span className="font-display text-3xl font-bold text-neutral-900 dark:text-white">
+            QuantumPay
+        </span>
   </Link>
 );
 
@@ -214,5 +216,6 @@ const Navbar = () => {
     </nav>
   );
 };
+
 
 export default Navbar;
