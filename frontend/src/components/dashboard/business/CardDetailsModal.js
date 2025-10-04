@@ -11,7 +11,7 @@ import IconLogo24 from '../../icons/IconLogo24';
 const QuantumPayLogo = () => (
  <div className="flex items-center space-x-2">
      <IconLogo24 className="h-6 w-auto" /> {/* Example styling */}
-        <span className="font-display text-3xl font-bold text-neutral-900 dark:text-white">
+       <span className="font-display text-3xl font-bold text-white">
             QuantumPay
         </span>
     </div>
@@ -183,6 +183,7 @@ const CardDetailsModal = ({ isOpen, onClose, card }) => {
 };
 
 export default CardDetailsModal;
+
 
 
 
