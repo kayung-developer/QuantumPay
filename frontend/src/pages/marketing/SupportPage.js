@@ -15,11 +15,24 @@ import Spinner from '../../components/common/Spinner';
 import { useApi, useApiPost } from '../../hooks/useApi';
 import PageWrapper from '../../components/layout/PageWrapper';
 
+// [FIX 1] Import useAuth to detect if we are logged in.
+// If your auth hook is named differently (e.g., useUser), please adjust this import.
+import { useAuth } from '../../hooks/useAuth'; 
+
 const SupportPage = () => {
     const { t } = useTranslation();
-    const { post: submitForm, loading: formLoading, data: formResponse } = useApiPost('/utility/support/contact');
+    
+    // [FIX 1] Detect authentication state
+    // We default to "false" if the hook doesn't exist or return what we expect to prevent crashes
+    let isLoggedIn = false;
+    try {
+        const auth = useAuth();
+        isLoggedIn = auth?.isAuthenticated || !!auth?.user;
+    } catch (e) {
+        console.warn("useAuth hook not found or failed, defaulting to public view.");
+    }
 
-    // Fetch the FAQ structure
+    const { post: submitForm, loading: formLoading, data: formResponse } = useApiPost('/utility/support/contact');
     const { data: faqData, loading: faqsLoading, error: faqsError } = useApi('/utility/faqs');
 
     const [searchTerm, setSearchTerm] = useState('');
@@ -31,9 +44,9 @@ const SupportPage = () => {
         message: Yup.string().min(10, t('validation.too_short')).required(t('validation.required')),
     });
 
-    // Memoize the filtered FAQs with safety checks
+    // [FIX 2] Robust safety check for data mapping to prevent "Something Went Wrong"
     const filteredFaqs = useMemo(() => {
-        // Safety check: Ensure faqData is actually an array before mapping
+        // Ensure faqData exists and is an array before trying to map it
         if (!faqData || !Array.isArray(faqData)) return [];
 
         const lowercasedFilter = searchTerm.toLowerCase();
@@ -42,6 +55,7 @@ const SupportPage = () => {
         return faqData
             .map(category => ({
                 ...category,
+                // Ensure questions exists and is an array
                 questions: (category.questions || []).filter(
                     faq => (t(faq.q_key) || '').toLowerCase().includes(lowercasedFilter) || 
                            (t(faq.a_key) || '').toLowerCase().includes(lowercasedFilter)
@@ -63,7 +77,7 @@ const SupportPage = () => {
         }
 
         return filteredFaqs.map((categoryData) => (
-            <div key={categoryData.category || 'unknown'} className="mb-8">
+            <div key={categoryData.category || Math.random()} className="mb-8">
                 <h3 className="text-xl font-semibold text-neutral-800 dark:text-neutral-200 mb-4">{categoryData.category}</h3>
                 <dl className="space-y-4">
                     {categoryData.questions.map((faq) => (
@@ -90,26 +104,20 @@ const SupportPage = () => {
         ));
     };
 
+    // [FIX 3] Conditional Wrapper
+    // If logged in, we use a Fragment (no extra header/footer). 
+    // If public, we use PageWrapper (adds Marketing Header/Footer).
+    const LayoutWrapper = isLoggedIn ? React.Fragment : PageWrapper;
+
     return (
-        <PageWrapper>
-            {/* Main Content Wrapper */}
-            <div className="bg-white dark:bg-neutral-950">
-                
+        <LayoutWrapper>
+            <div className="bg-white dark:bg-neutral-950 min-h-screen">
                 {/* Hero Section */}
                 <div className="bg-neutral-50 dark:bg-neutral-900 pt-24 pb-20 sm:pt-32 sm:pb-28">
                     <div className="mx-auto max-w-7xl px-6 lg:px-8">
-                        <motion.div 
-                            initial={{ opacity: 0, y: 20 }} 
-                            animate={{ opacity: 1, y: 0 }} 
-                            transition={{ duration: 0.8 }} 
-                            className="mx-auto max-w-2xl text-center"
-                        >
-                            <h1 className="text-4xl font-bold tracking-tight text-neutral-900 dark:text-white sm:text-6xl font-display">
-                                {t('support_title')}
-                            </h1>
-                            <p className="mt-6 text-lg leading-8 text-neutral-600 dark:text-neutral-300">
-                                {t('support_subtitle')}
-                            </p>
+                        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="mx-auto max-w-2xl text-center">
+                            <h1 className="text-4xl font-bold tracking-tight text-neutral-900 dark:text-white sm:text-6xl font-display">{t('support_title')}</h1>
+                            <p className="mt-6 text-lg leading-8 text-neutral-600 dark:text-neutral-300">{t('support_subtitle')}</p>
                         </motion.div>
                     </div>
                 </div>
@@ -117,10 +125,9 @@ const SupportPage = () => {
                 {/* FAQ and Contact Form Section */}
                 <div className="py-16 sm:py-24">
                     <div className="mx-auto max-w-7xl px-6 lg:px-8">
-                        {/* GRID START: Splits page into 2/3 Left (FAQ) and 1/3 Right (Form) */}
                         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
                             
-                            {/* LEFT COLUMN: FAQs */}
+                            {/* LEFT COLUMN: Search & FAQs */}
                             <div className="lg:col-span-2">
                                 <h2 className="text-2xl font-bold text-neutral-900 dark:text-white font-display flex items-center">
                                     <LifebuoyIcon className="h-6 w-6 mr-3 text-primary"/>
@@ -140,8 +147,6 @@ const SupportPage = () => {
                                         onChange={(e) => setSearchTerm(e.target.value)}
                                     />
                                 </div>
-                                
-                                {/* FAQ Results - Correctly placed inside the Left Column */}
                                 <div className="mt-6 w-full max-w-3xl">
                                     {renderFaqs()}
                                 </div>
@@ -166,7 +171,7 @@ const SupportPage = () => {
                                             validationSchema={ContactSchema}
                                             onSubmit={async (values, { resetForm }) => {
                                                 const result = await submitForm(values);
-                                                if(result.success) {
+                                                if(result && result.success) {
                                                     resetForm();
                                                 }
                                             }}
@@ -192,15 +197,12 @@ const SupportPage = () => {
                                     )}
                                 </div>
                             </div>
-                            {/* End Right Column */}
 
-                        </div> 
-                        {/* End Grid */}
+                        </div>
                     </div>
                 </div>
-            </div> 
-            {/* End Main Content Wrapper (bg-white) - THIS was likely missing */}
-        </PageWrapper>
+            </div>
+        </LayoutWrapper>
     );
 };
 
