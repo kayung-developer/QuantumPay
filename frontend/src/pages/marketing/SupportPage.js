@@ -15,22 +15,15 @@ import Spinner from '../../components/common/Spinner';
 import { useApi, useApiPost } from '../../hooks/useApi';
 import PageWrapper from '../../components/layout/PageWrapper';
 
-// [FIX 1] Import useAuth to detect if we are logged in.
-// If your auth hook is named differently (e.g., useUser), please adjust this import.
-import { useAuth } from '../../hooks/useAuth'; 
+// [FIX 1] Correctly import useAuth from your Context file
+import { useAuth } from '../../context/AuthContext';
 
 const SupportPage = () => {
     const { t } = useTranslation();
     
-    // [FIX 1] Detect authentication state
-    // We default to "false" if the hook doesn't exist or return what we expect to prevent crashes
-    let isLoggedIn = false;
-    try {
-        const auth = useAuth();
-        isLoggedIn = auth?.isAuthenticated || !!auth?.user;
-    } catch (e) {
-        console.warn("useAuth hook not found or failed, defaulting to public view.");
-    }
+    // [FIX 2] Get auth state correctly
+    // We assume the component is wrapped in AuthProvider (standard in App.js)
+    const { isAuthenticated } = useAuth();
 
     const { post: submitForm, loading: formLoading, data: formResponse } = useApiPost('/utility/support/contact');
     const { data: faqData, loading: faqsLoading, error: faqsError } = useApi('/utility/faqs');
@@ -44,9 +37,9 @@ const SupportPage = () => {
         message: Yup.string().min(10, t('validation.too_short')).required(t('validation.required')),
     });
 
-    // [FIX 2] Robust safety check for data mapping to prevent "Something Went Wrong"
+    // [FIX 3] Robust safety check for data mapping to prevent crashes
     const filteredFaqs = useMemo(() => {
-        // Ensure faqData exists and is an array before trying to map it
+        // Safety check: Ensure faqData is actually an array before mapping
         if (!faqData || !Array.isArray(faqData)) return [];
 
         const lowercasedFilter = searchTerm.toLowerCase();
@@ -104,14 +97,15 @@ const SupportPage = () => {
         ));
     };
 
-    // [FIX 3] Conditional Wrapper
-    // If logged in, we use a Fragment (no extra header/footer). 
-    // If public, we use PageWrapper (adds Marketing Header/Footer).
-    const LayoutWrapper = isLoggedIn ? React.Fragment : PageWrapper;
+    // [FIX 4] Conditional Wrapper Logic
+    // If authenticated: Render Fragment (Layout is handled by parent Dashboard)
+    // If not authenticated: Render PageWrapper (Adds Marketing Header/Footer)
+    const LayoutWrapper = isAuthenticated ? React.Fragment : PageWrapper;
 
     return (
         <LayoutWrapper>
             <div className="bg-white dark:bg-neutral-950 min-h-screen">
+                
                 {/* Hero Section */}
                 <div className="bg-neutral-50 dark:bg-neutral-900 pt-24 pb-20 sm:pt-32 sm:pb-28">
                     <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -197,6 +191,7 @@ const SupportPage = () => {
                                     )}
                                 </div>
                             </div>
+                            {/* End Right Column */}
 
                         </div>
                     </div>
