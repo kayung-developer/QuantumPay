@@ -19,7 +19,7 @@ const SupportPage = () => {
     const { t } = useTranslation();
     const { post: submitForm, loading: formLoading, data: formResponse } = useApiPost('/utility/support/contact');
 
-    // [THE DEFINITIVE FIX] Fetch the FAQ structure from the new backend endpoint.
+    // Fetch the FAQ structure from the backend endpoint.
     const { data: faqData, loading: faqsLoading, error: faqsError } = useApi('/utility/faqs');
 
     const [searchTerm, setSearchTerm] = useState('');
@@ -31,12 +31,12 @@ const SupportPage = () => {
         message: Yup.string().min(10, t('validation.too_short')).required(t('validation.required')),
     });
 
-    // [THE DEFINITIVE FIX] Memoize the filtered FAQs based on the new hierarchical structure.
+    // Memoize the filtered FAQs.
     const filteredFaqs = useMemo(() => {
         if (!faqData) return [];
 
         const lowercasedFilter = searchTerm.toLowerCase();
-        if (!lowercasedFilter) return faqData; // Return all data if search is empty
+        if (!lowercasedFilter) return faqData; 
 
         return faqData
             .map(category => ({
@@ -49,7 +49,7 @@ const SupportPage = () => {
 
     }, [searchTerm, faqData, t]);
 
-    // [THE DEFINITIVE FIX] A dedicated render function for the FAQ section to handle all states.
+    // Render function for the FAQ section.
     const renderFaqs = () => {
         if (faqsLoading) {
             return <div className="pt-6 flex justify-center"><Spinner /></div>;
@@ -102,33 +102,36 @@ const SupportPage = () => {
 
                 {/* FAQ and Contact Form Section */}
                 <div className="py-16 sm:py-24">
-                     <div className="mx-auto max-w-7xl px-6 lg:px-8">
+                    <div className="mx-auto max-w-7xl px-6 lg:px-8">
                         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+                            
+                            {/* LEFT COLUMN: Search + FAQs */}
                             <div className="lg:col-span-2">
-                                 <h2 className="text-2xl font-bold text-neutral-900 dark:text-white font-display flex items-center">
+                                <h2 className="text-2xl font-bold text-neutral-900 dark:text-white font-display flex items-center">
                                     <LifebuoyIcon className="h-6 w-6 mr-3 text-primary"/>
                                     {t('faq_title')}
                                 </h2>
-                                 <div className="relative">
-                                        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                                            <MagnifyingGlassIcon className="h-5 w-5 text-neutral-400" aria-hidden="true" />
-                                        </div>
-                                        <input
-                                            type="search"
-                                            name="search"
-                                            id="search"
-                                            className="block w-full rounded-md border-0 py-2.5 pl-10 bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 ring-1 ring-inset ring-neutral-300 dark:ring-neutral-700 placeholder:text-neutral-400 focus:ring-2 focus:ring-inset focus:ring-primary"
-                                            placeholder={t('faq_search_placeholder')}
-                                            value={searchTerm}
-                                            onChange={(e) => setSearchTerm(e.target.value)}
-                                        />
+                                <div className="relative mt-4">
+                                    <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                                        <MagnifyingGlassIcon className="h-5 w-5 text-neutral-400" aria-hidden="true" />
                                     </div>
+                                    <input
+                                        type="search"
+                                        name="search"
+                                        id="search"
+                                        className="block w-full rounded-md border-0 py-2.5 pl-10 bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 ring-1 ring-inset ring-neutral-300 dark:ring-neutral-700 placeholder:text-neutral-400 focus:ring-2 focus:ring-inset focus:ring-primary"
+                                        placeholder={t('faq_search_placeholder')}
+                                        value={searchTerm}
+                                        onChange={(e) => setSearchTerm(e.target.value)}
+                                    />
                                 </div>
+                                {/* FAQs are now correctly INSIDE the col-span-2 div */}
                                 <div className="mt-6 w-full max-w-3xl">
                                     {renderFaqs()}
                                 </div>
                             </div>
-                            {/* Contact Form */}
+
+                            {/* RIGHT COLUMN: Contact Form */}
                             <div className="lg:col-span-1">
                                 <div className="bg-white dark:bg-neutral-900 p-8 rounded-lg border border-neutral-200 dark:border-neutral-800 sticky top-24">
                                     <h2 className="text-2xl font-bold text-neutral-900 dark:text-white font-display flex items-center">
@@ -176,7 +179,8 @@ const SupportPage = () => {
                         </div>
                     </div>
                 </div>
-            </PageWrapper>
+            </div> {/* Added missing closing div for bg-white */}
+        </PageWrapper>
     );
 };
 
