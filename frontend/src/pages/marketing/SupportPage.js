@@ -19,7 +19,7 @@ const SupportPage = () => {
     const { t } = useTranslation();
     const { post: submitForm, loading: formLoading, data: formResponse } = useApiPost('/utility/support/contact');
 
-    // Fetch the FAQ structure from the backend endpoint.
+    // Fetch the FAQ structure
     const { data: faqData, loading: faqsLoading, error: faqsError } = useApi('/utility/faqs');
 
     const [searchTerm, setSearchTerm] = useState('');
@@ -31,25 +31,26 @@ const SupportPage = () => {
         message: Yup.string().min(10, t('validation.too_short')).required(t('validation.required')),
     });
 
-    // Memoize the filtered FAQs.
+    // Memoize the filtered FAQs with safety checks
     const filteredFaqs = useMemo(() => {
-        if (!faqData) return [];
+        // Safety check: Ensure faqData is actually an array before mapping
+        if (!faqData || !Array.isArray(faqData)) return [];
 
         const lowercasedFilter = searchTerm.toLowerCase();
-        if (!lowercasedFilter) return faqData; 
+        if (!lowercasedFilter) return faqData;
 
         return faqData
             .map(category => ({
                 ...category,
-                questions: category.questions.filter(
-                    faq => t(faq.q_key).toLowerCase().includes(lowercasedFilter) || t(faq.a_key).toLowerCase().includes(lowercasedFilter)
+                questions: (category.questions || []).filter(
+                    faq => (t(faq.q_key) || '').toLowerCase().includes(lowercasedFilter) || 
+                           (t(faq.a_key) || '').toLowerCase().includes(lowercasedFilter)
                 ),
             }))
-            .filter(category => category.questions.length > 0);
+            .filter(category => category.questions && category.questions.length > 0);
 
     }, [searchTerm, faqData, t]);
 
-    // Render function for the FAQ section.
     const renderFaqs = () => {
         if (faqsLoading) {
             return <div className="pt-6 flex justify-center"><Spinner /></div>;
@@ -62,19 +63,21 @@ const SupportPage = () => {
         }
 
         return filteredFaqs.map((categoryData) => (
-            <div key={categoryData.category} className="mb-8">
+            <div key={categoryData.category || 'unknown'} className="mb-8">
                 <h3 className="text-xl font-semibold text-neutral-800 dark:text-neutral-200 mb-4">{categoryData.category}</h3>
                 <dl className="space-y-4">
                     {categoryData.questions.map((faq) => (
                         <Disclosure as="div" key={faq.q_key} className="pt-4 border-t border-neutral-200 dark:border-neutral-800">
                             {({ open }) => (
                                 <>
-                                    <dt><Disclosure.Button className="flex w-full items-start justify-between text-left text-neutral-900 dark:text-white">
-                                        <span className="text-base font-semibold leading-7">{t(faq.q_key)}</span>
-                                        <span className="ml-6 flex h-7 items-center">
-                                            {open ? <MinusSmallIcon className="h-6 w-6" /> : <PlusSmallIcon className="h-6 w-6" />}
-                                        </span>
-                                    </Disclosure.Button></dt>
+                                    <dt>
+                                        <Disclosure.Button className="flex w-full items-start justify-between text-left text-neutral-900 dark:text-white">
+                                            <span className="text-base font-semibold leading-7">{t(faq.q_key)}</span>
+                                            <span className="ml-6 flex h-7 items-center">
+                                                {open ? <MinusSmallIcon className="h-6 w-6" /> : <PlusSmallIcon className="h-6 w-6" />}
+                                            </span>
+                                        </Disclosure.Button>
+                                    </dt>
                                     <Disclosure.Panel as="dd" className="mt-2 pr-12">
                                         <p className="text-base leading-7 text-neutral-600 dark:text-neutral-400">{t(faq.a_key)}</p>
                                     </Disclosure.Panel>
@@ -89,13 +92,24 @@ const SupportPage = () => {
 
     return (
         <PageWrapper>
+            {/* Main Content Wrapper */}
             <div className="bg-white dark:bg-neutral-950">
+                
                 {/* Hero Section */}
                 <div className="bg-neutral-50 dark:bg-neutral-900 pt-24 pb-20 sm:pt-32 sm:pb-28">
                     <div className="mx-auto max-w-7xl px-6 lg:px-8">
-                        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="mx-auto max-w-2xl text-center">
-                            <h1 className="text-4xl font-bold tracking-tight text-neutral-900 dark:text-white sm:text-6xl font-display">{t('support_title')}</h1>
-                            <p className="mt-6 text-lg leading-8 text-neutral-600 dark:text-neutral-300">{t('support_subtitle')}</p>
+                        <motion.div 
+                            initial={{ opacity: 0, y: 20 }} 
+                            animate={{ opacity: 1, y: 0 }} 
+                            transition={{ duration: 0.8 }} 
+                            className="mx-auto max-w-2xl text-center"
+                        >
+                            <h1 className="text-4xl font-bold tracking-tight text-neutral-900 dark:text-white sm:text-6xl font-display">
+                                {t('support_title')}
+                            </h1>
+                            <p className="mt-6 text-lg leading-8 text-neutral-600 dark:text-neutral-300">
+                                {t('support_subtitle')}
+                            </p>
                         </motion.div>
                     </div>
                 </div>
@@ -103,9 +117,10 @@ const SupportPage = () => {
                 {/* FAQ and Contact Form Section */}
                 <div className="py-16 sm:py-24">
                     <div className="mx-auto max-w-7xl px-6 lg:px-8">
+                        {/* GRID START: Splits page into 2/3 Left (FAQ) and 1/3 Right (Form) */}
                         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
                             
-                            {/* LEFT COLUMN: Search + FAQs */}
+                            {/* LEFT COLUMN: FAQs */}
                             <div className="lg:col-span-2">
                                 <h2 className="text-2xl font-bold text-neutral-900 dark:text-white font-display flex items-center">
                                     <LifebuoyIcon className="h-6 w-6 mr-3 text-primary"/>
@@ -125,7 +140,8 @@ const SupportPage = () => {
                                         onChange={(e) => setSearchTerm(e.target.value)}
                                     />
                                 </div>
-                                {/* FAQs are now correctly INSIDE the col-span-2 div */}
+                                
+                                {/* FAQ Results - Correctly placed inside the Left Column */}
                                 <div className="mt-6 w-full max-w-3xl">
                                     {renderFaqs()}
                                 </div>
@@ -176,10 +192,14 @@ const SupportPage = () => {
                                     )}
                                 </div>
                             </div>
-                        </div>
+                            {/* End Right Column */}
+
+                        </div> 
+                        {/* End Grid */}
                     </div>
                 </div>
-            </div> {/* Added missing closing div for bg-white */}
+            </div> 
+            {/* End Main Content Wrapper (bg-white) - THIS was likely missing */}
         </PageWrapper>
     );
 };
