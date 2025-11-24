@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuantumPay | Visual Showcase</title>
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* --- GLOBAL THEME --- */
+        :root {
+            --bg-color: #050505;
+            --card-bg: rgba(20, 25, 40, 0.7);
+            --accent-primary: #43cea2;
+            --accent-secondary: #185a9d;
+            --text-color: #ffffff;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(67, 206, 162, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(24, 90, 157, 0.05) 0%, transparent 40%);
+            color: var(--text-color);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        /* --- HEADERS --- */
+        .header-section {
+            text-align: center;
+            padding: 60px 20px 20px;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            margin: 0;
+            background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        h3 {
+            font-size: 2rem;
+            margin: 60px 0 20px;
+            text-align: center;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .section-tag {
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+        }
+
+        p.subtitle {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 10px auto 40px;
+        }
+
+        /* --- SWIPER CONTAINER --- */
+        .swiper {
+            width: 100%;
+            padding-top: 20px;
+            padding-bottom: 60px;
+        }
+
+        .swiper-slide {
+            background-position: center;
+            background-size: cover;
+            width: 320px; /* Mobile width */
+            height: auto;
+            border-radius: 24px;
+            /* Glassmorphism */
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        /* Responsive width for larger screens if needed */
+        @media (min-width: 768px) {
+            .swiper-slide {
+                width: 380px;
+            }
+        }
+
+        .swiper-slide img {
+            display: block;
+            width: 100%;
+            height: auto;
+            max-height: 650px; /* Prevents extremely long screenshots */
+            object-fit: contain;
+            background-color: transparent;
+        }
+
+        /* Hover Captions */
+        .caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0));
+            color: white;
+            text-align: center;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transform: translateY(100%);
+            transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .swiper-slide:hover {
+            border-color: rgba(67, 206, 162, 0.5);
+            box-shadow: 0 25px 50px -12px rgba(67, 206, 162, 0.2);
+        }
+
+        .swiper-slide:hover .caption {
+            transform: translateY(0);
+        }
+
+        /* Navigation & Pagination */
+        .swiper-pagination-bullet {
+            background: #fff;
+            opacity: 0.2;
+            width: 10px;
+            height: 10px;
+        }
+        .swiper-pagination-bullet-active {
+            background: var(--accent-primary);
+            opacity: 1;
+            width: 25px;
+            border-radius: 5px;
+            transition: width 0.3s;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="header-section">
+        <h1>QuantumPay</h1>
+        <p class="subtitle">Global Fintech Super-App • UI/UX Showcase</p>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- SECTION 1: CORE BANKING & USER EXPERIENCE      -->
+    <!-- ============================================== -->
+    <h3><span class="section-tag">01.</span> Core Banking Experience</h3>
+    <p class="subtitle">Dashboards, Wallets, Global Transfers, and Utilities</p>
+
+    <div class="swiper mySwiper">
+        <div class="swiper-wrapper">
+            <!-- Dashboards -->
+            <div class="swiper-slide"><img src="https://i.ibb.co/7NS0Lfs9/dashboard.png"><div class="caption">Main Dashboard</div></div>
+            <div class="swiper-slide"><img src="https://i.ibb.co/prRcDHsz/dashboard-dark.png"><div class="caption">Dashboard (Dark Mode)</div></div>
+            
+            <!-- Wallets & Vaults -->
+            <div class="swiper-slide"><img src="https://i.ibb.co/nMHjRy6d/wallet.png"><div class="caption">Wallet Overview</div></div>
+            <div class="swiper-slide"><img src="https://i.ibb.co/rfcfBnsH/wallet-dark.png"><div class="caption">Wallet (Dark Mode)</div></div>
+            <div class="swiper-slide"><img src="https://i.ibb.co/yBNcsHGJ/vaults.png"><div class="caption">Savings Vaults</div></div>
+            <div class="swiper-slide"><img src="https://i.ibb.co/dJM3hGFf/vaults-dark.png"><div class="caption">Vaults (Dark Mode)</div></div>
+            
+            <!-- Transactions -->
+            <div class="swiper-slide"><img src="https://i.ibb.co/PZRbhhh4/send-global.png"><div class="caption">Global Transfers</div></div>
+            <div class="swiper-slide"><img src="https://i.ibb.co/Cp4hjG61/global-pay-dark.png"><div class="caption">Global Pay (Dark)</div></div>
+            <div class="swiper-slide"><img src="https://i.ibb.co/Kc3BS30V/exchange.png"><div class="caption">Currency Exchange</div></div>
+            <div class="swiper-slide"><img src="https://i.ibb.co/1fhK930q/withdraw.png"><div class="caption">Withdrawal Interface</div></div>
+            <div class="swiper-slide"><img src="https://i.ibb.co/20VWf9f7/withdraw-dark.png"><div class="caption">Withdrawal (Dark)</div></div>
+            <div class="swiper-slide"><img src="https://i.ibb.co/8L2C9jsB/deposit-dark.png"><div class="caption">Deposit Funds</div></div>
+
+            <!-- Utilities -->
+            <div class="swiper-slide"><img src="https://i.ibb.co/21xVcXN2/pay-bills.png"><div class="caption">Pay Bills</div></div>
+            <div class="swiper-slide"><img src="https://i.ibb.co/JFyjrzPT/pay-bills-dark.png"><div class="caption">Pay Bills (Dark)</div></div>
+            <div class="swiper-slide"><img src="https://i.ibb.co/hF3H7VqV/ussd.png"><div class="caption">USSD Banking</div></div>
+            <div class="swiper-slide"><img src="https://i.ibb.co/gZ36Jp59/ussd-dark.png"><div class="caption">USSD (Dark)</div></div>
+            
+            <!-- History -->
+            <div class="swiper-slide"><img src="https://i.ibb.co/nMZkk1h3/transact-statement.png"><div class="caption">Transaction Statement</div></div>
+            <div class="swiper-slide"><img src="https://i.ibb.co/k66Qx51k/transaction-histrory-dark.png"><div class="caption">History (Dark)</div></div>
+            <div class="swiper-slide"><img src="https://i.ibb.co/HTf13bhR/transact-statements.png"><div class="caption">Detailed Statements</div></div>
+        </div>
+        <div class="swiper-pagination"></div>
+    </div>
+
+
+    <!-- ============================================== -->
+    <!-- SECTION 2: BUSINESS, ADMIN & OPERATIONS        -->
+    <!-- ============================================== -->
+    <h3><span class="section-tag">02.</span> Business & Operations</h3>
+    <p class="subtitle">Merchant Tools, Analytics, KYC, and System Settings</p>
+
+    <div class="swiper mySwiperReverse">
+        <div class="swiper-wrapper">
+            <!-- Business Dashboard -->
+            <div class="swiper-slide"><img src="https://i.ibb.co/qYwvYJLC/bussiness-dashboard.png"><div class="caption">Business Dashboard</div></div>
+            <div class="swiper-slide"><img src="https://i.ibb.co/TxsZGvNC/business-dashboard-dark.png"><div class="caption">Business Dash (Dark)</div></div>
+            
+            <!-- Merchant Tools -->
+            <div class="swiper-slide"><img src="https://i.ibb.co/FL2HYmpN/invoicing.png"><div class="caption">Invoicing System</div></div>
+            <div class="swiper-slide"><img src="https://i.ibb.co/C3vGZ5Rj/batch-payments.png"><div class="caption">Batch Payments</div></div>
+            <div class="swiper-slide"><img src="https://i.ibb.co/p61539xt/batch-pay-dark.png"><div class="caption">Batch Pay (Dark)</div></div>
+            <div class="swiper-slide"><img src="https://i.ibb.co/QjXHtjcm/corporate-cards.png"><div class="caption">Corporate Cards</div></div>
+            <div class="swiper-slide"><img src="https://i.ibb.co/1JJ9xQ5q/corporate-cards-dark.png"><div class="caption">Corp Cards (Dark)</div></div>
+            <div class="swiper-slide"><img src="https://i.ibb.co/h11Px5GL/treasury.png"><div class="caption">Treasury Management</div></div>
+            <div class="swiper-slide"><img src="https://i.ibb.co/5xxK5XP4/expenses.png"><div class="caption">Expense Tracking</div></div>
+            <div class="swiper-slide"><img src="https://i.ibb.co/HL21svwY/expenses-dark.png"><div class="caption">Expenses (Dark)</div></div>
+
+            <!-- Admin & Setup -->
+            <div class="swiper-slide"><img src="https://i.ibb.co/Kzh3rYpk/merchant-setup.png"><div class="caption">Merchant Setup</div></div>
+            <div class="swiper-slide"><img src="https://i.ibb.co/ycJSVTz1/team-mgt.png"><div class="caption">Team Management</div></div>
+            <div class="swiper-slide"><img src="https://i.ibb.co/v6SJgT3x/Siperuser.png"><div class="caption">Superuser Admin</div></div>
+            <div class="swiper-slide"><img src="https://i.ibb.co/V0XpRYZB/users-dark.png"><div class="caption">User Management</div></div>
+            <div class="swiper-slide"><img src="https://i.ibb.co/20MTKsNL/developers.png"><div class="caption">Developer API</div></div>
+            <div class="swiper-slide"><img src="https://i.ibb.co/zW48r9Cz/developers-dark.png"><div class="caption">Developer Tools (Dark)</div></div>
+
+            <!-- Settings & Support -->
+            <div class="swiper-slide"><img src="https://i.ibb.co/ZpZkfRTD/kyc-approved.png"><div class="caption">KYC Approved</div></div>
+            <div class="swiper-slide"><img src="https://i.ibb.co/cKK7gPK2/kyc-approvals-dark.png"><div class="caption">KYC Approvals (Dark)</div></div>
+            <div class="swiper-slide"><img src="https://i.ibb.co/6c4VxHx0/profile.png"><div class="caption">User Profile</div></div>
+            <div class="swiper-slide"><img src="https://i.ibb.co/39k4Zwgr/security.png"><div class="caption">Security Settings</div></div>
+            <div class="swiper-slide"><img src="https://i.ibb.co/JW55sHW3/support-chat.png"><div class="caption">Live Support</div></div>
+            <div class="swiper-slide"><img src="https://i.ibb.co/dwXNRCNJ/support-chatt-dark.png"><div class="caption">Support Chat (Dark)</div></div>
+        </div>
+        <div class="swiper-pagination"></div>
+    </div>
+
+    <!-- Swiper JS Script -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <script>
+        // Configuration for the Core Banking Slider
+        var swiper = new Swiper(".mySwiper", {
+            effect: "coverflow",
+            grabCursor: true,
+            centeredSlides: true,
+            slidesPerView: "auto",
+            initialSlide: 0,
+            loop: true,
+            autoplay: {
+                delay: 2000,
+                disableOnInteraction: false,
+                pauseOnMouseEnter: true, // Auto-pause when hovering
+            },
+            coverflowEffect: {
+                rotate: 35,
+                stretch: 0,
+                depth: 100,
+                modifier: 1,
+                slideShadows: true,
+            },
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+            },
+        });
+
+        // Configuration for the Business Slider (Slightly slower)
+        var swiperReverse = new Swiper(".mySwiperReverse", {
+            effect: "coverflow",
+            grabCursor: true,
+            centeredSlides: true,
+            slidesPerView: "auto",
+            initialSlide: 1,
+            loop: true,
+            autoplay: {
+                delay: 2500,
+                disableOnInteraction: false,
+                pauseOnMouseEnter: true,
+            },
+            coverflowEffect: {
+                rotate: 35,
+                stretch: 0,
+                depth: 100,
+                modifier: 1,
+                slideShadows: true,
+            },
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+            },
+        });
+    </script>
+</body>
+</html>
